@@ -1,6 +1,11 @@
 <template>
   <div class="home">
-    <homepage-image id="cottage" img="cottages.jpg" page="product-search/cottages" title="COTTAGES" />
+    <homepage-image
+      id="cottage"
+      img="cottages.jpg"
+      page="product-search/cottages"
+      title="COTTAGES"
+    />
     <homepage-image
       id="boat"
       img="boat.jpg"

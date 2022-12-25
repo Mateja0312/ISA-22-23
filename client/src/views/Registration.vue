@@ -1,0 +1,103 @@
+<template>
+  <div>
+    <form>
+      <label for="email">Email:</label>
+      <input id="email" type="email" v-model="newUser.email" />
+      <label for="password1">Password:</label>
+      <input id="password1" type="password" v-model="newUser.password" />
+      <label for="password2">Repeat Password:</label>
+      <input id="password2" type="password" v-model="password2" />
+      <fieldset>
+        <legend>personal</legend>
+        <label for="name">First Name:</label>
+        <input id="name" v-model="newUser.name" />
+        <label for="surname">Surname:</label>
+        <input id="surname" v-model="newUser.surname" />
+        <label for="jmbg">JMBG:</label>
+        <input id="jmbg" v-model="newUser.jmbg" />
+        <input type="radio" id="male" name="gender" value="male" />
+        <label for="male"> Male</label><br />
+        <input type="radio" id="female" name="gender" value="female" />
+        <label for="female"> Female</label><br />
+      </fieldset>
+
+      <fieldset>
+        <legend>contanct</legend>
+        <label for="country">Country:</label>
+        <input id="country" v-model="newUser.country" />
+        <label for="city">City:</label>
+        <input id="city" v-model="newUser.city" />
+        <label for="address">Address:</label>
+        <input id="address" v-model="newUser.address" />
+        <label for="phone">Phone:</label>
+        <input id="phone" type="tel" v-model="newUser.phone" />
+      </fieldset>
+
+      <fieldset>
+        <legend>job</legend>
+        <label for="institution">institution:</label>
+        <input id="institution" v-model="newUser.institution" />
+        <label for="profession">profession:</label>
+        <input id="profession" v-model="newUser.profession" />
+      </fieldset>
+
+      <button type="submit" @click.prevent="onSubmit">Register</button>
+    </form>
+  </div>
+</template>
+
+<script lang="ts">
+import Vue from "vue";
+import { register } from "../services/requests";
+
+export default Vue.extend({
+  name: "Registration",
+  props: {},
+  data() {
+    return {
+      password2: "",
+      newUser: {
+        email: "",
+        password: "",
+        name: "",
+        surname: "",
+        jmbg: "",
+        gender: null,
+        country: "",
+        city: "",
+        address: "",
+        phone: "",
+        profession: "",
+        institution: "",
+      },
+    };
+  },
+  methods: {
+    onSubmit() {
+      console.log(
+        register({
+          ...this.newUser,
+          role: "Client",
+        })
+      );
+    },
+  },
+});
+</script>
+
+<style scoped lang="scss">
+form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+
+  input {
+    margin: 5px;
+  }
+}
+</style>
