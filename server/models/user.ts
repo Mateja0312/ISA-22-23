@@ -53,7 +53,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
       allowNull: false,
       primaryKey: true
     },
-    email: DataTypes.STRING,
+    email: {
+      type: DataTypes.STRING,
+      unique: true
+    },
     password: DataTypes.STRING,
     role: DataTypes.STRING,
     active: DataTypes.STRING,

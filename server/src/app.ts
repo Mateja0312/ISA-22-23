@@ -18,12 +18,11 @@ app.post("/register", async (req, response) => {
     console.log("newUser", newUser)
     return;
 
-    const salt = await bcrypt.genSalt(10);
     var usr = {
-      first_name : req.body.first_name,
-      last_name : req.body.last_name,
-      email : req.body.email,
-      password : await bcrypt.hash(req.body.password, salt)
+      first_name : newUser.firstName,
+      last_name : newUser.lastName,
+      email : newUser.email,
+      password : bcrypt.hashSync( newUser.password, 10 )
     };
     const created_user = await db.User.create(usr);
     response.status(201).json(created_user);

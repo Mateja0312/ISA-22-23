@@ -10,9 +10,9 @@
       <fieldset>
         <legend>personal</legend>
         <label for="name">First Name:</label>
-        <input id="name" v-model="newUser.name" />
+        <input id="name" v-model="newUser.firstName" />
         <label for="surname">Surname:</label>
-        <input id="surname" v-model="newUser.surname" />
+        <input id="surname" v-model="newUser.lastName" />
         <label for="jmbg">JMBG:</label>
         <input id="jmbg" v-model="newUser.jmbg" />
         <input type="radio" id="male" name="gender" value="male" />
@@ -59,8 +59,8 @@ export default Vue.extend({
       newUser: {
         email: "",
         password: "",
-        name: "",
-        surname: "",
+        firstName: "",
+        lastName: "",
         jmbg: "",
         gender: null,
         country: "",
