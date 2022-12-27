@@ -23,17 +23,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
     static associate(models: any) {
       //asocijacije samo ne rade
-
-      // models.User.hasOne(Appointment, {
-      //   foreignKey: 'id',
-      //   as: 'clientId'
-      // });
-      // Appointment.belongsTo(models.User);
-      
-      // Appointment.hasOne(models.User, {
-      //   foreignKey: 'Employee'
-      // });
-      // models.User.belongsTo(Appointment);
+      models.User.hasOne(Appointment, {
+        foreignKey: 'client'
+      });
+      Appointment.belongsTo(models.User);
     }
   }
   Appointment.init({
