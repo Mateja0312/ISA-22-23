@@ -7,10 +7,19 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        validate:{
+          notEmpty:{
+              msg:"Email-id required"
+          },
+          isEmail:{
+              msg:'Valid email-id required'
+          }
+        },
+        unique: true
       },
       password: {
         type: Sequelize.STRING
@@ -59,6 +68,8 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
+    }, {
+      initialAutoIncrement: 1
     });
   },
   async down(queryInterface, Sequelize) {

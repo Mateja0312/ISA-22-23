@@ -53,10 +53,19 @@ module.exports = (sequelize: any, DataTypes: any) => {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true,
     },
     email: {
       type: DataTypes.STRING,
+      validate:{
+        notEmpty:{
+            msg:"Email-id required"
+        },
+        isEmail:{
+            msg:'Valid email-id required'
+        }
+      },
       unique: true
     },
     password: DataTypes.STRING,
@@ -74,7 +83,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     institution: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'User',
+    modelName: 'User'
   });
   return User;
 };

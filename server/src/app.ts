@@ -17,17 +17,17 @@ app.get("/", (req, response) => {
 
 app.post("/register", async (req, response) => {
     const newUser = req.body;
+    newUser.password = bcrypt.hashSync( newUser.password, 10 )
+    
     console.log("newUser", newUser)
-    return;
-
-    var usr = {
-      first_name : newUser.firstName,
-      last_name : newUser.lastName,
-      email : newUser.email,
-      password : bcrypt.hashSync( newUser.password, 10 )
-    };
-    const created_user = await db.User.create(usr);
-    response.status(201).json(created_user);
+    db.User.create(newUser)
+    .then((createdUser: any) => {
+      response.status(201).json(createdUser);
+    })
+    .catch((err: any)=>{
+      console.log(err)
+      response.status(500).json(err);
+    })
 });
 
 app.listen(8081);
