@@ -15,17 +15,15 @@ module.exports = {
       durationInMinutes: {
         type: Sequelize.INTEGER
       },
-      // clientId:{
-      //   type: Sequelize.INTEGER,
-      //   references: {
-      //     model: {
-      //       tableName: 'Users',
-      //       schema: 'ISA2022'
-      //     },
-      //     key: 'id'
-      //   },
-      //   allowNull: true
-      // },
+      client:{
+        type: Sequelize.INTEGER,
+        references: {
+          model: {
+            tableName: 'Users',
+          },
+          key: 'id'
+        },
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
