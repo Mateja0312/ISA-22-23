@@ -4,6 +4,8 @@ import bcrypt from 'bcrypt';
 // import jwt from 'jsonwebtoken';
 import db from '../models'
 
+db.sequelize.sync();
+
 const app = express();
 
 app.use(cors());
