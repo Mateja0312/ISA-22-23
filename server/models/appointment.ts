@@ -25,6 +25,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
       Appointment.belongsTo(models.User, {
         foreignKey: 'client'
       });
+      Appointment.belongsTo(models.User, {
+        foreignKey: 'employee'
+      });
     }
   }
   Appointment.init({
