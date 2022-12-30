@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home flex">
     <homepage-image
       id="cottage"
       img="cottages.jpg"
@@ -7,17 +7,12 @@
       title="COTTAGES"
     />
     <homepage-image
-      id="boat"
-      img="boat.jpg"
-      page="product-search/boats"
-      title="SHIPS AND BOATS"
+      id="cottage"
+      img="cottages.jpg"
+      page="product-search/cottages"
+      title="COTTAGES"
     />
-    <homepage-image
-      id="fishing"
-      img="fishing.jpg"
-      page="product-search/lessons"
-      title="FISHING LESSONS"
-    />
+    ALOOOOOOOOOOOOOO
   </div>
 </template>
 
@@ -33,9 +28,9 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .homepage-image {
-  width: calc(100vw / 3);
+  width: calc(100vw / 2);
   height: 100vh;
   float: left;
 }
