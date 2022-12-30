@@ -11,18 +11,11 @@ export async function login(credentials: any): Promise<any> {
   return api().post("login", credentials).then();
 }
 
-export async function getAllProductsOfType(type: string): Promise<any> {
+export async function getCenters(): Promise<any> {
   return api()
-    .get(type)
+    .get("centers")
     .then((res) => res.data);
 }
-
-export async function getProductsForProvider(providerId: number): Promise<any> {
-  return api()
-    .get(`productsForProvider/${providerId}`)
-    .then((res) => res.data);
-}
-getProductsForProvider;
 
 export async function getProductById(productId: number): Promise<any> {
   return api()

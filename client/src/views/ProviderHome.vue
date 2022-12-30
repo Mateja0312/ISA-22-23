@@ -1,5 +1,6 @@
 <template>
   <div class="provider-home">
+    {{ "provider " }}
     <homepage-image
       id="cottage"
       img="cottages.jpg"
@@ -33,9 +34,9 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .homepage-image {
-  width: calc(100vw / 3);
+  width: calc(100vw / 2);
   height: 100vh;
   float: left;
 }
