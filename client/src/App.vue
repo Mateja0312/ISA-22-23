@@ -39,4 +39,12 @@ export default Vue.extend({
   font-family: "Times New Roman";
   margin: 0;
 }
+body,
+html {
+  margin: 0;
+  padding: 0;
+}
+* {
+  box-sizing: border-box;
+}
 </style>
