@@ -49,9 +49,13 @@
 <script lang="ts">
 import Vue from "vue";
 import { register } from "../services/requests";
+import LabeledInput from "@/components/LabeledInput.vue";
 
 export default Vue.extend({
   name: "Registration",
+  components: {
+    LabeledInput
+  },
   props: {},
   data() {
     return {
