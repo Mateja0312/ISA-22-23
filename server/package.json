@@ -30,9 +30,7 @@
     "typescript": "^4.4.4"
   },
   "scripts": {
-    "serve": "nodemon",
-    "resetdb": "ts-node src/db/resetdb.ts",
-    "showdb": "ts-node src/db/showdb.ts"
+    "serve": "nodemon"
   },
   "author": "",
   "license": "ISC"

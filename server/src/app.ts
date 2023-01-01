@@ -3,6 +3,7 @@ import cors from 'cors';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import db from '../models'
+import {Op} from 'sequelize';
 
 db.sequelize.sync();
 
@@ -19,13 +20,11 @@ app.post("/register", async (req, response) => {
     const newUser = req.body;
     newUser.password = bcrypt.hashSync( newUser.password, 10 )
     
-    console.log("newUser", newUser)
     db.User.create(newUser)
     .then((createdUser: any) => {
       response.status(201).json(createdUser);
     })
     .catch((err: any)=>{
-      console.log(err)
       response.status(500).json(err);
     })
 });
@@ -45,8 +44,6 @@ app.post("/login", async (req, res) => {
         return res.status(401).json({ message: "Invalid email or password" });
       }
 
-      console.log(process.env.JWT_SECRET)
-
       const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, {
         expiresIn: "7d"
       });
@@ -60,7 +57,26 @@ app.post("/login", async (req, res) => {
     });
 });
 
+app.get("/centers", async (req, res) => {
+  const { name, address } = req.query;
+
+  const where: any = {};
+  if (name) {
+    where.name = { [Op.like]: `%${name}%` };
+  }
+  if (address) {
+    where.address = { [Op.like]: `%${address}%` };
+  }
+
+  try {
+    const centers = await db.Center.findAll({ where });
+    res.json(centers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 
 app.listen(8081);
-console.log("Server started.");
     

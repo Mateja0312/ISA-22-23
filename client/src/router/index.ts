@@ -32,6 +32,11 @@ const routes: Array<RouteConfig> = [
     name: "Login",
     component: () => import("../views/Login.vue"),
   },
+  {
+    path: "/centers",
+    name: "Centers",
+    component: () => import("../views/Centers.vue"),
+  },
 ];
 
 const router = new VueRouter({

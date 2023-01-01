@@ -1,19 +1,15 @@
 import api from "./api";
 export async function register(newUser: any): Promise<any> {
-  return api()
-    .post("register", newUser)
-    .then((res) => {
-      console.log(res);
-    });
+  return api().post("register", newUser).then();
 }
 
 export async function login(credentials: any): Promise<any> {
   return api().post("login", credentials).then();
 }
 
-export async function getCenters(): Promise<any> {
+export async function getCenters(query: any): Promise<any> {
   return api()
-    .get("centers")
+    .get("centers", { params: query })
     .then((res) => res.data);
 }
 
@@ -43,19 +39,11 @@ export async function getReservations(clientId: number): Promise<any> {
 }
 
 export async function makeReservation(reservation: any): Promise<any> {
-  return api()
-    .post("makeReservation", reservation)
-    .then((res) => {
-      console.log(res);
-    });
+  return api().post("makeReservation", reservation).then();
 }
 
 export async function cancelReservation(cancelRequest: any): Promise<any> {
-  return api()
-    .put("cancelReservation", cancelRequest)
-    .then((res) => {
-      console.log(res);
-    });
+  return api().put("cancelReservation", cancelRequest).then();
 }
 
 export async function updateClientInfo(clientInfo: any): Promise<any> {
@@ -67,9 +55,5 @@ export async function updateUserActivity(userInfo: any): Promise<any> {
 }
 
 export async function approve(newUser: any): Promise<any> {
-  return api()
-    .post("register", newUser)
-    .then((res) => {
-      console.log(res);
-    });
+  return api().post("register", newUser).then();
 }
