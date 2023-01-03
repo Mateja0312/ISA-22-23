@@ -1,14 +1,21 @@
 <template>
   <div id="centers-page">
-    <section class="mt-32 mx-auto">
+    <form class="mt-32 mx-auto">
       <label for="date">Date: </label>
-      <input id="date" type="date" class="text-black" />
-    </section>
+      <input id="date" type="date" />
+      <label for="name">Name: </label>
+      <input v-model="name" id="name" />
+      <label for="address">Address: </label>
+      <input v-model="address" id="address" />
+      <label for="rating">Rating: </label>
+      <input v-model="rating" id="rating" type="number" />
+      <button @click.prevent="search">search</button>
+    </form>
     <section class="mx-auto">
       <search-result
-        v-for="s in searchResults"
-        :key="s.id"
-        :center="s"
+        v-for="center in centers"
+        :key="center.id"
+        :center="center"
       ></search-result>
     </section>
   </div>
@@ -24,36 +31,33 @@ export default Vue.extend({
   name: "CenterSearch",
   data() {
     return {
-      allCenters: [],
+      name: null,
+      address: null,
+      rating: null,
+      centers: [],
     };
   },
-  computed: {
-    searchResults(): any[] {
-      let searchResults;
-      searchResults = this.allCenters.filter((center) =>
-        this.satisfiesSearch(center)
-      );
-      return searchResults;
-    },
-  },
   mounted() {
-    console.log(this.type);
-    if (this.type == "provider") {
-      getCenters().then((res) => {
-        this.allCenters = res;
-      });
-    }
+    getCenters({}).then((res) => {
+      this.centers = res;
+    });
   },
   methods: {
-    satisfiesSearch(center: any) {
-      return true || center;
+    search() {
+      getCenters({
+        name: this.name,
+        address: this.address,
+        rating: this.rating,
+      }).then((res) => {
+        this.centers = res;
+      });
     },
   },
 });
 </script>
 
 <style scoped lang="scss">
-#center-search-page {
+#centers-page {
   height: 100vh;
   width: 100vw;
   position: fixed;
@@ -62,6 +66,7 @@ export default Vue.extend({
   background-image: url("../assets/home_screen.jpg");
   color: white;
 
+  padding-top: 120px;
   section,
   nav {
     width: fit-content;

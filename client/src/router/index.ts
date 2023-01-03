@@ -37,6 +37,11 @@ const routes: Array<RouteConfig> = [
     name: 'Profile',
     component: () => import('../views/Profile.vue')
   },
+  {
+    path: "/centers",
+    name: "Centers",
+    component: () => import("../views/Centers.vue"),
+  },
 ];
 
 const router = new VueRouter({
