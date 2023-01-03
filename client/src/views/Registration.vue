@@ -1,8 +1,9 @@
 <template>
   <div>
     <form>
-      <label for="email">Email:</label>
-      <input id="email" type="email" v-model="newUser.email" />
+      <labeled-input id="email" type="email" labelValue="Email:" v-model="newUser.email"/>
+
+      
       <label for="password1">Password:</label>
       <input id="password1" type="password" v-model="newUser.password" />
       <label for="password2">Repeat Password:</label>
