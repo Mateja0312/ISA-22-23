@@ -6,7 +6,6 @@ module.exports = {
     return queryInterface.bulkInsert('Centers', [{
       name: 'Telep',
       address: 'Adresa na Telepu',
-      rating: 10,
       createdAt: new Date(),
       updatedAt: new Date()
     }])

@@ -1,22 +1,16 @@
 <template>
-  <div class="home">
+  <div id="home">
     <homepage-image
-      id="cottage"
+      id="centers"
       img="cottages.jpg"
-      page="product-search/cottages"
-      title="COTTAGES"
+      page="centers"
+      title="CENTERS"
     />
     <homepage-image
-      id="boat"
-      img="boat.jpg"
-      page="product-search/boats"
-      title="SHIPS AND BOATS"
-    />
-    <homepage-image
-      id="fishing"
-      img="fishing.jpg"
-      page="product-search/lessons"
-      title="FISHING LESSONS"
+      id="appointments"
+      img="cottages.jpg"
+      page="appointments"
+      title="APPOINTMENTS"
     />
   </div>
 </template>
@@ -33,18 +27,14 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss">
-.homepage-image {
-  width: calc(100vw / 3);
+<style scoped lang="scss">
+#home {
+  display: flex;
   height: 100vh;
-  float: left;
-}
 
-#boat img {
-  object-position: 90%;
-}
-
-#fishing img {
-  object-position: 40%;
+  .homepage-image {
+    width: calc(100vw / 2);
+    height: 100%;
+  }
 }
 </style>
