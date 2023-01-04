@@ -77,6 +77,13 @@ app.get("/centers", async (req, res) => {
   }
 });
 
+app.put("/profile", async(req, res) => {
+  db.User.update(req.body, {
+    where: {
+      id: req.body.id
+    }
+  });
+})
 
 app.listen(8081);
     

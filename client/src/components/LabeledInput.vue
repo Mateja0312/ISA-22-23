@@ -1,7 +1,7 @@
 <template>
     <div class="labeled-input">
-      <label for="idValue"> {{ labelValue }} </label>
-      <input id="idValue" type="typeValue" @input="updateValue"
+      <label :for="idValue"> {{ labelValue }} </label>
+      <input :id="idValue" :type="typeValue" @input="updateValue"
       />
     </div>
 </template>

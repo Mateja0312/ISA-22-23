@@ -47,7 +47,7 @@ export async function cancelReservation(cancelRequest: any): Promise<any> {
 }
 
 export async function updateClientInfo(clientInfo: any): Promise<any> {
-  return api().post("updateClientInfo", clientInfo).then();
+  return api().put("profile", clientInfo).then();
 }
 
 export async function updateUserActivity(userInfo: any): Promise<any> {

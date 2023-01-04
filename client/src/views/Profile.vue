@@ -2,54 +2,54 @@
 
 <template>
   <div id="profile">
-    <main class="mx-auto mt-32 w-5/6">
-      <div id="header" class="my-6 p-4 flex">
-        <editable-field
-          id="user.name"
-          :text.sync="user.name"
-          @save="saveUserInfo"
-        />
-        <editable-field
-          id="user.surname"
-          :text.sync="user.surname"
-          @save="saveUserInfo"
-        />
-      </div>
-      <div class="flex justify-between">
-        <div id="card" class="w-2/6">
-          <img src="../assets/fishing.jpg" />
-        </div>
-        <section id="info" class="p-4 w-2/4 text-xl divide-y">
-          <header>
-            <h2>Info</h2>
-          </header>
-          <div>
-            <p>{{ user.email }}</p>
-            <editable-field
-              id="user.country"
-              :text.sync="user.country"
-              @save="saveUserInfo"
-            />
-            <editable-field
-              id="user.city"
-              :text.sync="user.city"
-              @save="saveUserInfo"
-            />
-            <editable-field
-              id="user.address"
-              :text.sync="user.address"
-              @save="saveUserInfo"
-            />
-            <editable-field
-              id="user.phone"
-              :text.sync="user.phone"
-              @save="saveUserInfo"
-            />
-          </div>
-        </section>
-      </div>
-      <button class="btn btn-red" @click="deleteAccount">Delete Account</button>
-    </main>
+    <header>
+      <h2>Info</h2>
+    </header>
+    <div>
+      <p>{{ user.email }}</p>
+      <editable-field
+        id="user.firstName"
+        :text.sync="user.firstName"
+        @save="saveUserInfo"
+      />
+      <editable-field
+        id="user.lastName"
+        :text.sync="user.lastName"
+        @save="saveUserInfo"
+      />
+      <p>{{ user.gender ? "Male" : "Female" }}</p>
+      <editable-field
+        id="user.country"
+        :text.sync="user.country"
+        @save="saveUserInfo"
+      />
+      <editable-field
+        id="user.city"
+        :text.sync="user.city"
+        @save="saveUserInfo"
+      />
+      <editable-field
+        id="user.address"
+        :text.sync="user.address"
+        @save="saveUserInfo"
+      />
+      <editable-field
+        id="user.phone"
+        :text.sync="user.phone"
+        @save="saveUserInfo"
+      />
+      <editable-field
+        id="user.profession"
+        :text.sync="user.profession"
+        @save="saveUserInfo"
+      />
+      <editable-field
+        id="user.institution"
+        :text.sync="user.institution"
+        @save="saveUserInfo"
+      />
+    </div>
+    <button class="btn btn-red" @click="deleteAccount">Delete Account</button>
   </div>
 </template>
 <!--
@@ -71,6 +71,7 @@ export default Vue.extend({
   methods: {
     saveUserInfo() {
       this.$store.commit("setUser", this.user);
+      console.log(this.user.firstName + ' ' + this.user.lastName);
       updateClientInfo(this.user);
     },
     deleteAccount() {
@@ -89,7 +90,7 @@ export default Vue.extend({
   height: 100vh;
   width: 100vw;
   position: fixed;
-  top: 0px;
+  top: 10%;
 
   .btn {
     @apply font-bold py-1 px-3 rounded;
