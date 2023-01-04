@@ -33,6 +33,15 @@ module.exports = {
       role: {
         type: Sequelize.STRING
       },
+      employedAt:{
+        type: Sequelize.INTEGER,
+        references: {
+          model: {
+            tableName: 'Centers',
+          },
+          key: 'id'
+        },
+      },
       active: {
         type: Sequelize.STRING
       },

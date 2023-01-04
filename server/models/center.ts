@@ -17,6 +17,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
     address!: string;
 
     static associate(models: any) {
+      Center.hasMany(models.User, {
+        foreignKey: 'employedAt'
+      })
     }
   }
   Center.init({

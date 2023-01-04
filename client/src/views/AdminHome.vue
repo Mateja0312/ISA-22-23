@@ -1,9 +1,8 @@
 <template>
   <div class="dashboard">
-      <homepage-image id=requests img="No-Image-Placeholder.jpg" page="boats" title="Requests Approval"/>
-      <homepage-image id=requests img="No-Image-Placeholder.jpg" page="boats" title="Requests Approval"/>
-      <homepage-image id=requests img="No-Image-Placeholder.jpg" page="boats" title="Requests Approval"/>
-      <homepage-image id=requests img="cottage1.jpg" page="request_approval" title="Requests Approval"/>
+      <homepage-image id=requests img="No-Image-Placeholder.jpg" page="boats" title="Register New User"/>
+      <homepage-image id=requests img="No-Image-Placeholder.jpg" page="boats" title="Register New Center"/>
+      <homepage-image id=requests img="No-Image-Placeholder.jpg" page="boats" title="User Feedback"/>
   </div>
 </template>
 
@@ -24,7 +23,7 @@ export default Vue.extend({
 
 <style scoped lang="scss">
 .homepage-image{
-  width:calc(100% / 4);
+  width:calc(100% / 3);
   height:calc(100vh -  78px); 
   float:left;
 }

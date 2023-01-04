@@ -10,7 +10,7 @@ module.exports = {
       firstName: 'Glavni',
       lastName: 'Arhivator',
       email: 'example@example.com',
-      role: 'System Admin',
+      role: 'Admin',
       active: 'active',
       address: 'DataTypes.STRING',
       city: 'DataTypes.STRING',
