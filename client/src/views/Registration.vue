@@ -84,7 +84,8 @@ export default Vue.extend({
           ...this.newUser,
           role: "Client",
         })
-      );
+      )
+      this.$router.push("login");
     },
   },
 });

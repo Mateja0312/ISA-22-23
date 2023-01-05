@@ -6,6 +6,7 @@ module.exports = {
     return queryInterface.bulkInsert('Appointments', [{
       startTime: new Date(),
       durationInMinutes: 15,
+      status: "AVAILABLE",
       createdAt: new Date(),
       updatedAt: new Date()
     }])

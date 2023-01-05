@@ -15,6 +15,9 @@ module.exports = {
       durationInMinutes: {
         type: Sequelize.INTEGER
       },
+      status: {
+        type: Sequelize.STRING
+      },
       client:{
         type: Sequelize.INTEGER,
         references: {

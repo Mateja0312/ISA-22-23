@@ -7,6 +7,7 @@ interface AppointmentAttrubutes {
   id: number;
   startTime: Date;
   durationInMinutes: number;
+  status: string;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -20,6 +21,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     id!: number;
     startTime: Date;
     durationInMinutes: number;
+    status: string;
 
     static associate(models: any) {
       Appointment.belongsTo(models.User, {
@@ -37,7 +39,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
       primaryKey: true
     },
     startTime: DataTypes.DATE,
-    durationInMinutes: DataTypes.INTEGER
+    durationInMinutes: DataTypes.INTEGER,
+    status: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Appointment',
