@@ -1,8 +1,17 @@
-//user model 
-
 import { Table, Column, Model, HasMany, ForeignKey } from 'sequelize-typescript';
 import {Center} from "./Center";
 import {Rating} from "./Rating";
+
+export enum Roles {
+  SYS_ADMIN = 'admin',
+  EMPLOYEE = 'employee',
+  CLIENT = 'client',
+}
+
+export enum Gender {
+  MALE = 'male',
+  FEMALE = 'female'
+}
 
 @Table
 export class User extends Model<User>{
@@ -19,16 +28,34 @@ export class User extends Model<User>{
   password!: string
 
   @Column
-  role!: string
+  role!: Roles
 
   @Column
   active!: string
 
   @Column
-  address!: string
+  address: string
 
   @Column
-  city!: string
+  city: string
+
+  @Column
+  country: string
+
+  @Column
+  phone: string
+
+  @Column
+  JMBG: string
+
+  @Column
+  profession: string
+
+  @Column
+  gender: Gender
+
+  @Column
+  institution: string
 
   @ForeignKey(() => Center)
   @Column
