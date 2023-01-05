@@ -9,9 +9,9 @@ export class Rating extends Model<Rating>{
 
   @ForeignKey(() => User)
   @Column
-  userId!: number
+  user_id!: number
 
   @ForeignKey(() => Center)
   @Column
-  centerId!: number
+  center_id!: number
 }

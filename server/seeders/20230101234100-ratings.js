@@ -5,7 +5,7 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('Ratings', [{
       rating: 3,
-      client_id: 1,
+      user_id: 1,
       center_id: 1,
       createdAt: new Date(),
       updatedAt: new Date()

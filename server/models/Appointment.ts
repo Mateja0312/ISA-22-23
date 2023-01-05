@@ -22,10 +22,10 @@ export enum AppointmentStatus {
     @Column
     status: AppointmentStatus;
 
-    @BelongsTo(() => User, 'employeeId')
+    @BelongsTo(() => User, 'employee_id')
     employee: User;
 
-    @BelongsTo(() => User, 'clientId')
+    @BelongsTo(() => User, 'client_id')
     client: User;
   }
   

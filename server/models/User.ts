@@ -65,9 +65,9 @@ export class User extends Model<User>{
   @HasMany(() => Rating)
   ratings: Rating[];
 
-  @HasMany(() => Appointment, 'employeeId')
+  @HasMany(() => Appointment, 'employee_id')
   appointmentsAsEmployee: Appointment[];
 
-  @HasMany(() => Appointment, 'clientId')
+  @HasMany(() => Appointment, 'client_id')
   appointmentsAsClient: Appointment[];
 }

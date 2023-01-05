@@ -86,7 +86,7 @@ app.put("/profile", async(req, res) => {
 });
 
 (async () => {
-  await sequelize.sync({force: true});
+  await sequelize.sync(); // mora bez force: true da se ne bi dropovale i ponovo pravile tabele pri pokretanju beka
 
   app.listen(8081);
 })();
