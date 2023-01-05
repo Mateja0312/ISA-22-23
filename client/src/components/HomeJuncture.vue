@@ -8,7 +8,7 @@ import { mapGetters } from "vuex";
 import Home from "../views/Landing.vue";
 import AdminHome from "../views/AdminHome.vue";
 import EmployeeHome from "../views/EmployeeHome.vue";
-import ClientHome from "../views/Browse.vue";
+import ClientHome from "../views/ClientHome.vue";
 
 export default Vue.extend({
   name: "HomeJuncture",

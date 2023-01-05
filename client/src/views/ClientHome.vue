@@ -12,6 +12,18 @@
       page="appointments"
       title="APPOINTMENTS"
     />
+    <homepage-image
+      id="questionnaire"
+      img="cottages.jpg"
+      page="questionnaire"
+      title="QUESTIONNAIRE"
+    />
+    <homepage-image
+      id="feedback"
+      img="cottages.jpg"
+      page="feedback"
+      title="FEEDBACK"
+    />
   </div>
 </template>
 
@@ -20,7 +32,7 @@ import HomepageImage from "../components/HomepageImage.vue";
 import Vue from "vue";
 
 export default Vue.extend({
-  name: "Browse",
+  name: "ClientHome",
   components: {
     HomepageImage,
   },

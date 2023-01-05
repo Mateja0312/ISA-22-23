@@ -3,7 +3,7 @@
     <header>
       <nav>
         <router-link to="/">
-          <img src="../assets/anchor.png" />
+          <img src="../assets/real-red-blood-drop-clip-art-clkerm-vector-clip-0.png" />
         </router-link>
         <div id="links">
           <router-link to="/about" class="mx-2">About</router-link>
@@ -61,6 +61,7 @@ nav {
     top: 50%;
     right: 5%;
     font-size: 24px;
+    color: red;
   }
   img {
     margin-top: 20px;

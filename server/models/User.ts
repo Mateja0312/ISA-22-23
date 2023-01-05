@@ -1,7 +1,8 @@
-import { Table, Column, Model, HasMany, ForeignKey } from 'sequelize-typescript';
+import { Table, Column, Model, HasMany, ForeignKey, HasOne } from 'sequelize-typescript';
 import { Appointment } from './Appointment';
 import {Center} from "./Center";
 import {Rating} from "./Rating";
+import {Questionnaire} from "./Questionnaire";
 
 export enum Roles {
   SYS_ADMIN = 'admin',
@@ -70,4 +71,7 @@ export class User extends Model<User>{
 
   @HasMany(() => Appointment, 'client_id')
   appointmentsAsClient: Appointment[];
+
+  @HasOne(() => Questionnaire, 'client_id')
+  myQuestionnaire: Questionnaire;
 }
