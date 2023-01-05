@@ -1,4 +1,5 @@
 import { Table, Column, Model, HasMany, ForeignKey } from 'sequelize-typescript';
+import { Appointment } from './Appointment';
 import {Center} from "./Center";
 import {Rating} from "./Rating";
 
@@ -62,7 +63,8 @@ export class User extends Model<User>{
   employedAt!: number
 
   @HasMany(() => Rating)
-  @Column
   ratings: Rating[];
 
+  @HasMany(() => Appointment)
+  appointment: Appointment[];
 }

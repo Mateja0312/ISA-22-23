@@ -27,10 +27,8 @@ import {Rating} from "./Rating";
     address!: string
 
     @HasMany(() => User)
-    @Column
     employees: User[];
 
     @HasMany(() => Rating)
-    @Column
     ratings: Rating[];
 };
