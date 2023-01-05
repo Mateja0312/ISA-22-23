@@ -3,7 +3,7 @@ import {
   Model
 } from 'sequelize';
 
-interface AppointmentAttrubutes {
+interface AppointmentAttributes {
   id: number;
   startTime: Date;
   durationInMinutes: number;
@@ -11,8 +11,8 @@ interface AppointmentAttrubutes {
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
-  class Appointment extends Model<AppointmentAttrubutes>
-  implements AppointmentAttrubutes {
+  class Appointment extends Model<AppointmentAttributes>
+  implements AppointmentAttributes {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.

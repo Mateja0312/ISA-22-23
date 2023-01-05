@@ -15,7 +15,17 @@ module.exports = (sequelize: any, DataTypes: any) => {
     id!: number;
     name!: string;
     address!: string;
+    // getRatings: () => Promise<[]>
 
+    // Rating = sequelize.import('./rating.ts')
+    get averageRating() {
+      return this.getRatings()
+        .then((ratings: any) => {
+          const sum = ratings.reduce((acc: any, rating: any) => acc + rating.rating, 0);
+          return sum / ratings.length;
+        });
+    }
+    
     static associate(models: any) {
       Center.hasMany(models.User, {
         foreignKey: 'employedAt'

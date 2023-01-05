@@ -38,11 +38,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     phone: string;
     profession: string;
     institution: string;
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+
     static associate(models: any) {
       User.hasMany(models.Appointment, {
         foreignKey: 'client'
