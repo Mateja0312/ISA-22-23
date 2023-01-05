@@ -7,7 +7,6 @@ import Vue from "vue";
 import { mapGetters } from "vuex";
 import Home from "../views/Landing.vue";
 import AdminHome from "../views/AdminHome.vue";
-import CenterAdminHome from "../views/CenterAdminHome.vue";
 import EmployeeHome from "../views/EmployeeHome.vue";
 import ClientHome from "../views/Browse.vue";
 
@@ -16,7 +15,6 @@ export default Vue.extend({
   components: {
     Home,
     AdminHome,
-    CenterAdminHome,
     EmployeeHome,
     ClientHome,
   },

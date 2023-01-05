@@ -2,10 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import db from '../models'
 import {Op} from 'sequelize';
-
-db.sequelize.sync();
+import {sequelize} from './sequelize';
+import {User} from '../models/User'
+import {Center} from '../models/Center'
 
 const app = express();
 
@@ -20,7 +20,7 @@ app.post("/register", async (req, response) => {
     const newUser = req.body;
     newUser.password = bcrypt.hashSync( newUser.password, 10 )
     
-    db.User.create(newUser)
+    User.create(newUser)
     .then((createdUser: any) => {
       response.status(201).json(createdUser);
     })
@@ -32,7 +32,7 @@ app.post("/register", async (req, response) => {
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
-  db.User.findOne({ where: { email } })
+  User.findOne({ where: { email } })
     .then((user: any) => {
       if (!user) {
         return res.status(401).json({ message: "Invalid email or password" });
@@ -69,7 +69,7 @@ app.get("/centers", async (req, res) => {
   }
 
   try {
-    const centers = await db.Center.findAll({ where });
+    const centers = await Center.findAll({ where });
     res.json(centers);
   } catch (error) {
     console.error(error);
@@ -78,12 +78,16 @@ app.get("/centers", async (req, res) => {
 });
 
 app.put("/profile", async(req, res) => {
-  db.User.update(req.body, {
+  User.update(req.body, {
     where: {
       id: req.body.id
     }
   });
-})
+});
 
-app.listen(8081);
+(async () => {
+  await sequelize.sync({force: true});
+
+  app.listen(8081);
+})();
     
