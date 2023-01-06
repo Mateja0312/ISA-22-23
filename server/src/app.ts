@@ -6,6 +6,7 @@ import {Op} from 'sequelize';
 import {sequelize} from './sequelize';
 import {User} from '../models/User'
 import {Center} from '../models/Center'
+import { Questionnaire, questions } from '../models/Questionnaire';
 
 const app = express();
 
@@ -77,6 +78,10 @@ app.get("/centers", async (req, res) => {
   }
 });
 
+app.get("/questionnaireQuestions", async (req, res) => {
+  res.json(questions)
+});
+
 app.put("/profile", async(req, res) => {
   User.update(req.body, {
     where: {
@@ -85,8 +90,20 @@ app.put("/profile", async(req, res) => {
   });
 });
 
+app.post("/questionnaire", async(req, res) => {
+  console.log(req.body)
+  Questionnaire.create({...req.body, q_answers: JSON.stringify(req.body.q_answers)})
+  .then((createdQuestionnaire: any) => {
+    res.status(201).json(createdQuestionnaire);
+  })
+  .catch((err: any)=>{
+    console.log(err);
+    res.status(500).json(err);
+  })
+});
+
 (async () => {
-  await sequelize.sync(); // mora bez force: true da se ne bi dropovale i ponovo pravile tabele pri pokretanju beka
+  await sequelize.sync(); // mora bez {force: true} da se ne bi dropovale i ponovo pravile tabele pri pokretanju beka
 
   app.listen(8081);
 })();

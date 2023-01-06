@@ -42,6 +42,11 @@ const routes: Array<RouteConfig> = [
     name: "Centers",
     component: () => import("../views/Centers.vue"),
   },
+  {
+    path: "/questionnaire",
+    name: "Questionnaire",
+    component: () => import("../views/Questionnaire.vue"),
+  },
 ];
 
 const router = new VueRouter({

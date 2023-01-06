@@ -19,6 +19,12 @@ export async function getProductById(productId: number): Promise<any> {
     .then((res) => res.data);
 }
 
+export async function questions(): Promise<any> {
+  return api()
+    .get('questionnaireQuestions')
+    .then(res => res.data);
+}
+
 export async function getAllProviders(): Promise<any> {
   return api()
     .get("providers")
@@ -56,4 +62,8 @@ export async function updateUserActivity(userInfo: any): Promise<any> {
 
 export async function approve(newUser: any): Promise<any> {
   return api().post("register", newUser).then();
+}
+
+export async function saveQuestionnaireInfo(newAnswers: any): Promise<any> {
+  return api().post("questionnaire", newAnswers).then();
 }
