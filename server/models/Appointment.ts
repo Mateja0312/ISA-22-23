@@ -3,7 +3,6 @@
 import { Table, Column, Model, BelongsTo } from 'sequelize-typescript';
 import { Center } from './Center';
 import {User} from "./User";
-import {Rating} from "./Rating";
 
 export enum AppointmentStatus {
   AVAILABLE = 'available',
