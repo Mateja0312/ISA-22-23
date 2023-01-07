@@ -1,8 +1,7 @@
 'use strict';
 
-import { Table, Column, Model, HasMany, ForeignKey, HasOne, BelongsTo } from 'sequelize-typescript';
+import { Table, Column, Model, BelongsTo } from 'sequelize-typescript';
 import {User} from "./User";
-import {Rating} from "./Rating";
 
 export enum AppointmentStatus {
   AVAILABLE = 'available',

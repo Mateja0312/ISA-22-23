@@ -1,4 +1,4 @@
-import { Table, Column, Model, HasMany, ForeignKey } from 'sequelize-typescript';
+import { Table, Column, Model, ForeignKey } from 'sequelize-typescript';
 import {User} from "./User";
 import {Center} from "./Center";
 
