@@ -23,7 +23,7 @@ export default Vue.extend({
   methods: {
     async login() {
       const res = await login({ email: this.email, password: this.password });
-      console.log(res);
+
       this.$store.commit("setToken", res.data.token);
       this.$store.commit("setUser", res.data.user);
       this.$router.push("/");

@@ -91,13 +91,12 @@ app.put("/profile", async(req, res) => {
 });
 
 app.post("/questionnaire", async(req, res) => {
-  console.log(req.body)
   Questionnaire.create({...req.body, q_answers: JSON.stringify(req.body.q_answers)})
   .then((createdQuestionnaire: any) => {
     res.status(201).json(createdQuestionnaire);
   })
   .catch((err: any)=>{
-    console.log(err);
+    console.error(err);
     res.status(500).json(err);
   })
 });

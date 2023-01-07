@@ -7,11 +7,10 @@
       <question
         v-for="(question, index) in questions"
         :key="question"
-        :qText="question"
-        :qNumber="index.toString()"
+        :text="question"
+        :index="index"
         v-model="myAnswers[index]"
       >
-        {{ index }}.{{ question }}
       </question>
     </div>
 
@@ -35,17 +34,13 @@ export default Vue.extend({
   },
   async mounted() {
     this.questions = await questions();
-    console.log(this.questions);
   },
   methods: {
     onSubmit() {
-      console.log(this.myAnswers);
-      console.log(
-        saveQuestionnaireInfo({
-          q_answers: this.myAnswers,
-          client_id: this.$store.state.user.id,
-        })
-      );
+      saveQuestionnaireInfo({
+        q_answers: this.myAnswers,
+        client_id: this.$store.state.user.id,
+      });
     },
   },
 });

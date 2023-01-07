@@ -1,5 +1,3 @@
-
-
 <template>
   <div id="profile">
     <header>
@@ -71,7 +69,6 @@ export default Vue.extend({
   methods: {
     saveUserInfo() {
       this.$store.commit("setUser", this.user);
-      console.log(this.user.firstName + ' ' + this.user.lastName);
       updateClientInfo(this.user);
     },
     deleteAccount() {

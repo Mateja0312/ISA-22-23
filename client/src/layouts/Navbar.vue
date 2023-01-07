@@ -1,14 +1,11 @@
 <template>
   <div>
     <nav id="navbar">
-      <router-link to="/">Početna</router-link>
-      <router-link to="/about">O nama</router-link>
-      <router-link to="/profile" v-if="isLoggedIn">Profil</router-link>
-      <router-link to="/login" v-if="!isLoggedIn">Prijava</router-link>
-      <a href="/" v-if="isLoggedIn" @click.prevent="logout">Odjava</a>
-      <router-link to="/registration" v-if="!isLoggedIn"
-        >Registracija</router-link
-      >
+      <router-link to="/">Home</router-link>
+      <router-link to="/profile" v-if="isLoggedIn">Profile</router-link>
+      <router-link to="/login" v-if="!isLoggedIn">Sign in</router-link>
+      <a href="/" v-if="isLoggedIn" @click.prevent="logout">Sign out</a>
+      <router-link to="/registration" v-if="!isLoggedIn">Sign up</router-link>
     </nav>
     <main>
       <slot />
