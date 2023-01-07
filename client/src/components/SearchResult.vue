@@ -1,10 +1,16 @@
 <template>
   <div class="center">
     <div class="center-info">
-      <h2>{{ center.name }}</h2>
+      <h2>
+        <router-link :to="'/center/' + center.id">
+          {{ center.name }}
+        </router-link>
+      </h2>
       <dl>
         <dt>Address</dt>
         <dd>{{ center.address }}</dd>
+        <dt>Rating</dt>
+        <dd>{{ center.rating ?? "none" }}</dd>
       </dl>
       <div class="center-controls">
         <button @click="onClick">View</button>
