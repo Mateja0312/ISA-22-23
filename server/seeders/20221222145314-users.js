@@ -5,11 +5,11 @@ const bcrypt = require( 'bcrypt' );
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('Users', [{
-      email: 'example@example.com',
+      email: 'admin@email.com',
       password: bcrypt.hashSync( '123', 10 ),
       firstName: 'Glavni',
       lastName: 'Arhivator',
-      role: 'Admin',
+      role: 'admin',
       active: 'active',
       address: 'ND',
       city: 'ND',
@@ -23,11 +23,11 @@ module.exports = {
       updatedAt: new Date()
     },
     {
-      email: 'employee@gmail.com',
+      email: 'employee@email.com',
       password: bcrypt.hashSync( '123', 10 ),
       firstName: 'Medicinski',
       lastName: 'Radnik',
-      role: 'Employee',
+      role: 'employee',
       active: 'active',
       address: 'ND',
       city: 'ND',
@@ -41,12 +41,30 @@ module.exports = {
       updatedAt: new Date()
     },
     {
-      email: 'centeradmin@gmail.com',
+      email: 'centeradmin@email.com',
       password: bcrypt.hashSync( '123', 10 ),
       firstName: 'Admin',
       lastName: 'Centra',
-      role: 'CenterAdmin',
+      role: 'employee',
       active: 'active',
+      address: 'ND',
+      city: 'ND',
+      country: 'ND',
+      phone: 'ND',
+      JMBG: 'ND',
+      profession: 'ND',
+      gender: true,
+      institution: 'ND',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      email: 'client@email.com',
+      password: bcrypt.hashSync( '123', 10 ),
+      firstName: 'Blood',
+      lastName: 'Bag',
+      role: 'client',
+      active: 'activated',
       address: 'ND',
       city: 'ND',
       country: 'ND',

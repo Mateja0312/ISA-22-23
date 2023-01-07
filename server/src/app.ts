@@ -21,7 +21,7 @@ app.get("/", (req, response) => {
 app.post("/register", async (req, res) => {
   const newUser = req.body;
   newUser.password = bcrypt.hashSync(newUser.password, 10);
-  newUser.active = 'unactivated'; // add this field to track whether the user has activated their account
+  newUser.active = 'unactivated'; 
 
   try {
     const createdUser = await User.create(newUser);

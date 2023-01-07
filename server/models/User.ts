@@ -1,8 +1,8 @@
 import { Table, Column, Model, HasMany, ForeignKey, HasOne } from 'sequelize-typescript';
 import { Appointment } from './Appointment';
-import {Center} from "./Center";
-import {Rating} from "./Rating";
-import {Questionnaire} from "./Questionnaire";
+import { Center } from "./Center";
+import { Rating } from "./Rating";
+import { Questionnaire } from "./Questionnaire";
 
 export enum Roles {
   SYS_ADMIN = 'admin',
@@ -13,6 +13,11 @@ export enum Roles {
 export enum Gender {
   MALE = 'male',
   FEMALE = 'female'
+}
+
+export enum Activation {
+  UNACTIVATED = 'unactivated',
+  ACTIVATED = 'activated'
 }
 
 @Table
