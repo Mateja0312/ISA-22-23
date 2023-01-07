@@ -1,15 +1,9 @@
 import { Table, Column, Model, HasMany, ForeignKey, HasOne } from 'sequelize-typescript';
 import { Appointment } from './Appointment';
-<<<<<<< Updated upstream
-import {Center} from "./Center";
-import {Rating} from "./Rating";
-import {Questionnaire} from "./Questionnaire";
-=======
 import { Center } from "./Center";
 import { Rating } from "./Rating";
 import { Questionnaire } from "./Questionnaire";
 import { Feedback } from './Feedback';
->>>>>>> Stashed changes
 
 export enum Roles {
   SYS_ADMIN = 'admin',
