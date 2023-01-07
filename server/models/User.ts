@@ -1,8 +1,15 @@
 import { Table, Column, Model, HasMany, ForeignKey, HasOne } from 'sequelize-typescript';
 import { Appointment } from './Appointment';
+<<<<<<< Updated upstream
 import {Center} from "./Center";
 import {Rating} from "./Rating";
 import {Questionnaire} from "./Questionnaire";
+=======
+import { Center } from "./Center";
+import { Rating } from "./Rating";
+import { Questionnaire } from "./Questionnaire";
+import { Feedback } from './Feedback';
+>>>>>>> Stashed changes
 
 export enum Roles {
   SYS_ADMIN = 'admin',
@@ -74,4 +81,10 @@ export class User extends Model<User>{
 
   @HasOne(() => Questionnaire, 'client_id')
   myQuestionnaire: Questionnaire;
+
+  @HasMany(() => Feedback, 'client_id')
+  feedbacksGiven: Feedback[];
+
+  @HasMany(() => Feedback, 'employee_id')
+  feedbacksReceived: Feedback[];
 }
