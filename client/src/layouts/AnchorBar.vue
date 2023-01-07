@@ -3,23 +3,18 @@
     <header>
       <nav>
         <router-link to="/">
-          <img src="../assets/real-red-blood-drop-clip-art-clkerm-vector-clip-0.png" />
+          <img
+            src="../assets/real-red-blood-drop-clip-art-clkerm-vector-clip-0.png"
+          />
         </router-link>
         <div id="links">
-          <router-link to="/about" class="mx-2">About</router-link>
-          <router-link to="/profile" v-if="isLoggedIn" class="mx-2"
-            >Profile</router-link
-          >
-          <router-link to="/reservations" v-if="isClient" class="mx-2"
+          <router-link to="/profile" v-if="isLoggedIn">Profile</router-link>
+          <router-link to="/reservations" v-if="isClient"
             >Reservations</router-link
           >
-          <router-link to="/login" v-if="!isLoggedIn" class="mx-2"
-            >Sign In</router-link
-          >
-          <a href="/" v-if="isLoggedIn" @click.prevent="logout" class="mx-2"
-            >Sign Out</a
-          >
-          <router-link to="/registration" v-if="!isLoggedIn" class="mx-2"
+          <router-link to="/login" v-if="!isLoggedIn">Sign In</router-link>
+          <a href="/" v-if="isLoggedIn" @click.prevent="logout">Sign Out</a>
+          <router-link to="/registration" v-if="!isLoggedIn"
             >Sign Up</router-link
           >
         </div>
@@ -62,6 +57,8 @@ nav {
     right: 5%;
     font-size: 24px;
     color: red;
+    display: flex;
+    gap: 20px;
   }
   img {
     margin-top: 20px;

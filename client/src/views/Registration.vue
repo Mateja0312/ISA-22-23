@@ -1,9 +1,13 @@
 <template>
   <div>
     <form>
-      <labeled-input id="email" type="email" labelValue="Email:" v-model="newUser.email"/>
+      <labeled-input
+        id="email"
+        type="email"
+        labelValue="Email:"
+        v-model="newUser.email"
+      />
 
-      
       <label for="password1">Password:</label>
       <input id="password1" type="password" v-model="newUser.password" />
       <label for="password2">Repeat Password:</label>
@@ -55,7 +59,7 @@ import LabeledInput from "@/components/LabeledInput.vue";
 export default Vue.extend({
   name: "Registration",
   components: {
-    LabeledInput
+    LabeledInput,
   },
   props: {},
   data() {
@@ -79,12 +83,10 @@ export default Vue.extend({
   },
   methods: {
     onSubmit() {
-      console.log(
-        register({
-          ...this.newUser,
-          role: "Client",
-        })
-      )
+      register({
+        ...this.newUser,
+        role: "Client",
+      });
       this.$router.push("login");
     },
   },

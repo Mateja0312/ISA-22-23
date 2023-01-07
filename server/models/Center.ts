@@ -1,6 +1,6 @@
 'use strict';
 
-import { Table, Column, Model, HasMany, ForeignKey } from 'sequelize-typescript';
+import { Table, Column, Model, HasMany } from 'sequelize-typescript';
 import {User} from "./User";
 import {Rating} from "./Rating";
 import { Feedback } from './Feedback';
