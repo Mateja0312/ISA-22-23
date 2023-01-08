@@ -1,6 +1,6 @@
 <template>
   <div id="centers-page">
-    <form class="mt-32 mx-auto">
+    <form>
       <label for="date">Date: </label>
       <input id="date" type="date" />
       <label for="name">Name: </label>
@@ -11,7 +11,7 @@
       <input v-model="rating" id="rating" type="number" />
       <button @click.prevent="search">search</button>
     </form>
-    <section class="mx-auto">
+    <section>
       <search-result
         v-for="center in centers"
         :key="center.id"
