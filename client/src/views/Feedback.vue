@@ -1,17 +1,36 @@
 <template>
     <div class="feedback">
-        <input class="textarea" id="feedbackContent" placeholder="ovde se pise complaint"/>
-        <search-result></search-result>
+        <input
+        class="textarea"
+        id="feedbackContent"
+        v-model="content"
+        placeholder="ovde se pise complaint"/>
+        <p>Negde treba nekako prikazati listu zaposlenih i centara sa kojima je korisnik interagovao</p>
+        <button @click="onSubmit">Submit</button>
     </div>
 </template>
 
 <script>
 import Vue from "vue";
-import SearchResult from "../components/SearchResult.vue";
+import { submitFeedback } from "../services/requests";
 
 export default Vue.extend({
-    component : SearchResult,
-    name: "Feedback"
+    name: "Feedback",
+    data() {
+        return{
+            content: "",
+        };
+    },
+    methods:{
+        onSubmit(){
+            submitFeedback({
+                content: this.content,
+                client_id: this.$store.state.user.id,
+                employee_id: 1, // za sad hard kodovano, ove podatke verovatno treba izvuci preko liste korisnikovih appointmenta pa izvuci zaposlene i centre sa kojima je interagovano
+                center_id: 1,
+            });
+        },
+    },
 });
 </script>
 

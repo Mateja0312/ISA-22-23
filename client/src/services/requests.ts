@@ -67,3 +67,7 @@ export async function approve(newUser: any): Promise<any> {
 export async function saveQuestionnaireInfo(newAnswers: any): Promise<any> {
   return api().post("questionnaire", newAnswers).then();
 }
+
+export async function submitFeedback(newFeedback: any): Promise<any> {
+  return api().post("feedback", newFeedback).then();
+}

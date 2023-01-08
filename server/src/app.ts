@@ -8,6 +8,7 @@ import {sequelize} from './sequelize';
 import {User} from '../models/User'
 import {Center} from '../models/Center'
 import { Questionnaire, questions } from '../models/Questionnaire';
+import { Feedback } from '../models/Feedback';
 
 const app = express();
 
@@ -138,6 +139,17 @@ app.post("/questionnaire", async(req, res) => {
   Questionnaire.create({...req.body, q_answers: JSON.stringify(req.body.q_answers)})
   .then((createdQuestionnaire: any) => {
     res.status(201).json(createdQuestionnaire);
+  })
+  .catch((err: any)=>{
+    console.error(err);
+    res.status(500).json(err);
+  })
+});
+
+app.post("/feedback", async(req, res) => {
+  Feedback.create(req.body)
+  .then((createdFeedback: any) => {
+    res.status(201).json(createdFeedback);
   })
   .catch((err: any)=>{
     console.error(err);
