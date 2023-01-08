@@ -3,6 +3,7 @@ import { Appointment } from './Appointment';
 import { Center } from "./Center";
 import { Rating } from "./Rating";
 import { Questionnaire } from "./Questionnaire";
+import { Feedback } from './Feedback';
 
 export enum Roles {
   SYS_ADMIN = 'admin',
@@ -13,11 +14,6 @@ export enum Roles {
 export enum Gender {
   MALE = 'male',
   FEMALE = 'female'
-}
-
-export enum Activation {
-  UNACTIVATED = 'unactivated',
-  ACTIVATED = 'activated'
 }
 
 @Table
@@ -79,4 +75,10 @@ export class User extends Model<User>{
 
   @HasOne(() => Questionnaire, 'client_id')
   myQuestionnaire: Questionnaire;
+
+  @HasMany(() => Feedback, 'client_id')
+  feedbacksGiven: Feedback[];
+
+  @HasMany(() => Feedback, 'employee_id')
+  feedbacksReceived: Feedback[];
 }

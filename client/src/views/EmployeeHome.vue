@@ -2,7 +2,6 @@
     <div class="dashboard">
         <homepage-image id=requests img="No-Image-Placeholder.jpg" page="boats" title="Business Data"/>
         <homepage-image id=requests img="No-Image-Placeholder.jpg" page="boats" title="Manage Appointments"/><!--na ovoj stranici ce biti link za istoriju svih appointmenta vezanih za dodeljen centar-->
-        <homepage-image id=requests img="No-Image-Placeholder.jpg" page="boats" title="Center Admin"/>
     </div>
   </template>
   
@@ -23,7 +22,7 @@
   
   <style scoped lang="scss">
   .homepage-image{
-    width:calc(100% / 3);
+    width:calc(100% / 2);
     height:calc(100vh -  78px); 
     float:left;
   }
