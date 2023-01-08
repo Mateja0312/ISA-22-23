@@ -2,22 +2,22 @@
 
 import { Table, Column, Model, BelongsTo } from 'sequelize-typescript';
 import { Center } from './Center';
-import {User} from "./User";
+import { User } from "./User";
 
 export enum AppointmentStatus {
-  AVAILABLE = 'available',
-  PENDING = 'pending',
-  COMPLETED = 'completed',
-  FAILED = 'failed',
+  PREDEFINED = 'predefined',
+  CLIENT_ACCEPTED = 'accepted',
+  CLIENT_RESERVED = 'reserved',
+  CLIENT_CANCELED = 'canceled',
 }
   @Table
   export class Appointment extends Model<Appointment>{
 
     @Column
-    startTime: Date;
+    start: Date;
 
     @Column
-    durationInMinutes: number;
+    end: Date;
 
     @Column
     status: AppointmentStatus;

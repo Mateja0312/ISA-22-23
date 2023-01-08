@@ -62,7 +62,7 @@ export class User extends Model<User>{
 
   @ForeignKey(() => Center)
   @Column
-  employedAt!: number
+  employedAt: number
 
   @HasMany(() => Rating)
   ratings: Rating[];

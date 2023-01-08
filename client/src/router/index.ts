@@ -34,6 +34,12 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/Centers.vue"),
   },
   {
+    path: "/center/:id",
+    name: "Center",
+    component: () => import("../views/Center.vue"),
+    props: true,
+  },
+  {
     path: "/questionnaire",
     name: "Questionnaire",
     component: () => import("../views/Questionnaire.vue"),

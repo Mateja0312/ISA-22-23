@@ -7,8 +7,11 @@ import {Op} from 'sequelize';
 import {sequelize} from './sequelize';
 import {User} from '../models/User'
 import {Center} from '../models/Center'
+import {Rating} from '../models/Rating'
 import { Questionnaire, questions } from '../models/Questionnaire';
 import { Feedback } from '../models/Feedback';
+import { Appointment } from '../models/Appointment';
+import { ClientRequest } from 'http';
 
 const app = express();
 
@@ -104,7 +107,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/centers", async (req, res) => {
-  const { name, address } = req.query;
+  const { name, address, rating } = req.query;
 
   const where: any = {};
   if (name) {
@@ -114,9 +117,39 @@ app.get("/centers", async (req, res) => {
     where.address = { [Op.like]: `%${address}%` };
   }
 
+  let centers = (await Center.findAll({ where, include: [Rating, Appointment]}));
+  centers = centers.map((center: any) => {
+    center = center.get({ plain: true }); 
+    if(center.ratings) {
+      center.rating = center.ratings.reduce((acc: number, rating: any) => acc + rating.rating, 0) / center.ratings.length
+    }
+    return center;
+  });
+
+  if (rating) {
+    centers = centers.filter((center: any) => center.rating >= rating);
+  }
+
   try {
-    const centers = await Center.findAll({ where });
+    
     res.json(centers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.get("/center/:id", async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    let center : any = await Center.findOne({ where: { id }, include: [Rating, Appointment]});
+    center = center.get({ plain: true }); 
+    if(center.ratings) {
+      center = {...center, rating: center.ratings.reduce((acc: number, rating: any) => acc + rating.rating, 0) / center.ratings.length}
+    }
+
+    res.json(center);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
@@ -156,6 +189,31 @@ app.post("/feedback", async(req, res) => {
     res.status(500).json(err);
   })
 });
+
+app.post("/appointment", async(req, res) => {
+  const newAppointment = req.body;
+  const { id } = jwt.verify(newAppointment.token, process.env.JWT_SECRET as string) as { id: number };
+  if (id !== newAppointment.user_id) {
+    return res.status(401).json({ message: "Invalid token" });
+  } else {
+    delete newAppointment.token;
+    delete newAppointment.user_id; 
+    const user = (await User.findOne({ where: { id } })).get({ plain: true });
+    newAppointment[user.role + '_id'] = user.id;
+    newAppointment['status'] = user.role === 'client' ? 'reserved' : 'predefined';
+    console.log(newAppointment)
+    Appointment.create(newAppointment)
+    .then((createdAppointment: any) => {
+      res.status(201).json(createdAppointment);
+    })
+    .catch((err: any)=>{
+      console.error(err);
+      res.status(500).json(err);
+    })
+  }
+  
+});
+
 
 (async () => {
   await sequelize.sync(); // mora bez {force: true} da se ne bi dropovale i ponovo pravile tabele pri pokretanju beka

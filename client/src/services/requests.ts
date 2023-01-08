@@ -21,8 +21,8 @@ export async function getProductById(productId: number): Promise<any> {
 
 export async function questions(): Promise<any> {
   return api()
-    .get('questionnaireQuestions')
-    .then(res => res.data);
+    .get("questionnaireQuestions")
+    .then((res) => res.data);
 }
 
 export async function getAllProviders(): Promise<any> {
@@ -44,12 +44,12 @@ export async function getReservations(clientId: number): Promise<any> {
     .then((res) => res.data);
 }
 
-export async function makeReservation(reservation: any): Promise<any> {
-  return api().post("makeReservation", reservation).then();
+export async function makeAppointment(appointment: any): Promise<any> {
+  return api().post("appointment", appointment).then();
 }
 
-export async function cancelReservation(cancelRequest: any): Promise<any> {
-  return api().put("cancelReservation", cancelRequest).then();
+export async function cancelAppointment(cancelRequest: any): Promise<any> {
+  return api().put("cancelAppointment", cancelRequest).then();
 }
 
 export async function updateClientInfo(clientInfo: any): Promise<any> {
@@ -70,4 +70,9 @@ export async function saveQuestionnaireInfo(newAnswers: any): Promise<any> {
 
 export async function submitFeedback(newFeedback: any): Promise<any> {
   return api().post("feedback", newFeedback).then();
+}
+export async function getCenter(id: number): Promise<any> {
+  return api()
+    .get(`center/${id}`)
+    .then((res) => res.data);
 }
