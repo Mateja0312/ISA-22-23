@@ -34,7 +34,7 @@ export default Vue.extend({
       name: null,
       address: null,
       rating: null,
-      centers: [],
+      centers: [] as any[],
     };
   },
   mounted() {
