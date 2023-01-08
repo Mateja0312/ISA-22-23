@@ -37,6 +37,7 @@ module.exports = {
       profession: 'ND',
       gender: true,
       institution: 'ND',
+      employedAt: 1,
       createdAt: new Date(),
       updatedAt: new Date()
     },
@@ -55,6 +56,7 @@ module.exports = {
       profession: 'ND',
       gender: true,
       institution: 'ND',
+      employedAt: 1,
       createdAt: new Date(),
       updatedAt: new Date()
     },

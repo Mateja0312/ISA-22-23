@@ -7,7 +7,9 @@ import {Op} from 'sequelize';
 import {sequelize} from './sequelize';
 import {User} from '../models/User'
 import {Center} from '../models/Center'
+import {Rating} from '../models/Rating'
 import { Questionnaire, questions } from '../models/Questionnaire';
+import { ClientRequest } from 'http';
 
 const app = express();
 
@@ -103,7 +105,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/centers", async (req, res) => {
-  const { name, address } = req.query;
+  const { name, address, rating } = req.query;
 
   const where: any = {};
   if (name) {
@@ -113,8 +115,21 @@ app.get("/centers", async (req, res) => {
     where.address = { [Op.like]: `%${address}%` };
   }
 
+  let centers = (await Center.findAll({ where, include: [Rating]}));
+  centers = centers.map((center: any) => {
+    center = center.get({ plain: true }); 
+    if(center.ratings) {
+      center.rating = center.ratings.reduce((acc: number, rating: any) => acc + rating.rating, 0) / center.ratings.length
+    }
+    return center;
+  });
+
+  if (rating) {
+    centers = centers.filter((center: any) => center.rating >= rating);
+  }
+
   try {
-    const centers = await Center.findAll({ where });
+    
     res.json(centers);
   } catch (error) {
     console.error(error);

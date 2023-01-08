@@ -7,7 +7,7 @@
       <input v-model="name" id="name" />
       <label for="address">Address: </label>
       <input v-model="address" id="address" />
-      <label for="rating">Rating: </label>
+      <label for="rating">Rating >= </label>
       <input v-model="rating" id="rating" type="number" />
       <button @click.prevent="search">search</button>
     </form>

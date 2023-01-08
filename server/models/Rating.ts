@@ -1,4 +1,4 @@
-import { Table, Column, Model, ForeignKey } from 'sequelize-typescript';
+import { Table, Column, Model, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import {User} from "./User";
 import {Center} from "./Center";
 
@@ -11,7 +11,6 @@ export class Rating extends Model<Rating>{
   @Column
   user_id!: number
 
-  @ForeignKey(() => Center)
-  @Column
-  center_id!: number
+  @BelongsTo(() => Center, 'center_id')
+  center: Center  
 }

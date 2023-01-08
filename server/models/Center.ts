@@ -16,7 +16,7 @@ import { Feedback } from './Feedback';
     @HasMany(() => User)
     employees: User[];
 
-    @HasMany(() => Rating)
+    @HasMany(() => Rating, 'center_id')
     ratings: Rating[];
 
     @HasMany(() => Feedback, 'center_id')
