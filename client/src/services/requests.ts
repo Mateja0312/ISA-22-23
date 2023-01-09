@@ -13,6 +13,12 @@ export async function getCenters(query: any): Promise<any> {
     .then((res) => res.data);
 }
 
+export async function getMyInteractions(): Promise<any> {
+  return api()
+    .get("interactedEmployeesAndCenters")
+    .then((res) => res.data);
+}
+
 export async function getProductById(productId: number): Promise<any> {
   return api()
     .get(`products/${productId}`)
@@ -28,8 +34,7 @@ export async function questions(): Promise<any> {
 export async function getAllProviders(): Promise<any> {
   return api()
     .get("providers")
-    .then((res) => res.data); //ovde nije pisalo res => res.data i bez toga nije radilo
-  //poenta je da ce res biti ceo response objekat koji ima status i razna druga sranja pored samih podataka koji nas zanimaju, pa kad uradimo res.data ekstraktujemo samo onaj deo odgovora koji nas interesuje, same podatke
+    .then((res) => res.data);
 }
 
 export async function getAllUsers(): Promise<any> {
@@ -71,6 +76,7 @@ export async function saveQuestionnaireInfo(newAnswers: any): Promise<any> {
 export async function submitFeedback(newFeedback: any): Promise<any> {
   return api().post("feedback", newFeedback).then();
 }
+
 export async function getCenter(id: number): Promise<any> {
   return api()
     .get(`center/${id}`)

@@ -5,21 +5,35 @@
         id="feedbackContent"
         v-model="content"
         placeholder="ovde se pise complaint"/>
+        <label for="dog-names">Choose a dog name:</label>
+        <select name="dog-names" id="dog-names">
+            <option value="rigatoni">Rigatoni</option> <!-- opcije ce se praviti pomocu v-for elementa -->
+            <option value="dave">Dave</option>
+            <option value="pumpernickel">Pumpernickel</option>
+            <option value="reeses">Reeses</option>
+        </select>
         <p>Negde treba nekako prikazati listu zaposlenih i centara sa kojima je korisnik interagovao</p>
         <button @click="onSubmit">Submit</button>
+        {{ myInteractions }}
     </div>
 </template>
 
 <script>
 import Vue from "vue";
-import { submitFeedback } from "../services/requests";
+import { submitFeedback, getMyInteractions } from "../services/requests";
 
 export default Vue.extend({
     name: "Feedback",
     data() {
         return{
             content: "",
+            myInteractions: [],
         };
+    },
+    mounted() {
+        getMyInteractions({client_id: this.$store.state.user.id}).then((res) => {
+            this.myInteractions = res;
+        });
     },
     methods:{
         onSubmit(){

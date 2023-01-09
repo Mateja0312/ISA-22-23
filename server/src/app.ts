@@ -139,6 +139,37 @@ app.get("/centers", async (req, res) => {
   }
 });
 
+app.get("/interactedEmployeesAndCenters", async (req, res) => {
+  
+  console.log("budjons",req.params);
+  try {
+    let content : any = await Appointment.findAll({
+      where: {
+        client: req.params
+      },
+      include: [{model: User, as: 'client'}] 
+      // include: [
+      //   {
+      //     model: User,
+      //     as: "client"
+      //   },
+      //   {
+      //     model: User,
+      //     as: "employee"
+      //   },
+      //   Center
+      // ]
+    });
+    res.json(content);
+    console.log("kontent",content);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+
+});
+
 app.get("/center/:id", async (req, res) => {
   const { id } = req.params;
   
@@ -219,5 +250,6 @@ app.post("/appointment", async(req, res) => {
   await sequelize.sync(); // mora bez {force: true} da se ne bi dropovale i ponovo pravile tabele pri pokretanju beka
 
   app.listen(8081);
+
 })();
     
