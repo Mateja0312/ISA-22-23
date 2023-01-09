@@ -6,7 +6,7 @@
       <input
         type="radio"
         id="yes"
-        :name="index.toString"
+        :name="index.toString()"
         value="YES"
         @input="updateValue"
       />
@@ -14,7 +14,7 @@
       <input
         type="radio"
         id="no"
-        :name="index.toString"
+        :name="index.toString()"
         value="NO"
         @input="updateValue"
       />
