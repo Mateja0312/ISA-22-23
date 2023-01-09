@@ -13,9 +13,9 @@ export async function getCenters(query: any): Promise<any> {
     .then((res) => res.data);
 }
 
-export async function getMyInteractions(): Promise<any> {
+export async function getMyInteractions(token: any): Promise<any> {
   return api()
-    .get("interactedEmployeesAndCenters")
+    .get("interactions", { params: token })
     .then((res) => res.data);
 }
 

@@ -139,29 +139,30 @@ app.get("/centers", async (req, res) => {
   }
 });
 
-app.get("/interactedEmployeesAndCenters", async (req, res) => {
-  
-  console.log("budjons",req.params);
+app.get("/interactions", async (req, res) => {
+  const { token } = req.query;
+  const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
   try {
     let content : any = await Appointment.findAll({
-      where: {
-        client: req.params
-      },
-      include: [{model: User, as: 'client'}] 
-      // include: [
-      //   {
-      //     model: User,
-      //     as: "client"
-      //   },
-      //   {
-      //     model: User,
-      //     as: "employee"
-      //   },
-      //   Center
-      // ]
+      include: { all: true },
+      where: { 
+        client_id: id, 
+        // status: 'completed' 
+      }
     });
-    res.json(content);
-    console.log("kontent",content);
+
+    const interactions = content.reduce((acc: any, appointment: any) => {
+      appointment = appointment.get({ plain: true });
+      acc['centers'].push( appointment.center);
+      acc['doctors'].push( appointment.employee);
+      return acc;
+    }, {centers: [], doctors: []});
+
+    // remove duplicates
+    interactions.centers =  [...new Map(interactions.centers.map((item: any) => [item?.id, item])).values()]
+    interactions.doctors =  [...new Map(interactions.doctors.map((item: any) => [item?.id, item])).values()]
+
+    res.json(interactions);
 
   } catch (error) {
     console.error(error);
@@ -232,7 +233,6 @@ app.post("/appointment", async(req, res) => {
     const user = (await User.findOne({ where: { id } })).get({ plain: true });
     newAppointment[user.role + '_id'] = user.id;
     newAppointment['status'] = user.role === 'client' ? 'reserved' : 'predefined';
-    console.log(newAppointment)
     Appointment.create(newAppointment)
     .then((createdAppointment: any) => {
       res.status(201).json(createdAppointment);

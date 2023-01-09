@@ -105,7 +105,6 @@ export default Vue.extend({
           this.events = [];
 
           this.center.appointments.forEach((termin: any) => {
-            console.log("termin", termin);
             this.events.push({
               id: termin.id,
               user_id: 1,
@@ -119,7 +118,6 @@ export default Vue.extend({
         });
     },
     timesSelected: function (selectedPeriod: any) {
-      console.log("timesSelected", selectedPeriod);
       this.showCreateModal = true;
 
       this.newResStart = selectedPeriod.start;
@@ -135,7 +133,6 @@ export default Vue.extend({
       });
     },
     eventClicked: function (e: any) {
-      console.log("eventClicked", e);
       this.showApproveModal = true;
       this.activeRes = e.unavailability;
     },
@@ -160,7 +157,6 @@ export default Vue.extend({
         Predefined: "#6495ed",
         Reserved: "#f28c28",
       };
-      console.log(this.unavailabilityStatus(ua));
       return colors[this.unavailabilityStatus(ua)];
     },
     unavailabilityStatus(appointment: any): any {
