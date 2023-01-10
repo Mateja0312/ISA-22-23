@@ -3,6 +3,7 @@ import nodemailer from 'nodemailer';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import qrcode from 'qrcode';
 import {Op} from 'sequelize';
 import {sequelize} from './sequelize';
 import {User} from '../models/User'
@@ -13,6 +14,48 @@ import { Feedback } from '../models/Feedback';
 import { Appointment, AppointmentStatus } from '../models/Appointment';
 import { ClientRequest } from 'http';
 import { FeedbackStatus } from "../models/Feedback";
+import path from 'path';
+
+const publicPath = path.join(__dirname, '..', 'qrcodes', 'test.png');
+qrcode.toFile(publicPath, JSON.stringify({id: 1}), { type: 'png' }, (err) => {
+  if (err) throw err;
+  console.log("QR code generated successfully");
+});
+
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: parseInt(process.env.SMTP_PORT, 10), 
+  auth: {
+    user: process.env.SMTP_USERNAME,
+    pass: process.env.SMTP_PASSWORD
+  }
+});
+
+function sendQRcode(appointment: any, email: string){
+        console.log(appointment);
+        const filename = `appointment-${appointment.id}.png`
+        const qrCodePath = path.join(__dirname, '..', 'qrcodes', filename);
+        qrcode.toFile(qrCodePath, JSON.stringify(appointment), { type: 'png' }, (err) => {
+          if (err) throw err;
+          console.log("QR code generated successfully");
+        });
+
+        const mailOptions = {
+          from: 'appointments@lastdrop.com',
+          to: email,
+          subject: 'Appointment QR Code',
+          text: 'Appointment QR Code',
+          html: `<p>Appointment QR Code</p><img src="http://localhost:3000/${filename}"/>`
+        };
+        
+        transporter.sendMail(mailOptions, function(error, info){
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('Email sent: ' + info.response);
+          }
+        });
+}
 
 const app = express();
 
@@ -36,15 +79,6 @@ app.post("/register", async (req, res) => {
       process.env.JWT_SECRET as string,
       { expiresIn: "1d" }
     );
-
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT, 10), 
-      auth: {
-        user: process.env.SMTP_USERNAME,
-        pass: process.env.SMTP_PASSWORD
-      }
-    });
 
     const mailOptions = {
       from: "welcome@lastdrop.com",
@@ -132,7 +166,6 @@ app.get("/centers", async (req, res) => {
   }
 
   try {
-    
     res.json(centers);
   } catch (error) {
     console.error(error);
@@ -159,7 +192,6 @@ app.get("/interactions", async (req, res) => {
       return acc;
     }, {centers: [], employees: []});
 
-    // remove duplicates
     interactions.centers =  [...new Map(interactions.centers.map((item: any) => [item?.id, item])).values()]
     interactions.employees =  [...new Map(interactions.employees.map((item: any) => [item?.id, item])).values()]
 
@@ -292,6 +324,10 @@ app.post("/appointment", async(req, res) => {
     newAppointment['status'] = user.role === 'client' ? 'reserved' : 'predefined';
     Appointment.create(newAppointment)
     .then((createdAppointment: any) => {
+      
+      if(user.role === 'client') {
+        sendQRcode(createdAppointment, user.email);
+      }
       res.status(201).json(createdAppointment);
     })
     .catch((err: any)=>{
@@ -305,7 +341,7 @@ app.post("/appointment/:id", async(req, res) => {
   const { id } = req.params;
   const { token } = req.query;
   const { id: userId } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
-
+  const user = (await User.findOne({ where: { id: userId } })).get({ plain: true });
 
   const appointment = (await Appointment.findOne({ where: { id } })).get({ plain: true });
   appointment.client_id = userId;
@@ -315,6 +351,7 @@ app.post("/appointment/:id", async(req, res) => {
     where: { id }
   })
   .then((updatedAppointment: any) => {
+    sendQRcode(appointment, user.email);
     res.status(201).json(updatedAppointment);
   })
   .catch((err: any)=>{
@@ -371,4 +408,11 @@ app.delete("/appointment/:id", async(req, res) => {
   app.listen(8081);
 
 })();
+
+const qrcodes = express();
+var dir = path.join(__dirname, '..', 'qrcodes');
+qrcodes.use(express.static(dir));
+qrcodes.listen(3000, function () {
+    console.log('Listening on http://localhost:3000/');
+});
     
