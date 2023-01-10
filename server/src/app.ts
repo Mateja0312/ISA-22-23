@@ -231,9 +231,14 @@ app.post("/feedback", async(req, res) => {
 app.post("/appointment", async(req, res) => {
   const newAppointment = req.body;
   const { id } = jwt.verify(newAppointment.token, process.env.JWT_SECRET as string) as { id: number };
+  
   if (id !== newAppointment.user_id) {
     return res.status(401).json({ message: "Invalid token" });
   } 
+  
+  if (new Date(newAppointment.start) < new Date()) {
+    return res.status(400).json({ message: "Invalid date" });
+  }
 
   const appointments: any = await Appointment.findAll({
     include: { all: true },
@@ -274,8 +279,6 @@ app.post("/appointment", async(req, res) => {
       ]
     }
   });
-  
-  console.log(appointments.map((appointment: any) => appointment.get({ plain: true })));
 
   if (appointments.length) {
     return res.status(409).json({ message: "Overlapping appointments" });
@@ -330,6 +333,15 @@ app.delete("/appointment/:id", async(req, res) => {
     return res.status(401).json({ message: "Invalid token" });
   }
   
+  const now = new Date();
+  const start = new Date(appointment.start);
+  const diff = start.getTime() - now.getTime();
+  const diffHours = Math.ceil(diff / (1000 * 60 * 60));
+  if (diffHours < 24) {
+    return res.status(409).json({ message: "Can't cancel appointment less than 24 hours before" });
+  }
+  
+
   if(appointment.status === AppointmentStatus.CLIENT_ACCEPTED) {
     appointment.status = AppointmentStatus.PREDEFINED;
     appointment.client_id = null;   
