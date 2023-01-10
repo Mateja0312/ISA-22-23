@@ -168,8 +168,8 @@ export default Vue.extend({
     },
     eventClicked: function (e: any) {
       if (
-        e.unavailability.status == "reserved" &&
-        e.unavailability[this.user.role + "_id"] != this.user.id
+        this.unavailabilityStatus(e.unavailability) == "Reserved" &&
+        e.unavailability["client_id"] != this.user.id
       )
         return;
       this.showAcceptModal = true;
