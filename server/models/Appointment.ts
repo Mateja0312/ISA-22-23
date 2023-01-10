@@ -8,6 +8,7 @@ export enum AppointmentStatus {
   PREDEFINED = 'predefined',
   CLIENT_ACCEPTED = 'accepted',
   CLIENT_RESERVED = 'reserved',
+  CLIENT_CANCELED = 'canceled',
   FAILED = 'failed',
   COMPLETED = 'completed',
 }
@@ -35,5 +36,9 @@ export enum AppointmentStatus {
 
     @BelongsTo(() => Center, 'center_id')
     center: Center;
+
+    @ForeignKey(() => Center)
+    @Column
+    center_id: number
   }
   

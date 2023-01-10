@@ -39,12 +39,42 @@
         <button class="bg-green-500" @click="saveNewRes">Save</button>
       </div>
     </div>
+    <div v-if="showAcceptModal" class="modal">
+      <div>
+        {{ activeRes }}
+      </div>
+      <div>
+        <button
+          style="background-color: rgb(240 0 0)"
+          @click="cancelAppointment"
+        >
+          Cancel
+        </button>
+        <button
+          style="background-color: rgb(240 200 0)"
+          @click="cancelApproving"
+        >
+          Close
+        </button>
+        <button
+          v-if="activeStatus == 'Predefined'"
+          @click="acceptAppointment()"
+        >
+          Accept
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { getCenter, makeAppointment } from "../services/requests";
+import {
+  getCenter,
+  makeAppointment,
+  acceptAppointment,
+  cancelAppointment,
+} from "../services/requests";
 import VueScheduler from "vue-calendar-scheduler";
 
 export default Vue.extend({
@@ -78,7 +108,7 @@ export default Vue.extend({
       newResStart: null as any,
       newResEnd: null as any,
 
-      showApproveModal: false,
+      showAcceptModal: false,
       activeRes: {},
     };
   },
@@ -89,14 +119,18 @@ export default Vue.extend({
     startDate(): any {
       return new Date().setDate(new Date().getDate() + this.startDateOffset);
     },
+    activeStatus(): any {
+      return this.unavailabilityStatus(this.activeRes);
+    },
   },
   mounted() {
     this.reloadCenter();
   },
   methods: {
     reloadCenter() {
-      getCenter(this.id)
+      getCenter(this.id, this.$store.state.token)
         .catch((err) => {
+          console.log("error while loading center");
           console.log(err);
         })
         .then((res) => {
@@ -133,7 +167,12 @@ export default Vue.extend({
       });
     },
     eventClicked: function (e: any) {
-      this.showApproveModal = true;
+      if (
+        e.unavailability.status == "reserved" &&
+        e.unavailability[this.user.role + "_id"] != this.user.id
+      )
+        return;
+      this.showAcceptModal = true;
       this.activeRes = e.unavailability;
     },
     cancelNewRes() {
@@ -147,15 +186,22 @@ export default Vue.extend({
         start: this.newResStart,
         end: this.newResEnd,
         token: this.$store.state.token,
-      }).then(() => this.reloadCenter());
+      })
+        .then(() => this.reloadCenter())
+        .catch((err) => {
+          this.reloadCenter();
+          console.log(err);
+        });
       this.showCreateModal = false;
     },
     colorForUnavailability(ua: any): any {
       const colors: any = {
         Unavailable: "#101010",
         Mine: "#32a852",
+        MineAccepted: "#32a892",
         Predefined: "#6495ed",
         Reserved: "#f28c28",
+        Canceled: "#808080",
       };
       return colors[this.unavailabilityStatus(ua)];
     },
@@ -167,7 +213,30 @@ export default Vue.extend({
           else return "Reserved";
         case "predefined":
           return "Predefined";
+        case "accepted":
+          if (appointment[this.user.role + "_id"] == this.user.id)
+            return "MineAccepted";
+          else return "Reserved";
+        case "canceled":
+          return "Canceled";
       }
+    },
+    cancelApproving() {
+      this.showAcceptModal = false;
+    },
+    async acceptAppointment() {
+      this.showAcceptModal = false;
+      await acceptAppointment(this.activeRes, {
+        token: this.$store.state.token,
+      });
+      this.reloadCenter();
+    },
+    async cancelAppointment() {
+      this.showAcceptModal = false;
+      await cancelAppointment(this.activeRes, {
+        token: this.$store.state.token,
+      });
+      this.reloadCenter();
     },
   },
 });

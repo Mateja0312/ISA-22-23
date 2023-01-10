@@ -53,8 +53,22 @@ export async function makeAppointment(appointment: any): Promise<any> {
   return api().post("appointment", appointment).then();
 }
 
-export async function cancelAppointment(cancelRequest: any): Promise<any> {
-  return api().put("cancelAppointment", cancelRequest).then();
+export async function acceptAppointment(
+  appointment: any,
+  token: any
+): Promise<any> {
+  return api()
+    .post(`appointment/${appointment.id}`, appointment, { params: token })
+    .then();
+}
+
+export async function cancelAppointment(
+  appointment: any,
+  token: any
+): Promise<any> {
+  return api()
+    .delete(`appointment/${appointment.id}`, { params: token })
+    .then();
 }
 
 export async function updateClientInfo(clientInfo: any): Promise<any> {
@@ -77,8 +91,8 @@ export async function submitFeedback(newFeedback: any): Promise<any> {
   return api().post("feedback", newFeedback).then();
 }
 
-export async function getCenter(id: number): Promise<any> {
+export async function getCenter(id: number, token: any): Promise<any> {
   return api()
-    .get(`center/${id}`)
+    .get(`center/${id}`, { params: { token } })
     .then((res) => res.data);
 }
