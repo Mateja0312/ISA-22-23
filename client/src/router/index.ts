@@ -49,6 +49,11 @@ const routes: Array<RouteConfig> = [
     name: "Feedback",
     component: () => import("../views/Feedback.vue"),
   },
+  {
+    path: "/feedback-response",
+    name: "FeedbackResponse",
+    component: () => import("../views/FeedbackResponse.vue"),
+  },
 ];
 
 const router = new VueRouter({

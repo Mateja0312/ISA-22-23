@@ -1,7 +1,8 @@
 'use strict';
 
-import { BelongsTo, Column, Model, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, HasOne, Model, Table } from 'sequelize-typescript';
 import { Center } from './Center';
+import { FeedbackResponse } from './FeedbackResponse';
 import { User } from "./User";
 
 export enum FeedbackStatus {
@@ -25,4 +26,7 @@ export enum FeedbackStatus {
 
     @BelongsTo(() => Center, 'center_id')
     center: Center;
+
+    @HasOne(() => FeedbackResponse, 'feedback_id')
+    feedback_response: FeedbackResponse; 
   }

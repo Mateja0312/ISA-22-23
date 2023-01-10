@@ -12,6 +12,7 @@ import { Questionnaire, questions } from '../models/Questionnaire';
 import { Feedback } from '../models/Feedback';
 import { Appointment, AppointmentStatus } from '../models/Appointment';
 import { ClientRequest } from 'http';
+import { FeedbackStatus } from "../models/Feedback";
 
 const app = express();
 
@@ -218,6 +219,7 @@ app.post("/questionnaire", async(req, res) => {
 });
 
 app.post("/feedback", async(req, res) => {
+  req.body.status = FeedbackStatus.PENDING;
   Feedback.create(req.body)
   .then((createdFeedback: any) => {
     res.status(201).json(createdFeedback);
