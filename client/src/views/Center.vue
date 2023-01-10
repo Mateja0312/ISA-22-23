@@ -89,7 +89,7 @@ export default Vue.extend({
 
       startDateOffset: 0,
       schedulerOptions: {
-        weekDays: [0, 6],
+        weekDays: [0, 4],
       },
       users: [
         {
