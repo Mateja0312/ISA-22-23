@@ -154,13 +154,13 @@ app.get("/interactions", async (req, res) => {
     const interactions = content.reduce((acc: any, appointment: any) => {
       appointment = appointment.get({ plain: true });
       acc['centers'].push( appointment.center);
-      acc['doctors'].push( appointment.employee);
+      acc['employees'].push( appointment.employee);
       return acc;
-    }, {centers: [], doctors: []});
+    }, {centers: [], employees: []});
 
     // remove duplicates
     interactions.centers =  [...new Map(interactions.centers.map((item: any) => [item?.id, item])).values()]
-    interactions.doctors =  [...new Map(interactions.doctors.map((item: any) => [item?.id, item])).values()]
+    interactions.employees =  [...new Map(interactions.employees.map((item: any) => [item?.id, item])).values()]
 
     res.json(interactions);
 
