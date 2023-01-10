@@ -85,7 +85,7 @@ export default Vue.extend({
     onSubmit() {
       register({
         ...this.newUser,
-        role: "Client",
+        role: "client",
       });
       this.$router.push("login");
     },

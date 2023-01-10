@@ -10,7 +10,7 @@ import {Center} from '../models/Center'
 import {Rating} from '../models/Rating'
 import { Questionnaire, questions } from '../models/Questionnaire';
 import { Feedback } from '../models/Feedback';
-import { Appointment } from '../models/Appointment';
+import { Appointment, AppointmentStatus } from '../models/Appointment';
 import { ClientRequest } from 'http';
 
 const app = express();
@@ -173,6 +173,9 @@ app.get("/interactions", async (req, res) => {
 
 app.get("/center/:id", async (req, res) => {
   const { id } = req.params;
+  const { token } = req.query;
+  const { id: userId } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
+  const user = (await User.findOne({ where: { id: userId } })).get({ plain: true });
   
   try {
     let center : any = await Center.findOne({ where: { id }, include: [Rating, Appointment]});
@@ -181,6 +184,9 @@ app.get("/center/:id", async (req, res) => {
       center = {...center, rating: center.ratings.reduce((acc: number, rating: any) => acc + rating.rating, 0) / center.ratings.length}
     }
 
+    if(user.role === 'client') {
+      center.appointments = center.appointments.filter((appointment: any) => appointment.status !== AppointmentStatus.CLIENT_CANCELED || appointment.client_id === userId );
+    }
     res.json(center);
   } catch (error) {
     console.error(error);
@@ -227,6 +233,52 @@ app.post("/appointment", async(req, res) => {
   const { id } = jwt.verify(newAppointment.token, process.env.JWT_SECRET as string) as { id: number };
   if (id !== newAppointment.user_id) {
     return res.status(401).json({ message: "Invalid token" });
+  } 
+
+  const appointments: any = await Appointment.findAll({
+    include: { all: true },
+    where: {
+      [Op.and]: [
+        {
+          center_id: {
+            [Op.eq]: newAppointment.center_id,
+          } 
+        },
+        {
+        [Op.or] : [
+          {
+            status: {
+              [Op.not]: AppointmentStatus.CLIENT_CANCELED
+            },
+          },
+          {
+            client_id: {
+              [Op.eq]: id
+            },
+          }
+        ],
+        },
+        {[Op.or]: [
+          {
+            start: {
+              [Op.between]: [newAppointment.start, newAppointment.end]
+            },
+          },
+          {
+            end: {
+              [Op.between]: [newAppointment.start, newAppointment.end]
+            },
+          }
+        ],
+        }
+      ]
+    }
+  });
+  
+  console.log(appointments.map((appointment: any) => appointment.get({ plain: true })));
+
+  if (appointments.length) {
+    return res.status(409).json({ message: "Overlapping appointments" });
   } else {
     delete newAppointment.token;
     delete newAppointment.user_id; 
@@ -242,6 +294,59 @@ app.post("/appointment", async(req, res) => {
       res.status(500).json(err);
     })
   }
+});
+
+app.post("/appointment/:id", async(req, res) => {
+  const { id } = req.params;
+  const { token } = req.query;
+  const { id: userId } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
+
+
+  const appointment = (await Appointment.findOne({ where: { id } })).get({ plain: true });
+  appointment.client_id = userId;
+  appointment.status = AppointmentStatus.CLIENT_ACCEPTED;
+
+  Appointment.update(appointment, {
+    where: { id }
+  })
+  .then((updatedAppointment: any) => {
+    res.status(201).json(updatedAppointment);
+  })
+  .catch((err: any)=>{
+    console.error(err);
+    res.status(500).json(err);
+  })
+
+});
+
+app.delete("/appointment/:id", async(req, res) => {
+  const { id } = req.params;
+  const { token } = req.query;
+  const { id: userId } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
+
+  const appointment = (await Appointment.findOne({ where: { id } })).get({ plain: true });
+
+  if(appointment.client_id !== userId) {
+    return res.status(401).json({ message: "Invalid token" });
+  }
+  
+  if(appointment.status === AppointmentStatus.CLIENT_ACCEPTED) {
+    appointment.status = AppointmentStatus.PREDEFINED;
+    appointment.client_id = null;   
+  } else if (appointment.status === AppointmentStatus.CLIENT_RESERVED) {
+    appointment.status = AppointmentStatus.CLIENT_CANCELED;
+  }
+
+  Appointment.update(appointment, {
+    where: { id }
+  })
+  .then((updatedAppointment: any) => {
+    res.status(201).json(updatedAppointment);
+  })
+  .catch((err: any)=>{
+    console.error(err);
+    res.status(500).json(err);
+  })
   
 });
 
