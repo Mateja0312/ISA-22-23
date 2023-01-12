@@ -4,6 +4,13 @@
         <p>ID feedbeka: {{ id }} </p>
         <p>Klijent je podneo sledecu zalbu: </p>
         <p> {{ feedback.content }}  </p>
+        <p>Input your response below: </p>
+        <input
+        class="responsearea"
+        id="responseContent"
+        placeholder="Enter your response"
+        />
+        <button>Submit</button>
     </div>
 </template>
 
@@ -32,5 +39,14 @@
 </script>
 
 <style lang="scss" scoped>
-
+.responsearea {
+    width: 100%;
+    height: 150px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    resize: none;
+  }
 </style>

@@ -8,6 +8,9 @@ export class FeedbackResponse extends Model<FeedbackResponse>{
   @Column
   response: string;
 
+  @Column
+  respondedBy: number;
+
   @BelongsTo(() => Feedback, 'feedback_id')
   feedback: Feedback;
 }
