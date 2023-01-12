@@ -13,6 +13,9 @@ export enum FeedbackStatus {
   export class Feedback extends Model<Feedback>{
 
     @Column
+    title: string;
+
+    @Column
     content: string;
 
     @Column

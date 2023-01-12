@@ -181,7 +181,7 @@ app.get("/interactions", async (req, res) => {
       include: { all: true },
       where: { 
         client_id: id, 
-        // status: 'completed' 
+        status: 'completed' 
       }
     });
 
@@ -202,6 +202,26 @@ app.get("/interactions", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 
+});
+
+app.get("/feedbacksToRespond", async (req, res) => {
+  let feedbackList = await Feedback.findAll({
+    where: {
+      status: "pending",
+    }
+  })
+  res.json(feedbackList);
+});
+
+app.get("/feedbackById/:id", async (req, res) => {
+  console.log("Sadrzaj req.params je: ",req.params);
+  let feedback = await Feedback.findOne({
+    where: {
+      id: req.params.id,
+    }
+  })
+  console.log("Sadrzaj feedbacka je: ",feedback);
+  res.json(feedback);
 });
 
 app.get("/center/:id", async (req, res) => {
@@ -322,6 +342,7 @@ app.post("/appointment", async(req, res) => {
     const user = (await User.findOne({ where: { id } })).get({ plain: true });
     newAppointment[user.role + '_id'] = user.id;
     newAppointment['status'] = user.role === 'client' ? 'reserved' : 'predefined';
+    //newAppointment['employee'] = ...; //potrebno je pregledu dodeliti radnika 
     Appointment.create(newAppointment)
     .then((createdAppointment: any) => {
       

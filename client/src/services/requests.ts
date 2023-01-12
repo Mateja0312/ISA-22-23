@@ -43,6 +43,18 @@ export async function getAllUsers(): Promise<any> {
     .then((res) => res.data);
 }
 
+export async function getFeedbacksToRespondTo(): Promise<any> {
+  return api()
+    .get("feedbacksToRespond")
+    .then((res) => res.data);
+}
+
+export async function getFeedbackById(id: number): Promise<any> {
+  return api()
+    .get(`feedbackById/${id}`)
+    .then((res) => res.data);
+}
+
 export async function getReservations(clientId: number): Promise<any> {
   return api()
     .get(`reservations/${clientId}`)
