@@ -50,7 +50,7 @@ export async function getAllUsers(): Promise<any> {
     .then((res) => res.data);
 }
 
-export async function getFeedbacksToRespondTo(): Promise<any> {
+export async function getPendingFeedbacks(): Promise<any> {
   return api()
     .get("feedbacksToRespond")
     .then((res) => res.data);
