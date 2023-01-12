@@ -3,7 +3,7 @@
     <header>
       <h2>Questions must be answered honestly.</h2>
     </header>
-    <div id="question-container">
+    <div id="question-container" v-if="questions && myAnswers">
       <question
         v-for="(question, index) in questions"
         :key="question"
@@ -19,7 +19,11 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import { questions, saveQuestionnaireInfo } from "../services/requests";
+import {
+  questions,
+  saveQuestionnaireInfo,
+  getAnswers,
+} from "../services/requests";
 import question from "../components/Question.vue";
 
 export default Vue.extend({
@@ -34,12 +38,19 @@ export default Vue.extend({
   },
   async mounted() {
     this.questions = await questions();
+    this.myAnswers =
+      (await getAnswers({
+        token: this.$store.state.token,
+      })) ?? [];
   },
   methods: {
     onSubmit() {
-      saveQuestionnaireInfo({
-        q_answers: this.myAnswers,
-        client_id: this.$store.state.user.id,
+      if (this.myAnswers.length < this.questions.length) {
+        alert("Please answer all questions");
+        return;
+      }
+      saveQuestionnaireInfo(this.myAnswers, {
+        token: this.$store.state.token,
       });
     },
   },

@@ -30,7 +30,22 @@
     </div>
     <div v-if="showCreateModal" class="modal">
       <div class="flex flex-col items-center">
-        <h1 class="m-1">Confirm reservation request</h1>
+        <h1 class="m-1">Confirm appointment</h1>
+        <select
+          v-if="user.role === 'employee'"
+          v-model="newResDoctor"
+          name="doctors"
+          id="doctors"
+        >
+          <option
+            v-for="doctor in center.employees"
+            :key="doctor.id"
+            :value="doctor.id"
+          >
+            {{ doctor.id }} {{ doctor.firstName }} {{ doctor.lastName }}
+          </option>
+        </select>
+        <br />
         {{ newResStart }} <br />
         {{ newResEnd }}
       </div>
@@ -47,6 +62,7 @@
         <button
           style="background-color: rgb(240 0 0)"
           @click="cancelAppointment"
+          v-if="activeStatus == 'Reserved'"
         >
           Cancel
         </button>
@@ -57,7 +73,7 @@
           Close
         </button>
         <button
-          v-if="activeStatus == 'Predefined'"
+          v-if="activeStatus == 'Predefined' && user.role == 'client'"
           @click="acceptAppointment()"
         >
           Accept
@@ -89,7 +105,7 @@ export default Vue.extend({
 
       startDateOffset: 0,
       schedulerOptions: {
-        weekDays: [0, 4],
+        weekDays: [1, 5],
       },
       users: [
         {
@@ -107,6 +123,7 @@ export default Vue.extend({
       showCreateModal: false,
       newResStart: null as any,
       newResEnd: null as any,
+      newResDoctor: null as any,
 
       showAcceptModal: false,
       activeRes: {},
@@ -186,6 +203,7 @@ export default Vue.extend({
         start: this.newResStart,
         end: this.newResEnd,
         token: this.$store.state.token,
+        employee_id: this.newResDoctor,
       })
         .then(() => this.reloadCenter())
         .catch((err) => {

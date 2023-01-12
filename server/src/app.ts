@@ -209,7 +209,7 @@ app.get("/center/:id", async (req, res) => {
   const user = (await User.findOne({ where: { id: userId } })).get({ plain: true });
   
   try {
-    let center : any = await Center.findOne({ where: { id }, include: [Rating, Appointment]});
+    let center : any = await Center.findOne({ where: { id }, include: [Rating, Appointment, User]});
     center = center.get({ plain: true }); 
     if(center.ratings) {
       center = {...center, rating: center.ratings.reduce((acc: number, rating: any) => acc + rating.rating, 0) / center.ratings.length}
@@ -237,8 +237,38 @@ app.put("/profile", async(req, res) => {
   });
 });
 
+app.get("/questionnaire", async (req, res) => {
+  const { token } = req.query;
+  const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
+  try {
+    const questionnaire = (await Questionnaire.findOne({ where: { client_id: id } }))?.get({ plain: true });
+    res.json(questionnaire ? JSON.parse(questionnaire.q_answers) : []);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 app.post("/questionnaire", async(req, res) => {
-  Questionnaire.create({...req.body, q_answers: JSON.stringify(req.body.q_answers)})
+  const { token } = req.query;
+  const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
+
+  const questionnaire = (await Questionnaire.findOne({ where: { client_id: id } }))?.get({ plain: true });
+  if(questionnaire) {
+    Questionnaire.update({q_answers: JSON.stringify(req.body)}, {
+      where: {
+        client_id: id
+      }
+    }).then(() => {
+      res.status(200).json({message: 'Questionnaire updated'});
+    }).catch((err: any) => {
+      console.error(err);
+      res.status(500).json(err);
+    });
+    return;
+  }
+
+  Questionnaire.create({q_answers: JSON.stringify(req.body), client_id: id})
   .then((createdQuestionnaire: any) => {
     res.status(201).json(createdQuestionnaire);
   })
@@ -317,7 +347,7 @@ app.post("/appointment", async(req, res) => {
     delete newAppointment.token;
     delete newAppointment.user_id; 
     const user = (await User.findOne({ where: { id } })).get({ plain: true });
-    newAppointment[user.role + '_id'] = user.id;
+    newAppointment['client_id'] = user.role === 'client' ? id : null;
     newAppointment['status'] = user.role === 'client' ? 'reserved' : 'predefined';
     Appointment.create(newAppointment)
     .then((createdAppointment: any) => {

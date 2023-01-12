@@ -1,6 +1,6 @@
 <template>
   <div class="question">
-    <label>{{ index + 1 }}. {{ text }} </label>
+    <label>{{ index + 1 }}. {{ text }}</label>
     <div>
       <label for="yes">YES</label>
       <input
@@ -8,6 +8,7 @@
         id="yes"
         :name="index.toString()"
         value="YES"
+        :checked="value === 'YES'"
         @input="updateValue"
       />
       <label for="no">NO</label>
@@ -16,6 +17,7 @@
         id="no"
         :name="index.toString()"
         value="NO"
+        :checked="value === 'NO'"
         @input="updateValue"
       />
     </div>
@@ -28,8 +30,12 @@ import Vue from "vue";
 export default Vue.extend({
   name: "Questions",
   props: {
+    value: String,
     text: String,
     index: Number,
+  },
+  mounted() {
+    console.log(this.index);
   },
   methods: {
     updateValue(event: any) {

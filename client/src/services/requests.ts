@@ -19,6 +19,12 @@ export async function getMyInteractions(token: any): Promise<any> {
     .then((res) => res.data);
 }
 
+export async function getAnswers(token: any): Promise<any> {
+  return api()
+    .get("questionnaire", { params: token })
+    .then((res) => res.data);
+}
+
 export async function getProductById(productId: number): Promise<any> {
   return api()
     .get(`products/${productId}`)
@@ -83,8 +89,11 @@ export async function approve(newUser: any): Promise<any> {
   return api().post("register", newUser).then();
 }
 
-export async function saveQuestionnaireInfo(newAnswers: any): Promise<any> {
-  return api().post("questionnaire", newAnswers).then();
+export async function saveQuestionnaireInfo(
+  newAnswers: any,
+  token: any
+): Promise<any> {
+  return api().post("questionnaire", newAnswers, { params: token }).then();
 }
 
 export async function submitFeedback(newFeedback: any): Promise<any> {
