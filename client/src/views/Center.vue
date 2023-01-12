@@ -220,6 +220,8 @@ export default Vue.extend({
         Predefined: "#6495ed",
         Reserved: "#f28c28",
         Canceled: "#808080",
+        Completed: "#32a852",
+        Failed: "#D30000"
       };
       return colors[this.unavailabilityStatus(ua)];
     },
@@ -237,6 +239,10 @@ export default Vue.extend({
           else return "Reserved";
         case "canceled":
           return "Canceled";
+        case "completed":
+          return "Completed";
+        case "failed":
+          return "Failed";
       }
     },
     cancelApproving() {

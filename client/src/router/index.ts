@@ -40,6 +40,12 @@ const routes: Array<RouteConfig> = [
     props: true,
   },
   {
+    path: "/feedback-response/:id",
+    name: "FeedbackRespond",
+    component: () => import("../views/FeedbackRespond.vue"),
+    props: true,
+  },
+  {
     path: "/questionnaire",
     name: "Questionnaire",
     component: () => import("../views/Questionnaire.vue"),
@@ -48,6 +54,11 @@ const routes: Array<RouteConfig> = [
     path: "/feedback",
     name: "Feedback",
     component: () => import("../views/Feedback.vue"),
+  },
+  {
+    path: "/feedback-response",
+    name: "FeedbackResponseList",
+    component: () => import("../views/FeedbackResponseList.vue"),
   },
 ];
 

@@ -2,7 +2,7 @@
   <div class="dashboard">
       <homepage-image id=requests img="No-Image-Placeholder.jpg" page="boats" title="Register New User"/>
       <homepage-image id=requests img="No-Image-Placeholder.jpg" page="boats" title="Register New Center"/>
-      <homepage-image id=requests img="No-Image-Placeholder.jpg" page="boats" title="User Feedback"/>
+      <homepage-image id=requests img="No-Image-Placeholder.jpg" page="feedback-response" title="User Feedback"/>
   </div>
 </template>
 

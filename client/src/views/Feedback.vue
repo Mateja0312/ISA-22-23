@@ -21,12 +21,19 @@
       >{{ center.name }} ({{ center.address }})</option> 
     </select>
 
+    <p>Title: </p>
+    <input
+      class="title"
+      id="feedbackTitle"
+      v-model="title"
+      placeholder="Title your submission"
+    />
     <p>Input your feedback below: </p>
     <input
       class="textarea"
       id="feedbackContent"
       v-model="content"
-      placeholder="ovde se pise complaint"
+      placeholder="Enter your feedback"
     />
     <button @click="onSubmit">Submit</button>
     <button>My Submissions (wip)</button>
@@ -45,6 +52,7 @@ export default Vue.extend({
   name: "Feedback",
   data() {
     return {
+      title: "",
       content: "",
       myInteractions: [],
       showEmployee: true,
@@ -60,11 +68,17 @@ export default Vue.extend({
   methods: {
     onSubmit() {
       submitFeedback({
+        title: this.title,
         content: this.content,
         client_id: this.$store.state.user.id,
         employee_id: this.employeeIdValue,
         center_id: this.centerIdValue,
       });
+      alert("Submission completed!");
+      this.title = "";
+      this.content = "";
+      this.centerIdValue = "";
+      this.employeeIdValue = "";
     },
     modifyComplaintType() {
       this.showEmployee = !this.showEmployee;
@@ -90,6 +104,15 @@ body {
   .textarea {
     width: 100%;
     height: 150px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    resize: none;
+  }
+  .title {
+    width: 100%;
     padding: 12px 20px;
     box-sizing: border-box;
     border: 2px solid #ccc;

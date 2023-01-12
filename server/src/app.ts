@@ -12,6 +12,8 @@ import {Rating} from '../models/Rating'
 import { Questionnaire, questions } from '../models/Questionnaire';
 import { Feedback } from '../models/Feedback';
 import { Appointment, AppointmentStatus } from '../models/Appointment';
+import { ClientRequest } from 'http';
+import { FeedbackStatus } from "../models/Feedback";
 import path from 'path';
 
 const publicPath = path.join(__dirname, '..', 'qrcodes', 'test.png');
@@ -179,7 +181,7 @@ app.get("/interactions", async (req, res) => {
       include: { all: true },
       where: { 
         client_id: id, 
-        // status: 'completed' 
+        status: 'completed' 
       }
     });
 
@@ -200,6 +202,26 @@ app.get("/interactions", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 
+});
+
+app.get("/feedbacksToRespond", async (req, res) => {
+  let feedbackList = await Feedback.findAll({
+    where: {
+      status: "pending",
+    }
+  })
+  res.json(feedbackList);
+});
+
+app.get("/feedbackById/:id", async (req, res) => {
+  console.log("Sadrzaj req.params je: ",req.params);
+  let feedback = await Feedback.findOne({
+    where: {
+      id: req.params.id,
+    }
+  })
+  console.log("Sadrzaj feedbacka je: ",feedback);
+  res.json(feedback);
 });
 
 app.get("/center/:id", async (req, res) => {
@@ -279,6 +301,7 @@ app.post("/questionnaire", async(req, res) => {
 });
 
 app.post("/feedback", async(req, res) => {
+  req.body.status = FeedbackStatus.PENDING;
   Feedback.create(req.body)
   .then((createdFeedback: any) => {
     res.status(201).json(createdFeedback);
@@ -349,6 +372,7 @@ app.post("/appointment", async(req, res) => {
     const user = (await User.findOne({ where: { id } })).get({ plain: true });
     newAppointment['client_id'] = user.role === 'client' ? id : null;
     newAppointment['status'] = user.role === 'client' ? 'reserved' : 'predefined';
+    //newAppointment['employee'] = ...; //potrebno je pregledu dodeliti radnika 
     Appointment.create(newAppointment)
     .then((createdAppointment: any) => {
       
