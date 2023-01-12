@@ -1,7 +1,7 @@
 <template>
     <div>
         <p>Idem ucoravo nasljepo necu karte ni gledat</p>
-        <FeedbackToRespondTo v-for="feedback in feedbackToRespondList"
+        <feedbacks-pending v-for="feedback in feedbackToRespondList"
             :key = "feedback.id"
             :feedback = "feedback"
         />
@@ -10,11 +10,11 @@
 
 <script>
     import Vue from "vue";
-    import { getFeedbacksToRespondTo } from "../services/requests";
-    import FeedbackToRespondTo from "../components/FeedbackToRespondTo.vue"
+    import { getPendingFeedbacks } from "../services/requests";
+    import FeedbacksPending from "../components/FeedbacksPending.vue"
     
     export default Vue.extend({
-        components: { FeedbackToRespondTo },
+        components: { FeedbacksPending },
         name: "FeedbackResponseList",
         data() {
             return {
@@ -22,7 +22,7 @@
             }
         },
         mounted() {
-            getFeedbacksToRespondTo().then(res => {
+            getPendingFeedbacks().then(res => {
                 this.feedbackToRespondList = res;
             });
         },
