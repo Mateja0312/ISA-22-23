@@ -8,6 +8,7 @@ export async function login(credentials: any): Promise<any> {
 }
 
 export async function getCenters(query: any): Promise<any> {
+  console.log("query", query);
   return api()
     .get("centers", { params: query })
     .then((res) => res.data);
