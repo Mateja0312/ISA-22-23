@@ -60,6 +60,11 @@ const routes: Array<RouteConfig> = [
     name: "FeedbackResponseList",
     component: () => import("../views/FeedbackResponseList.vue"),
   },
+  {
+    path: "/feedback-history",
+    name: "FeedbackHistory",
+    component: () => import("../views/FeedbackHistory.vue"),
+  },
 ];
 
 const router = new VueRouter({

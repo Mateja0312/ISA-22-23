@@ -6,7 +6,6 @@ module.exports = {
     return queryInterface.bulkInsert('Feedbacks', [{
       title: "Vise puta koristi spric",
       content: "Strasno boze sacuvaj ne sme to nikako obolece ljudi",
-      status: "pending",
       client_id: 4,
       employee_id: 2,
       center_id: null,
@@ -15,7 +14,6 @@ module.exports = {
     },{
       title: "Budjav zid",
       content: "Zid budjaviji nego u bajicu",
-      status: "pending",
       client_id: 4,
       employee_id: null,
       center_id: 1,
@@ -23,8 +21,7 @@ module.exports = {
       updatedAt: new Date()
     },{
       title: "Ozbiljni problemovi",
-      content: "Nesto nesto, ovde je status responded pa se nece nigde prikazati",
-      status: "responded",
+      content: "Nesto nesto, ovde je status reviewed",
       client_id: 4,
       employee_id: null,
       center_id: 1,
@@ -32,8 +29,7 @@ module.exports = {
       updatedAt: new Date()
     },{
       title: "Ozbiljni problemovi 2",
-      content: "Nesto nesto, ovde je status responded pa se nece nigde prikazati",
-      status: "responded",
+      content: "Nesto nesto, ovde je status reviewed",
       client_id: 4,
       employee_id: null,
       center_id: 2,

@@ -5,10 +5,6 @@ import { Center } from './Center';
 import { FeedbackResponse } from './FeedbackResponse';
 import { User } from "./User";
 
-export enum FeedbackStatus {
-  REVIEWED = 'reviewed',
-  PENDING = 'pending',
-}
   @Table
   export class Feedback extends Model<Feedback>{
 
@@ -17,9 +13,6 @@ export enum FeedbackStatus {
 
     @Column
     content: string;
-
-    @Column
-    status: FeedbackStatus;
 
     @BelongsTo(() => User, 'client_id')
     client: User;

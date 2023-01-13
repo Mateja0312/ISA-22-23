@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p>Idem ucoravo nasljepo necu karte ni gledat</p>
+        <h1>Pending feedback list</h1>
         <feedbacks-pending v-for="feedback in feedbackToRespondList"
             :key = "feedback.id"
             :feedback = "feedback"

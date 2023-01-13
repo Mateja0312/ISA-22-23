@@ -67,8 +67,18 @@ export async function getReservations(clientId: number): Promise<any> {
     .then((res) => res.data);
 }
 
+export async function myFeedbackHistory(id: number): Promise<any> {
+  return api()
+    .get(`myFeedbackHistory/${id}`)
+    .then((res) => res.data);
+}
+
 export async function makeAppointment(appointment: any): Promise<any> {
   return api().post("appointment", appointment).then();
+}
+
+export async function submitResponse(feedbackResponse: any): Promise<any> {
+  return api().post("feedbackResponse", feedbackResponse).then();
 }
 
 export async function acceptAppointment(

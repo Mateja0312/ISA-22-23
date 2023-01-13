@@ -62,7 +62,7 @@
         <button
           style="background-color: rgb(240 0 0)"
           @click="cancelAppointment"
-          v-if="activeStatus == 'Reserved'"
+          v-if="activeStatus == 'Mine' || activeStatus == 'MineAccepted'"
         >
           Cancel
         </button>

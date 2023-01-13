@@ -1,22 +1,23 @@
 <template>
     <div>
-        <p>Dajte da vam strina nacrta smajla protiv uroka</p>
-        <p>ID feedbeka: {{ id }} </p>
-        <p>Klijent je podneo sledecu zalbu: </p>
+        <h1>Feedback ID: {{ id }} </h1>
+        <h3>Submission: </h3>
         <p> {{ feedback.content }}  </p>
-        <p>Input your response below: </p>
+        <h3>Input your response below: </h3>
         <input
         class="responsearea"
         id="responseContent"
+        v-model="content"
         placeholder="Enter your response"
         />
-        <button>Submit</button>
+        <button @click="respond()">Submit</button>
     </div>
 </template>
 
 <script lang="ts">
     import Vue from "vue";
     import { getFeedbackById } from "../services/requests"
+    import { submitResponse } from "../services/requests"
     export default Vue.extend({
         name: "FeedbackRespond",
         props: {
@@ -25,16 +26,25 @@
         data() {
             return {
                 feedback: {} as any,
+                content: "",
             };
         },
         mounted() {
-            console.log(typeof(+this.id));
-            console.log(+this.id);
-            console.log(typeof(this.feedback));
             getFeedbackById(+this.id).then((res) => {
                 this.feedback = res;
             });
         },
+        methods: {
+            respond(){
+                submitResponse({
+                    response: this.content,
+                    respondedBy: this.$store.state.user.id,
+                    feedback_id: this.id,
+                });
+                alert("Response sent!");
+                this.content="";
+            }
+        }
     });
 </script>
 

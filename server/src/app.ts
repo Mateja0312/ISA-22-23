@@ -13,8 +13,8 @@ import { Questionnaire, questions } from '../models/Questionnaire';
 import { Feedback } from '../models/Feedback';
 import { Appointment, AppointmentStatus } from '../models/Appointment';
 import { ClientRequest } from 'http';
-import { FeedbackStatus } from "../models/Feedback";
 import path from 'path';
+import { FeedbackResponse } from '../models/FeedbackResponse';
 
 const publicPath = path.join(__dirname, '..', 'qrcodes', 'test.png');
 qrcode.toFile(publicPath, JSON.stringify({id: 1}), { type: 'png' }, (err) => {
@@ -205,11 +205,13 @@ app.get("/interactions", async (req, res) => {
 });
 
 app.get("/feedbacksToRespond", async (req, res) => {
-  let feedbackList = await Feedback.findAll({
-    where: {
-      status: "pending",
-    }
+  let feedbackList : any = await Feedback.findAll({
+    include: [FeedbackResponse],
   })
+  feedbackList = feedbackList.map((f: any) => {
+    return f.get({ plain: true })
+  });
+  feedbackList = feedbackList.filter((f: any) => !f.feedback_response) //svi feedbackovi gde je response null
   res.json(feedbackList);
 });
 
@@ -222,6 +224,18 @@ app.get("/feedbackById/:id", async (req, res) => {
   })
   console.log("Sadrzaj feedbacka je: ",feedback);
   res.json(feedback);
+});
+
+app.get("/myFeedbackHistory/:id", async (req, res) => {
+  console.log("Sadrzaj req.params je: ",req.params);
+  let myFeedbacks = await Feedback.findAll({
+  });
+  myFeedbacks = myFeedbacks.map((f:any) => {
+    return f.get({plain: true})
+  });
+  myFeedbacks = myFeedbacks.filter((f:any) => f.client_id == req.params.id)
+  console.log("Sadrzaj feedbacka je: ",myFeedbacks);
+  res.json(myFeedbacks);
 });
 
 app.get("/center/:id", async (req, res) => {
@@ -300,8 +314,20 @@ app.post("/questionnaire", async(req, res) => {
   })
 });
 
+app.post("/feedbackResponse", async(req, res) => {
+  console.log(req.body);
+
+  FeedbackResponse.create(req.body)
+  .then((feedbackResponse: any) => {
+    res.status(201).json(feedbackResponse);
+  })
+  .catch((err: any)=>{
+    console.error(err);
+    res.status(500).json(err);
+  })
+});
+
 app.post("/feedback", async(req, res) => {
-  req.body.status = FeedbackStatus.PENDING;
   Feedback.create(req.body)
   .then((createdFeedback: any) => {
     res.status(201).json(createdFeedback);
@@ -409,7 +435,6 @@ app.post("/appointment/:id", async(req, res) => {
     console.error(err);
     res.status(500).json(err);
   })
-
 });
 
 app.delete("/appointment/:id", async(req, res) => {

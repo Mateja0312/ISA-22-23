@@ -36,7 +36,7 @@
       placeholder="Enter your feedback"
     />
     <button @click="onSubmit">Submit</button>
-    <button>My Submissions (wip)</button>
+    <button @click="mySubmissions">My Submissions (wip)</button>
   </div>
 </template>
 
@@ -58,6 +58,7 @@ export default Vue.extend({
       showEmployee: true,
       employeeIdValue: null,
       centerIdValue: null,
+      feedbacks: [],
     };
   },
   mounted() {
@@ -84,7 +85,10 @@ export default Vue.extend({
       this.showEmployee = !this.showEmployee;
       if(this.showEmployee) this.centerIdValue = null;
       else this.employeeIdValue = null;
-    }
+    },
+    mySubmissions() {
+      this.$router.push("feedback-history");
+    },
   },
 });
 </script>
