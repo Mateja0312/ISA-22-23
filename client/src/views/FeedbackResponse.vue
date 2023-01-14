@@ -18,7 +18,7 @@
         },
         data() {
             return {
-                response: Object
+                response: Object as any
             }
         },
         mounted() {
