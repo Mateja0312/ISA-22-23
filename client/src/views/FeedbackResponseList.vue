@@ -5,6 +5,7 @@
             :key = "feedback.id"
             :feedback = "feedback"
         />
+        <button @click="Click">Response history</button>
     </div>
 </template>
 
@@ -25,6 +26,11 @@
             getPendingFeedbacks().then(res => {
                 this.feedbackToRespondList = res;
             });
+        },
+        methods: {
+            Click(){
+                this.$router.push("feedback-response-history");
+            }
         },
     });
 </script>

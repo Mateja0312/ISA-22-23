@@ -1,7 +1,6 @@
 <template>
     <div>
         <p>Submission title: {{ feedback.title }}</p>
-        <p>Submitted by (client_id): {{ feedback.client_id }}</p>
         <button @click="ViewFeedback">View</button>
     </div>
 </template>
@@ -10,13 +9,13 @@
     import Vue from "vue";
 
     export default Vue.extend({
-        name: "FeedbacksPending",
+        name: "MyFeedbacks",
         props: {
             feedback: Object,
         },
         methods: {
             ViewFeedback(){
-                this.$router.push("feedback-response/" + this.feedback.id);
+                this.$router.push("feedback-history/" + this.feedback.id);
             }
         },
     });

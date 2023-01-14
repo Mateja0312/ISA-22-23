@@ -65,6 +65,23 @@ const routes: Array<RouteConfig> = [
     name: "FeedbackHistory",
     component: () => import("../views/FeedbackHistory.vue"),
   },
+  {
+    path: "/feedback-history/:id",
+    name: "MyFeedback",
+    component: () => import("../views/MyFeedback.vue"),
+    props: true,
+  },
+  {
+    path: "/feedback-response-history",
+    name: "FeedbackResponseHistory",
+    component: () => import("../views/FeedbackResponseHistory.vue"),
+  },
+  {
+    path: "/feedback-response-history/:id",
+    name: "FeedbackResponse",
+    component: () => import("../views/FeedbackResponse.vue"),
+    props: true
+  },
 ];
 
 const router = new VueRouter({

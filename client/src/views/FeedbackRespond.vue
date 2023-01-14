@@ -1,6 +1,7 @@
 <template>
     <div>
-        <h1>Feedback ID: {{ id }} </h1>
+        <h1>Respond to feedback</h1>
+        <h3>Feedback ID: {{ id }} </h3>
         <h3>Submission: </h3>
         <p> {{ feedback.content }}  </p>
         <h3>Input your response below: </h3>

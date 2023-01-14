@@ -204,6 +204,18 @@ app.get("/interactions", async (req, res) => {
 
 });
 
+app.get("/myResponseHistory/:id", async (req, res) => {
+  console.log("req params print: ",req.params)
+  let responses = await FeedbackResponse.findAll({
+    include: [Feedback],
+    where: {
+      respondedBy: req.params.id, 
+    }
+  });
+  console.log("response sadrzi: ", responses);
+  res.json(responses);
+});
+
 app.get("/feedbacksToRespond", async (req, res) => {
   let feedbackList : any = await Feedback.findAll({
     include: [FeedbackResponse],
@@ -213,6 +225,16 @@ app.get("/feedbacksToRespond", async (req, res) => {
   });
   feedbackList = feedbackList.filter((f: any) => !f.feedback_response) //svi feedbackovi gde je response null
   res.json(feedbackList);
+});
+
+app.get("/getMyResponses/:id", async (req, res) => {
+  let response: any = await FeedbackResponse.findOne({
+    include: [Feedback],
+    where: {
+      id: req.params.id
+    }
+  })
+  res.json(response);
 });
 
 app.get("/feedbackById/:id", async (req, res) => {
