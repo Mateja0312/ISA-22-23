@@ -212,7 +212,17 @@ app.get("/myResponseHistory/:id", async (req, res) => {
       respondedBy: req.params.id, 
     }
   });
-  console.log("response sadrzi: ", responses);
+  res.json(responses);
+});
+
+app.get("/myVisits/:id", async (req, res) => {
+  let responses = await Appointment.findAll({
+    include: [Center],
+    where: {
+      client_id: req.params.id,
+      status: 'completed',
+    }
+  });
   res.json(responses);
 });
 

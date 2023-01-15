@@ -139,3 +139,9 @@ export async function getCenter(id: number, token: any): Promise<any> {
     .get(`center/${id}`, { params: { token } })
     .then((res) => res.data);
 }
+
+export async function getCompletedAppointments(id: number): Promise<any> {
+  return api()
+    .get(`myVisits/${id}`)
+    .then((res) => res.data);
+}

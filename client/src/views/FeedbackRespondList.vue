@@ -16,7 +16,7 @@
     
     export default Vue.extend({
         components: { FeedbacksPending },
-        name: "FeedbackResponseList",
+        name: "FeedbackRespondList",
         data() {
             return {
                 feedbackToRespondList: [],

@@ -57,8 +57,8 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: "/feedback-response",
-    name: "FeedbackResponseList",
-    component: () => import("../views/FeedbackResponseList.vue"),
+    name: "FeedbackRespondList",
+    component: () => import("../views/FeedbackRespondList.vue"),
   },
   {
     path: "/feedback-history",
@@ -82,6 +82,12 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/FeedbackResponse.vue"),
     props: true
   },
+  {
+    path: "/center-visits",
+    name: "CenterVisits",
+    component: () => import("../views/CenterVisits.vue"),
+  },
+
 ];
 
 const router = new VueRouter({
