@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "strictNullChecks":false,
     "target": "esnext",
     "module": "esnext",
     "strict": true,
@@ -10,7 +11,6 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
-    "strictNullChecks":false,
     "baseUrl": ".",
     "types": [
       "webpack-env"

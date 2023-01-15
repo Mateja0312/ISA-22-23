@@ -17,9 +17,6 @@ export default Vue.extend({
     props: {
         appointment: Object,
     },
-    mounted(){
-            console.log("tip podatka datuma:", typeof this.appointment.start)
-    },
 })
 </script>
 

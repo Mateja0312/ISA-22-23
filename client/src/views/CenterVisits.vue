@@ -35,7 +35,6 @@ export default Vue.extend({
             for(var a in this.appointments){
                 this.appointments[a].startTimeInSeconds = new Date(this.appointments[a].start).getTime()
                 this.appointments[a].lengthInSeconds = new Date(this.appointments[a].end).getTime() - this.appointments[a].startTimeInSeconds
-                console.log("startTimeInSeconds kolona ima tip:",typeof this.appointments[a].startTimeInSeconds)
             }
         });
     },
