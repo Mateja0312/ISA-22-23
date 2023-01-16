@@ -146,3 +146,11 @@ export async function getCompletedAppointments(id: number): Promise<any> {
     .get(`myVisits/${id}`)
     .then((res) => res.data);
 }
+
+
+
+export async function getPendingAppointments(id: number): Promise<any> {
+  return api()
+    .get(`myAppointmentsPending/${id}`)
+    .then((res) => res.data);
+}

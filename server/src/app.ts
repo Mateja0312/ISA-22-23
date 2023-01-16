@@ -56,6 +56,44 @@ function sendQRcode(appointment: any, email: string){
         });
 }
 
+async function getRecentAppointments(clientId: any, start: any) {
+  const requestedDate = new Date(start);
+  const limit = new Date(start);
+  limit.setMonth(limit.getMonth() - 6);
+  return await Appointment.findAll({
+    where: {
+      [Op.and]: [
+        {
+          client_id: {
+            [Op.eq]: clientId,
+          } 
+        },
+        {
+          [Op.or]: [
+            {status: {
+            [Op.eq]: AppointmentStatus.COMPLETED
+            }},
+            {status: {
+              [Op.eq]: AppointmentStatus.CLIENT_RESERVED
+            }}
+          ],
+        },
+        {
+          start: {
+            [Op.gte]: limit
+          },
+        },
+        {
+          end: {
+            [Op.lte]: requestedDate
+          },
+        }
+
+      ]
+    }
+  });
+}
+
 async function isTimeslotFree(center_id: number, client_id: number, start: string, end: string) {
   const appointments: any = await Appointment.findAll({
     include: { all: true },
@@ -293,6 +331,19 @@ app.get("/myVisits/:id", async (req, res) => {
   res.json(responses);
 });
 
+app.get("/myAppointmentsPending/:id", async (req, res) => {
+  let responses = await Appointment.findAll({
+    where: {
+      client_id: req.params.id,
+      [Op.or]: [
+        {status: 'reserved'},
+        {status: 'accepted'}
+      ]
+    }
+  });
+  res.json(responses);
+});
+
 app.get("/feedbacksToRespond", async (req, res) => {
   let feedbackList : any = await Feedback.findAll({
     include: [FeedbackResponse],
@@ -454,41 +505,7 @@ app.post("/appointment", async(req, res) => {
     return res.status(400).json({ message: "Questionnaire not filled" });
   }
 
-  const requestedDate = new Date(newAppointment.start);
-  const limit = new Date(newAppointment.start);
-  limit.setMonth(limit.getMonth() - 6);
-  const recentAppointments: any = await Appointment.findAll({
-    where: {
-      [Op.and]: [
-        {
-          client_id: {
-            [Op.eq]: id,
-          } 
-        },
-        {
-          [Op.or]: [
-            {status: {
-            [Op.eq]: AppointmentStatus.COMPLETED
-            }},
-            {status: {
-              [Op.eq]: AppointmentStatus.CLIENT_RESERVED
-            }}
-          ],
-        },
-        {
-          start: {
-            [Op.gte]: limit
-          },
-        },
-        {
-          end: {
-            [Op.lte]: requestedDate
-          },
-        }
-
-      ]
-    }
-  });
+  const recentAppointments = await getRecentAppointments(id, newAppointment.start);
 
   if (recentAppointments.length) {
     return res.status(409).json({ message: "You already have an appointment in the last 6 months" });
@@ -525,9 +542,20 @@ app.post("/appointment/:id", async(req, res) => {
   const { id: userId } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
   const user = (await User.findOne({ where: { id: userId } })).get({ plain: true });
 
+  const questionnaire = (await Questionnaire.findOne({ where: { client_id: userId } }))?.get({ plain: true });
+  if(!questionnaire) {
+    return res.status(400).json({ message: "Questionnaire not filled" });
+  }
+
   const appointment = (await Appointment.findOne({ where: { id } })).get({ plain: true });
   appointment.client_id = userId;
   appointment.status = AppointmentStatus.CLIENT_ACCEPTED;
+
+  const recentAppointments = await getRecentAppointments(id, appointment.start);
+
+  if (recentAppointments.length) {
+    return res.status(409).json({ message: "You already have an appointment in the last 6 months" });
+  }
 
   Appointment.update(appointment, {
     where: { id }

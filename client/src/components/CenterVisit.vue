@@ -6,6 +6,7 @@
             {{ appointment.start.split("T")[1].split(":")[0] }}:{{ appointment.start.split("T")[1].split(":")[1] }} - 
             {{ appointment.end.split("T")[1].split(":")[0] }}:{{ appointment.end.split("T")[1].split(":")[1] }}
         </p>
+        <img :src="'http://localhost:3000/appointment-' + appointment.id + '.png'"/>
     </div>
 </template>
 
