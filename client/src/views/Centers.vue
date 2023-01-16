@@ -2,7 +2,7 @@
   <div id="centers-page">
     <form>
       <label for="date">Date: </label>
-      <input id="date" type="date" />
+      <input id="date" type="datetime-local" v-model="datetime" />
       <label for="name">Name: </label>
       <input v-model="name" id="name" />
       <label for="address">Address: </label>
@@ -35,11 +35,12 @@ export default Vue.extend({
       name: null,
       address: null,
       rating: null,
+      datetime: null,
       centers: [] as any[],
     };
   },
   mounted() {
-    getCenters({}).then((res) => {
+    getCenters({ token: this.$store.state.token }).then((res) => {
       this.centers = res;
     });
   },
@@ -49,6 +50,8 @@ export default Vue.extend({
         name: this.name,
         address: this.address,
         rating: this.rating,
+        datetime: this.datetime,
+        token: this.$store.state.token,
       }).then((res) => {
         this.centers = res;
       });

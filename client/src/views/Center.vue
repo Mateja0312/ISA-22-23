@@ -208,7 +208,9 @@ export default Vue.extend({
         .then(() => this.reloadCenter())
         .catch((err) => {
           this.reloadCenter();
-          console.log(err);
+          if (err.response) {
+            alert(err.response.data.message);
+          }
         });
       this.showCreateModal = false;
     },
@@ -221,7 +223,7 @@ export default Vue.extend({
         Reserved: "#f28c28",
         Canceled: "#808080",
         Completed: "#32a852",
-        Failed: "#D30000"
+        Failed: "#D30000",
       };
       return colors[this.unavailabilityStatus(ua)];
     },

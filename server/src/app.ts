@@ -32,7 +32,6 @@ const transporter = nodemailer.createTransport({
 });
 
 function sendQRcode(appointment: any, email: string){
-        console.log(appointment);
         const filename = `appointment-${appointment.id}.png`
         const qrCodePath = path.join(__dirname, '..', 'qrcodes', filename);
         qrcode.toFile(qrCodePath, JSON.stringify(appointment), { type: 'png' }, (err) => {
@@ -55,6 +54,55 @@ function sendQRcode(appointment: any, email: string){
             console.log('Email sent: ' + info.response);
           }
         });
+}
+
+async function isTimeslotFree(center_id: number, client_id: number, start: string, end: string) {
+  const appointments: any = await Appointment.findAll({
+    include: { all: true },
+    where: {
+      [Op.and]: [
+        {
+          center_id: {
+            [Op.eq]: center_id,
+          } 
+        },
+        {
+        [Op.or] : [
+          {
+            status: {
+              [Op.not]: AppointmentStatus.CLIENT_CANCELED
+            },
+          },
+          {
+            client_id: {
+              [Op.eq]: client_id
+            },
+          }
+        ],
+        },
+        {[Op.or]: [
+          {
+            start: {
+              [Op.between]: [start, end]
+            },
+          },
+          {
+            end: {
+              [Op.between]: [start, end]
+            },
+          }
+        ],
+        }
+      ]
+    }
+  });
+
+  console.log(center_id, client_id, typeof start, typeof end, appointments.map((appointment: any) => appointment.get({ plain: true })));
+
+  if (appointments.length) {
+    return false;
+  }
+  return true;
 }
 
 const app = express();
@@ -142,7 +190,8 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/centers", async (req, res) => {
-  const { name, address, rating } = req.query;
+  const { name, address, rating, datetime, token } = req.query;
+  const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
 
   const where: any = {};
   if (name) {
@@ -164,12 +213,30 @@ app.get("/centers", async (req, res) => {
   if (rating) {
     centers = centers.filter((center: any) => center.rating >= rating);
   }
+  
+  if (datetime) {
+  
+  const firstDate = new Date(datetime as string)
+  const secondDate = new Date(new Date(datetime as string).getTime() + 60 * 60 * 1000)
 
-  try {
-    res.json(centers);
-  } catch (error) {
+  console.log(typeof datetime, datetime, typeof firstDate, JSON.stringify(firstDate), typeof secondDate, JSON.stringify(secondDate));
+  console.log("datetime", !!datetime);
+
+
+  (async function() {
+    const result = (await Promise.all(centers.map(async(center) => ({
+      value: center,
+      include: await isTimeslotFree(center.id, id, firstDate.toISOString(), secondDate.toISOString())
+    })))).filter(v => v.include).map(data => data.value);
+    return result;
+  })().then((result) => {
+    res.json(result);
+  }).catch((error: any) => {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
+  });
+  } else {
+    res.json(centers);
   }
 });
 
@@ -382,68 +449,74 @@ app.post("/appointment", async(req, res) => {
     return res.status(400).json({ message: "Invalid date" });
   }
 
-  const appointments: any = await Appointment.findAll({
-    include: { all: true },
+  const questionnaire = (await Questionnaire.findOne({ where: { client_id: id } }))?.get({ plain: true });
+  if(!questionnaire) {
+    return res.status(400).json({ message: "Questionnaire not filled" });
+  }
+
+  const requestedDate = new Date(newAppointment.start);
+  const limit = new Date(newAppointment.start);
+  limit.setMonth(limit.getMonth() - 6);
+  const recentAppointments: any = await Appointment.findAll({
     where: {
       [Op.and]: [
         {
-          center_id: {
-            [Op.eq]: newAppointment.center_id,
+          client_id: {
+            [Op.eq]: id,
           } 
         },
         {
-        [Op.or] : [
-          {
-            status: {
-              [Op.not]: AppointmentStatus.CLIENT_CANCELED
-            },
-          },
-          {
-            client_id: {
-              [Op.eq]: id
-            },
-          }
-        ],
+          [Op.or]: [
+            {status: {
+            [Op.eq]: AppointmentStatus.COMPLETED
+            }},
+            {status: {
+              [Op.eq]: AppointmentStatus.CLIENT_RESERVED
+            }}
+          ],
         },
-        {[Op.or]: [
-          {
-            start: {
-              [Op.between]: [newAppointment.start, newAppointment.end]
-            },
+        {
+          start: {
+            [Op.gte]: limit
           },
-          {
-            end: {
-              [Op.between]: [newAppointment.start, newAppointment.end]
-            },
-          }
-        ],
+        },
+        {
+          end: {
+            [Op.lte]: requestedDate
+          },
         }
+
       ]
     }
   });
 
-  if (appointments.length) {
-    return res.status(409).json({ message: "Overlapping appointments" });
-  } else {
-    delete newAppointment.token;
-    delete newAppointment.user_id; 
-    const user = (await User.findOne({ where: { id } })).get({ plain: true });
-    newAppointment['client_id'] = user.role === 'client' ? id : null;
-    newAppointment['status'] = user.role === 'client' ? 'reserved' : 'predefined';
-    //newAppointment['employee'] = ...; //potrebno je pregledu dodeliti radnika 
-    Appointment.create(newAppointment)
-    .then((createdAppointment: any) => {
-      
-      if(user.role === 'client') {
-        sendQRcode(createdAppointment, user.email);
-      }
-      res.status(201).json(createdAppointment);
-    })
-    .catch((err: any)=>{
-      console.error(err);
-      res.status(500).json(err);
-    })
+  if (recentAppointments.length) {
+    return res.status(409).json({ message: "You already have an appointment in the last 6 months" });
   }
+
+  if(!(await isTimeslotFree( newAppointment.center_id, id, newAppointment.start, newAppointment.end))){
+    return res.status(409).json({ message: "Overlapping appointments" });
+  } 
+
+  delete newAppointment.token;
+  delete newAppointment.user_id; 
+  const user = (await User.findOne({ where: { id } })).get({ plain: true });
+  newAppointment['client_id'] = user.role === 'client' ? id : null;
+  newAppointment['status'] = user.role === 'client' ? 'reserved' : 'predefined';
+  //newAppointment['employee'] = ...; //potrebno je pregledu dodeliti radnika 
+  Appointment.create(newAppointment)
+  .then((createdAppointment: any) => {
+    
+    if(user.role === 'client') {
+      sendQRcode(createdAppointment, user.email);
+    }
+    res.status(201).json(createdAppointment);
+  })
+  .catch((err: any)=>{
+    console.error(err);
+    res.status(500).json(err);
+  })
+  
 });
 
 app.post("/appointment/:id", async(req, res) => {

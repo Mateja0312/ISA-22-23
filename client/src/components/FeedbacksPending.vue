@@ -2,7 +2,7 @@
     <div>
         <p>Submission title: {{ feedback.title }}</p>
         <p>Submitted by (client_id): {{ feedback.client_id }}</p>
-        <button @click="ViewFeedback">View</button>
+        <button @click="ViewFeedback">Respond</button>
     </div>
 </template>
 
