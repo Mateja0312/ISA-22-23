@@ -1,9 +1,12 @@
 'use strict';
 
+const qrcode = require('qrcode');
+const path = require('path');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert('Appointments', [{
+    const appointments = [{
       start: new Date('January 15, 2023, 10:00:00'),
       end: new Date('January 15, 2023, 11:00:00'),
       status: "canceled",
@@ -93,7 +96,20 @@ module.exports = {
       client_id: 4,
       createdAt: new Date(),
       updatedAt: new Date()
-    }])
+    }]
+
+    appointments.map((appointment, index) => {
+      appointment.id = index + 1
+      const filename = `appointment-${appointment.id}.png`
+      const qrCodePath = path.join(__dirname, '..', 'qrcodes', filename);
+      qrcode.toFile(qrCodePath, JSON.stringify(appointment), { type: 'png' }, (err) => {
+        if (err) throw err;
+        console.log("QR code generated successfully");
+      });
+    })
+
+    return queryInterface.bulkInsert('Appointments', appointments)
+    
   },
 
   down: (queryInterface, Sequelize) => {
