@@ -9,11 +9,12 @@
       <input v-model="address" id="address" />
       <label for="rating">Rating >= </label>
       <input v-model="rating" id="rating" type="number" />
+      <button @click.prevent="rotateSort">sort</button>
       <button @click.prevent="search">search</button>
     </form>
     <section>
       <search-result
-        v-for="center in centers"
+        v-for="center in sortedCenters"
         :key="center.id"
         :center="center"
       ></search-result>
@@ -36,12 +37,27 @@ export default Vue.extend({
       rating: null,
       datetime: null,
       centers: [] as any[],
+      sort: null as "asc" | "desc" | null,
     };
   },
   mounted() {
     getCenters({ token: this.$store.state.token }).then((res) => {
       this.centers = res;
     });
+  },
+  computed: {
+    sortedCenters(): Array<any> {
+      if (this.sort === null) {
+        return this.centers;
+      }
+      return [...this.centers].sort((a, b) => {
+        if (this.sort === "asc") {
+          return a.rating - b.rating;
+        } else {
+          return b.rating - a.rating;
+        }
+      });
+    },
   },
   methods: {
     search() {
@@ -54,6 +70,15 @@ export default Vue.extend({
       }).then((res) => {
         this.centers = res;
       });
+    },
+    rotateSort() {
+      if (this.sort === null) {
+        this.sort = "asc";
+      } else if (this.sort === "asc") {
+        this.sort = "desc";
+      } else {
+        this.sort = null;
+      }
     },
   },
 });
