@@ -396,6 +396,32 @@ app.post("/appointment", async(req, res) => {
     return res.status(400).json({ message: "Questionnaire not filled" });
   }
 
+  const penalties = await Appointment.findAll({
+    where: {
+      [Op.and]: [
+        {
+          client_id: {
+            [Op.eq]: id,
+          }
+        },
+        {
+          status: {
+            [Op.eq]: AppointmentStatus.FAILED
+          }
+        },
+        {
+          start: {
+            [Op.gte]: new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+          }
+        }
+      ]
+    }
+  });
+
+  if(penalties.length >= 3) {
+    return res.status(400).json({ message: "You have exceeded the number of penalties for this month" });
+  }
+
   const requestedDate = new Date(newAppointment.start);
   const limit = new Date(newAppointment.start);
   limit.setMonth(limit.getMonth() - 6);
