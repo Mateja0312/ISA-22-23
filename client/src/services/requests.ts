@@ -141,16 +141,8 @@ export async function getCenter(id: number, token: any): Promise<any> {
     .then((res) => res.data);
 }
 
-export async function getCompletedAppointments(id: number): Promise<any> {
+export async function getCompletedAndPendingAppointments(token: any): Promise<any> {
   return api()
-    .get(`myVisits/${id}`)
-    .then((res) => res.data);
-}
-
-
-
-export async function getPendingAppointments(id: number): Promise<any> {
-  return api()
-    .get(`myAppointmentsPending/${id}`)
+    .get("myVisits", { params: token })
     .then((res) => res.data);
 }

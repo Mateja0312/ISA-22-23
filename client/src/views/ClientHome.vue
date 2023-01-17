@@ -13,10 +13,10 @@
       title="SCHEDULE APPOINTMENT"
     />
     <homepage-image
-      id="appointments-pending"
+      id="center-visits"
       img="cottages.jpg"
-      page="appointments-pending"
-      title="PENDING APPOINTMENTS"
+      page="center-visits"
+      title="MY APPOINTMENTS"
     />
     <homepage-image
       id="feedback"

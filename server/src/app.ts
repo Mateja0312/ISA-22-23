@@ -320,27 +320,21 @@ app.get("/myResponseHistory/:id", async (req, res) => {
   res.json(responses);
 });
 
-app.get("/myVisits/:id", async (req, res) => {
+app.get("/myVisits", async (req, res) => {
+  const { token } = req.query;
+  const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
   let responses = await Appointment.findAll({
     include: [Center],
     where: {
-      client_id: req.params.id,
-      status: 'completed',
-    }
-  });
-  res.json(responses);
-});
-
-app.get("/myAppointmentsPending/:id", async (req, res) => {
-  let responses = await Appointment.findAll({
-    where: {
-      client_id: req.params.id,
+      client_id: id,
       [Op.or]: [
         {status: 'reserved'},
-        {status: 'accepted'}
+        {status: 'accepted'},
+        {status: 'completed'}
       ]
     }
   });
+  console.log("odgovor: ",responses)
   res.json(responses);
 });
 

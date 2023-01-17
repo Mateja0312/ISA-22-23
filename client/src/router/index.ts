@@ -87,11 +87,6 @@ const routes: Array<RouteConfig> = [
     name: "CenterVisits",
     component: () => import("../views/CenterVisits.vue"),
   },
-  {
-    path: "/appointments-pending",
-    name: "AppointmentsPending",
-    component: () => import("../views/AppointmentsPending.vue"),
-  },
 
 ];
 
