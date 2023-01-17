@@ -10,7 +10,6 @@
       <label for="rating">Rating >= </label>
       <input v-model="rating" id="rating" type="number" />
       <button @click.prevent="search">search</button>
-      <button @click.prevent="Click">My Visits</button>
     </form>
     <section>
       <search-result
@@ -56,9 +55,6 @@ export default Vue.extend({
         this.centers = res;
       });
     },
-    Click(){
-      this.$router.push("center-visits");
-    }
   },
 });
 </script>

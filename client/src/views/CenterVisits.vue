@@ -3,9 +3,11 @@
         <p>husein kapetan gradascevic sa krvavih njiva</p>
         <p>nabodi ga spicom ustomak</p>
         <p>--------------------------------------------</p>
+        <h1>Showing {{ filterValue }} Appointments</h1>
         <button id="dateButton" :class="{ bold: dateSort }" @click="sortByStart">Date ({{ orderDate }})</button>
         <button id="lengthButton" :class="{ bold: lengthSort }" @click="sortByLength">Lenght ({{ orderLength }})</button>
-        <CenterVisit v-for="a in appointments"
+        <button @click="filter">{{ filterValue }} List</button>
+        <CenterVisit v-for="a in filteredAppointments"
         :key="a.id"
         :appointment="a"/>
     </div>
@@ -13,7 +15,7 @@
 
 <script lang="ts">
 import CenterVisit from '@/components/CenterVisit.vue';
-import { getCompletedAppointments } from '../services/requests';
+import { getCompletedAndPendingAppointments } from '../services/requests';
 import Vue from 'vue'
 
 export default Vue.extend({
@@ -22,39 +24,57 @@ export default Vue.extend({
     data() {
         return {
             appointments: [] as any,
-            dateSort: false,
+            filteredAppointments: [] as any,
+            dateSort: true,
             lengthSort: false,
+            filterFlag: true,
             orderDate: 'asc',
             orderLength: 'asc',
-            pomDate: Date as any,
+            filterValue: 'Pending',
         }
     },
     mounted() {
-        getCompletedAppointments(this.$store.state.user.id).then(res => {
+        getCompletedAndPendingAppointments({token: this.$store.state.token}).then(res => {
             this.appointments = res
             for(var a in this.appointments){
                 this.appointments[a].startTimeInSeconds = new Date(this.appointments[a].start).getTime()
                 this.appointments[a].lengthInSeconds = new Date(this.appointments[a].end).getTime() - this.appointments[a].startTimeInSeconds
             }
+            this.filteredAppointments = this.appointments.filter((a: any) => a.status != "completed")
         });
     },
     methods: {
-        //ove sortove bi u sustini trebalo ubaciti u switch case kako bi se moglo sortirati npr opadajuce po datumu ali rastuce po trajanju (recimo da u istom danu ima vise apointmenta koji su bili razlicitog trajanja)
         sortByStart(){
-            this.dateSort = true;
-            this.lengthSort = false;
-            this.orderDate = this.orderDate == 'asc' ? 'desc' : "asc";
-            this.appointments = this.appointments.sort((a:any, b:any) => {
+            if(!this.dateSort){
+                this.dateSort = true;
+                this.lengthSort = false;
+            }else{
+                this.orderDate = this.orderDate == 'asc' ? 'desc' : "asc";
+            }
+            this.filteredAppointments = this.filteredAppointments.sort((a:any, b:any) => {
                 return (a.startTimeInSeconds - b.startTimeInSeconds) * (this.orderDate == 'asc' ? 1 : -1)
             });
         },
         sortByLength(){
-            this.dateSort = false;
-            this.lengthSort = true;
-            this.orderLength = this.orderLength == 'asc' ? 'desc' : "asc";
-            this.appointments = this.appointments.sort((a:any, b:any) => {
+            if(!this.lengthSort){
+                this.dateSort = false;
+                this.lengthSort = true;
+            }else{             
+                this.orderLength = this.orderLength == 'asc' ? 'desc' : "asc";
+            }
+            this.filteredAppointments = this.filteredAppointments.sort((a:any, b:any) => {
                 return (a.lengthInSeconds - b.lengthInSeconds) * (this.orderLength == 'asc' ? 1 : -1)
             });
+        },
+        filter(){
+            this.filterFlag = !this.filterFlag
+            if(!this.filterFlag){
+                this.filteredAppointments = this.appointments.filter((a: any) => a.status == "completed");
+                this.filterValue = "Completed"
+            }else{
+                this.filteredAppointments = this.appointments.filter((a: any) => a.status != "completed");
+                this.filterValue = "Pending"
+            }
         }
     }
 })
