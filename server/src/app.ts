@@ -94,6 +94,32 @@ async function getRecentAppointments(clientId: any, start: any) {
   });
 }
 
+async function isPenalized(clientId: any){
+  const penalties = await Appointment.findAll({
+    where: {
+      [Op.and]: [
+        {
+          client_id: {
+            [Op.eq]: clientId,
+          }
+        },
+        {
+          status: {
+            [Op.eq]: AppointmentStatus.FAILED
+          }
+        },
+        {
+          start: {
+            [Op.gte]: new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+          }
+        }
+      ]
+    }
+  });
+
+  return penalties.length >= 3;
+}
+
 async function isTimeslotFree(center_id: number, client_id: number, start: string, end: string) {
   const appointments: any = await Appointment.findAll({
     include: { all: true },
@@ -499,29 +525,7 @@ app.post("/appointment", async(req, res) => {
     return res.status(400).json({ message: "Questionnaire not filled" });
   }
 
-  const penalties = await Appointment.findAll({
-    where: {
-      [Op.and]: [
-        {
-          client_id: {
-            [Op.eq]: id,
-          }
-        },
-        {
-          status: {
-            [Op.eq]: AppointmentStatus.FAILED
-          }
-        },
-        {
-          start: {
-            [Op.gte]: new Date(new Date().getFullYear(), new Date().getMonth(), 1)
-          }
-        }
-      ]
-    }
-  });
-
-  if(penalties.length >= 3) {
+  if(await isPenalized(id)) {
     return res.status(400).json({ message: "You have exceeded the number of penalties for this month" });
   }
 
@@ -570,6 +574,10 @@ app.post("/appointment/:id", async(req, res) => {
   const appointment = (await Appointment.findOne({ where: { id } })).get({ plain: true });
   appointment.client_id = userId;
   appointment.status = AppointmentStatus.CLIENT_ACCEPTED;
+
+  if(await isPenalized(id)) {
+    return res.status(400).json({ message: "You have exceeded the number of penalties for this month" });
+  }
 
   const recentAppointments = await getRecentAppointments(id, appointment.start);
 
