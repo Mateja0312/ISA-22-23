@@ -57,9 +57,42 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: "/feedback-response",
-    name: "FeedbackResponseList",
-    component: () => import("../views/FeedbackResponseList.vue"),
+    name: "FeedbackRespondList",
+    component: () => import("../views/FeedbackRespondList.vue"),
   },
+  {
+    path: "/feedback-history",
+    name: "FeedbackHistory",
+    component: () => import("../views/FeedbackHistory.vue"),
+  },
+  {
+    path: "/feedback-history/:id",
+    name: "MyFeedback",
+    component: () => import("../views/MyFeedback.vue"),
+    props: true,
+  },
+  {
+    path: "/feedback-response-history",
+    name: "FeedbackResponseHistory",
+    component: () => import("../views/FeedbackResponseHistory.vue"),
+  },
+  {
+    path: "/feedback-response-history/:id",
+    name: "FeedbackResponse",
+    component: () => import("../views/FeedbackResponse.vue"),
+    props: true
+  },
+  {
+    path: "/center-visits",
+    name: "CenterVisits",
+    component: () => import("../views/CenterVisits.vue"),
+  },
+  {
+    path: "/appointments-pending",
+    name: "AppointmentsPending",
+    component: () => import("../views/AppointmentsPending.vue"),
+  },
+
 ];
 
 const router = new VueRouter({

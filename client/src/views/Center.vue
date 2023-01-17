@@ -62,7 +62,7 @@
         <button
           style="background-color: rgb(240 0 0)"
           @click="cancelAppointment"
-          v-if="activeStatus == 'Reserved'"
+          v-if="activeStatus == 'Mine' || activeStatus == 'MineAccepted'"
         >
           Cancel
         </button>
@@ -252,10 +252,15 @@ export default Vue.extend({
     },
     async acceptAppointment() {
       this.showAcceptModal = false;
-      await acceptAppointment(this.activeRes, {
+      acceptAppointment(this.activeRes, {
         token: this.$store.state.token,
-      });
-      this.reloadCenter();
+      }).then(res => {
+        this.reloadCenter();
+      }).catch(err => {
+        if (err.response) {
+            alert(err.response.data.message);
+          }
+      })
     },
     async cancelAppointment() {
       this.showAcceptModal = false;

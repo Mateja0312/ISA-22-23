@@ -13,8 +13,8 @@ import { Questionnaire, questions } from '../models/Questionnaire';
 import { Feedback } from '../models/Feedback';
 import { Appointment, AppointmentStatus } from '../models/Appointment';
 import { ClientRequest } from 'http';
-import { FeedbackStatus } from "../models/Feedback";
 import path from 'path';
+import { FeedbackResponse } from '../models/FeedbackResponse';
 
 const publicPath = path.join(__dirname, '..', 'qrcodes', 'test.png');
 qrcode.toFile(publicPath, JSON.stringify({id: 1}), { type: 'png' }, (err) => {
@@ -54,6 +54,44 @@ function sendQRcode(appointment: any, email: string){
             console.log('Email sent: ' + info.response);
           }
         });
+}
+
+async function getRecentAppointments(clientId: any, start: any) {
+  const requestedDate = new Date(start);
+  const limit = new Date(start);
+  limit.setMonth(limit.getMonth() - 6);
+  return await Appointment.findAll({
+    where: {
+      [Op.and]: [
+        {
+          client_id: {
+            [Op.eq]: clientId,
+          } 
+        },
+        {
+          [Op.or]: [
+            {status: {
+            [Op.eq]: AppointmentStatus.COMPLETED
+            }},
+            {status: {
+              [Op.eq]: AppointmentStatus.CLIENT_RESERVED
+            }}
+          ],
+        },
+        {
+          start: {
+            [Op.gte]: limit
+          },
+        },
+        {
+          end: {
+            [Op.lte]: requestedDate
+          },
+        }
+
+      ]
+    }
+  });
 }
 
 async function isTimeslotFree(center_id: number, client_id: number, start: string, end: string) {
@@ -271,13 +309,60 @@ app.get("/interactions", async (req, res) => {
 
 });
 
-app.get("/feedbacksToRespond", async (req, res) => {
-  let feedbackList = await Feedback.findAll({
+app.get("/myResponseHistory/:id", async (req, res) => {
+  console.log("req params print: ",req.params)
+  let responses = await FeedbackResponse.findAll({
+    include: [Feedback],
     where: {
-      status: "pending",
+      respondedBy: req.params.id, 
+    }
+  });
+  res.json(responses);
+});
+
+app.get("/myVisits/:id", async (req, res) => {
+  let responses = await Appointment.findAll({
+    include: [Center],
+    where: {
+      client_id: req.params.id,
+      status: 'completed',
+    }
+  });
+  res.json(responses);
+});
+
+app.get("/myAppointmentsPending/:id", async (req, res) => {
+  let responses = await Appointment.findAll({
+    where: {
+      client_id: req.params.id,
+      [Op.or]: [
+        {status: 'reserved'},
+        {status: 'accepted'}
+      ]
+    }
+  });
+  res.json(responses);
+});
+
+app.get("/feedbacksToRespond", async (req, res) => {
+  let feedbackList : any = await Feedback.findAll({
+    include: [FeedbackResponse],
+  })
+  feedbackList = feedbackList.map((f: any) => {
+    return f.get({ plain: true })
+  });
+  feedbackList = feedbackList.filter((f: any) => !f.feedback_response) //svi feedbackovi gde je response null
+  res.json(feedbackList);
+});
+
+app.get("/getMyResponses/:id", async (req, res) => {
+  let response: any = await FeedbackResponse.findOne({
+    include: [Feedback],
+    where: {
+      id: req.params.id
     }
   })
-  res.json(feedbackList);
+  res.json(response);
 });
 
 app.get("/feedbackById/:id", async (req, res) => {
@@ -289,6 +374,18 @@ app.get("/feedbackById/:id", async (req, res) => {
   })
   console.log("Sadrzaj feedbacka je: ",feedback);
   res.json(feedback);
+});
+
+app.get("/myFeedbackHistory/:id", async (req, res) => {
+  console.log("Sadrzaj req.params je: ",req.params);
+  let myFeedbacks = await Feedback.findAll({
+  });
+  myFeedbacks = myFeedbacks.map((f:any) => {
+    return f.get({plain: true})
+  });
+  myFeedbacks = myFeedbacks.filter((f:any) => f.client_id == req.params.id)
+  console.log("Sadrzaj feedbacka je: ",myFeedbacks);
+  res.json(myFeedbacks);
 });
 
 app.get("/center/:id", async (req, res) => {
@@ -367,8 +464,20 @@ app.post("/questionnaire", async(req, res) => {
   })
 });
 
+app.post("/feedbackResponse", async(req, res) => {
+  console.log(req.body);
+
+  FeedbackResponse.create(req.body)
+  .then((feedbackResponse: any) => {
+    res.status(201).json(feedbackResponse);
+  })
+  .catch((err: any)=>{
+    console.error(err);
+    res.status(500).json(err);
+  })
+});
+
 app.post("/feedback", async(req, res) => {
-  req.body.status = FeedbackStatus.PENDING;
   Feedback.create(req.body)
   .then((createdFeedback: any) => {
     res.status(201).json(createdFeedback);
@@ -422,41 +531,7 @@ app.post("/appointment", async(req, res) => {
     return res.status(400).json({ message: "You have exceeded the number of penalties for this month" });
   }
 
-  const requestedDate = new Date(newAppointment.start);
-  const limit = new Date(newAppointment.start);
-  limit.setMonth(limit.getMonth() - 6);
-  const recentAppointments: any = await Appointment.findAll({
-    where: {
-      [Op.and]: [
-        {
-          client_id: {
-            [Op.eq]: id,
-          } 
-        },
-        {
-          [Op.or]: [
-            {status: {
-            [Op.eq]: AppointmentStatus.COMPLETED
-            }},
-            {status: {
-              [Op.eq]: AppointmentStatus.CLIENT_RESERVED
-            }}
-          ],
-        },
-        {
-          start: {
-            [Op.gte]: limit
-          },
-        },
-        {
-          end: {
-            [Op.lte]: requestedDate
-          },
-        }
-
-      ]
-    }
-  });
+  const recentAppointments = await getRecentAppointments(id, newAppointment.start);
 
   if (recentAppointments.length) {
     return res.status(409).json({ message: "You already have an appointment in the last 6 months" });
@@ -493,9 +568,20 @@ app.post("/appointment/:id", async(req, res) => {
   const { id: userId } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
   const user = (await User.findOne({ where: { id: userId } })).get({ plain: true });
 
+  const questionnaire = (await Questionnaire.findOne({ where: { client_id: userId } }))?.get({ plain: true });
+  if(!questionnaire) {
+    return res.status(400).json({ message: "Questionnaire not filled" });
+  }
+
   const appointment = (await Appointment.findOne({ where: { id } })).get({ plain: true });
   appointment.client_id = userId;
   appointment.status = AppointmentStatus.CLIENT_ACCEPTED;
+
+  const recentAppointments = await getRecentAppointments(id, appointment.start);
+
+  if (recentAppointments.length) {
+    return res.status(409).json({ message: "You already have an appointment in the last 6 months" });
+  }
 
   Appointment.update(appointment, {
     where: { id }
@@ -508,7 +594,6 @@ app.post("/appointment/:id", async(req, res) => {
     console.error(err);
     res.status(500).json(err);
   })
-
 });
 
 app.delete("/appointment/:id", async(req, res) => {

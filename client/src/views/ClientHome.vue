@@ -1,22 +1,22 @@
 <template>
   <div id="home">
     <homepage-image
-      id="centers"
-      img="cottages.jpg"
-      page="centers"
-      title="CENTERS"
-    />
-    <homepage-image
-      id="appointments"
-      img="cottages.jpg"
-      page="appointments"
-      title="APPOINTMENTS"
-    />
-    <homepage-image
       id="questionnaire"
       img="cottages.jpg"
       page="questionnaire"
       title="QUESTIONNAIRE"
+    />
+    <homepage-image
+      id="centers"
+      img="cottages.jpg"
+      page="centers"
+      title="SCHEDULE APPOINTMENT"
+    />
+    <homepage-image
+      id="appointments-pending"
+      img="cottages.jpg"
+      page="appointments-pending"
+      title="PENDING APPOINTMENTS"
     />
     <homepage-image
       id="feedback"
