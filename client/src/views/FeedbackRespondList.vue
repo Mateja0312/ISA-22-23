@@ -1,11 +1,11 @@
 <template>
     <div>
         <h1>Pending feedback list</h1>
+        <button @click="Click">Response history</button>
         <feedbacks-pending v-for="feedback in feedbackToRespondList"
             :key = "feedback.id"
             :feedback = "feedback"
         />
-        <button @click="Click">Response history</button>
     </div>
 </template>
 

@@ -335,12 +335,13 @@ app.get("/interactions", async (req, res) => {
 
 });
 
-app.get("/myResponseHistory/:id", async (req, res) => {
-  console.log("req params print: ",req.params)
+app.get("/myResponseHistory", async (req, res) => {
+  const { token } = req.query;
+  const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
   let responses = await FeedbackResponse.findAll({
     include: [Feedback],
     where: {
-      respondedBy: req.params.id, 
+      respondedBy: id, 
     }
   });
   res.json(responses);
@@ -396,14 +397,15 @@ app.get("/feedbackById/:id", async (req, res) => {
   res.json(feedback);
 });
 
-app.get("/myFeedbackHistory/:id", async (req, res) => {
-  console.log("Sadrzaj req.params je: ",req.params);
+app.get("/myFeedbackHistory", async (req, res) => {
+  const { token } = req.query;
+  const { id: userId } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
   let myFeedbacks = await Feedback.findAll({
   });
   myFeedbacks = myFeedbacks.map((f:any) => {
     return f.get({plain: true})
   });
-  myFeedbacks = myFeedbacks.filter((f:any) => f.client_id == req.params.id)
+  myFeedbacks = myFeedbacks.filter((f:any) => f.client_id == userId)
   console.log("Sadrzaj feedbacka je: ",myFeedbacks);
   res.json(myFeedbacks);
 });
@@ -485,8 +487,11 @@ app.post("/questionnaire", async(req, res) => {
 });
 
 app.post("/feedbackResponse", async(req, res) => {
+  const { token } = req.query;
+  const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
+  req.body.respondedBy = id;
+  
   console.log(req.body);
-
   FeedbackResponse.create(req.body)
   .then((feedbackResponse: any) => {
     res.status(201).json(feedbackResponse);
@@ -498,6 +503,9 @@ app.post("/feedbackResponse", async(req, res) => {
 });
 
 app.post("/feedback", async(req, res) => {
+  const { token } = req.query;
+  const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
+  req.body.client_id = id;
   Feedback.create(req.body)
   .then((createdFeedback: any) => {
     res.status(201).json(createdFeedback);

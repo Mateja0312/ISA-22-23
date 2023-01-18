@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>Feedback ID: {{ id }} </h1>
-        <p> Date of submission: {{ feedback.createdAt }} </p>
+        <p> Date & Time of submission: {{ new Date(feedback.createdAt).toLocaleString("en-GB") }} </p>
         <h3>Title: </h3>
         <p> {{ feedback.title }} </p>
         <h3>Content: </h3>

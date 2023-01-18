@@ -22,7 +22,7 @@
         }  
       },
       mounted() {
-        myFeedbackHistory(+this.$store.state.user.id)
+        myFeedbackHistory({token: this.$store.state.token})
         .then(res => {this.myFeedbacks = res});
       }
     });

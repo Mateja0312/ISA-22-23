@@ -9,9 +9,6 @@
         </router-link>
         <div id="links">
           <router-link to="/profile" v-if="isLoggedIn">Profile</router-link>
-          <router-link to="/reservations" v-if="isClient"
-            >Reservations</router-link
-          >
           <router-link to="/login" v-if="!isLoggedIn">Sign In</router-link>
           <a href="/" v-if="isLoggedIn" @click.prevent="logout">Sign Out</a>
           <router-link to="/registration" v-if="!isLoggedIn"
@@ -49,6 +46,7 @@ nav {
   width: 100vw;
   position: fixed;
   z-index: 1;
+  pointer-events: none;
 
   color: white;
   #links {
@@ -59,6 +57,7 @@ nav {
     color: red;
     display: flex;
     gap: 20px;
+    pointer-events: auto;
   }
   img {
     margin-top: 20px;

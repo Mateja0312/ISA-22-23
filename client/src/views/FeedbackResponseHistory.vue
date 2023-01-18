@@ -22,7 +22,7 @@
         }  
       },
       mounted() {
-        myResponseHistory(this.$store.state.user.id)
+        myResponseHistory({token: this.$store.state.token})
         .then(res => {this.myResponses = res});
       }
     });

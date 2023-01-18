@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="response">
         <h2>Submitted by (id): {{ response.feedback.client_id }}</h2>
         <h2>Feedback:</h2>
         <p> {{ response.feedback.content }}</p>
@@ -18,7 +18,7 @@
         },
         data() {
             return {
-                response: Object as any
+                response: null as any
             }
         },
         mounted() {

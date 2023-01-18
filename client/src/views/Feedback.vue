@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="myInteractions">
     <div v-if="myInteractions.centers.length != 0" class="feedback">
 
       <button @click="mySubmissions">My Submissions (wip)</button>
@@ -58,7 +58,7 @@ export default Vue.extend({
     return {
       title: "",
       content: "",
-      myInteractions: [],
+      myInteractions: null,
       showEmployee: true,
       employeeIdValue: null,
       centerIdValue: null,
@@ -76,9 +76,10 @@ export default Vue.extend({
       submitFeedback({
         title: this.title,
         content: this.content,
-        client_id: this.$store.state.user.id,
         employee_id: this.employeeIdValue,
         center_id: this.centerIdValue,
+      },{
+        token: this.$store.state.token,
       });
       alert("Submission completed!");
       this.title = "";

@@ -16,7 +16,8 @@
 </template>
 
 <script lang="ts">
-    import Vue from "vue";
+    import router from "@/router";
+import Vue from "vue";
     import { getFeedbackById } from "../services/requests"
     import { submitResponse } from "../services/requests"
     export default Vue.extend({
@@ -39,8 +40,9 @@
             respond(){
                 submitResponse({
                     response: this.content,
-                    respondedBy: this.$store.state.user.id,
                     feedback_id: this.id,
+                },{
+                    token: this.$store.state.token
                 });
                 alert("Response sent!");
                 this.content="";

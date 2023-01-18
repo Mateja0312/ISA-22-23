@@ -1,8 +1,5 @@
 <template>
-    <div>
-        <p>husein kapetan gradascevic sa krvavih njiva</p>
-        <p>nabodi ga spicom ustomak</p>
-        <p>--------------------------------------------</p>
+    <div id="page">
         <h1>Showing {{ filterValue }} Appointments</h1>
         <button id="dateButton" :class="{ bold: dateSort }" @click="sortByStart">Date ({{ orderDate }})</button>
         <button id="lengthButton" :class="{ bold: lengthSort }" @click="sortByLength">Lenght ({{ orderLength }})</button>
@@ -83,6 +80,9 @@ export default Vue.extend({
 <style scoped>
 .bold {
     font-weight: bold
+}
+#page{
+  padding: 30px;
 }
 
 </style>

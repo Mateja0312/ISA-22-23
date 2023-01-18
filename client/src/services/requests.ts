@@ -26,21 +26,9 @@ export async function getAnswers(token: any): Promise<any> {
     .then((res) => res.data);
 }
 
-export async function getProductById(productId: number): Promise<any> {
-  return api()
-    .get(`products/${productId}`)
-    .then((res) => res.data);
-}
-
 export async function questions(): Promise<any> {
   return api()
     .get("questionnaireQuestions")
-    .then((res) => res.data);
-}
-
-export async function getAllProviders(): Promise<any> {
-  return api()
-    .get("providers")
     .then((res) => res.data);
 }
 
@@ -62,15 +50,9 @@ export async function getFeedbackById(id: number): Promise<any> {
     .then((res) => res.data);
 }
 
-export async function getReservations(clientId: number): Promise<any> {
+export async function myResponseHistory(token: any): Promise<any> {
   return api()
-    .get(`reservations/${clientId}`)
-    .then((res) => res.data);
-}
-
-export async function myResponseHistory(id: number): Promise<any> {
-  return api()
-    .get(`myResponseHistory/${id}`)
+    .get("myResponseHistory", { params: token })
     .then((res) => res.data);
 }
 
@@ -80,9 +62,9 @@ export async function getMyResponses(id: number): Promise<any> {
     .then((res) => res.data);
 }
 
-export async function myFeedbackHistory(id: number): Promise<any> {
+export async function myFeedbackHistory(token: any): Promise<any> {
   return api()
-    .get(`myFeedbackHistory/${id}`)
+    .get("myFeedbackHistory", { params: token })
     .then((res) => res.data);
 }
 
@@ -90,8 +72,8 @@ export async function makeAppointment(appointment: any): Promise<any> {
   return api().post("appointment", appointment).then();
 }
 
-export async function submitResponse(feedbackResponse: any): Promise<any> {
-  return api().post("feedbackResponse", feedbackResponse).then();
+export async function submitResponse(feedbackResponse: any, token: any): Promise<any> {
+  return api().post("feedbackResponse", feedbackResponse, { params: token }).then();
 }
 
 export async function acceptAppointment(
@@ -131,8 +113,8 @@ export async function saveQuestionnaireInfo(
   return api().post("questionnaire", newAnswers, { params: token }).then();
 }
 
-export async function submitFeedback(newFeedback: any): Promise<any> {
-  return api().post("feedback", newFeedback).then();
+export async function submitFeedback(newFeedback: any, token:any): Promise<any> {
+  return api().post("feedback", newFeedback, { params: token }).then();
 }
 
 export async function getCenter(id: number, token: any): Promise<any> {
