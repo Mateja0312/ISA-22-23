@@ -5,49 +5,56 @@
     </header>
     <div>
       <p>{{ user.email }}</p>
+      <label for="user.firstName">Name</label>
       <editable-field
         id="user.firstName"
         :text.sync="user.firstName"
         @save="saveUserInfo"
       />
+      <label for="user.lastName">Surname</label>
       <editable-field
         id="user.lastName"
         :text.sync="user.lastName"
         @save="saveUserInfo"
       />
       <p>{{ user.gender ? "Male" : "Female" }}</p>
-      <editable-field
-        id="user.country"
-        :text.sync="user.country"
-        @save="saveUserInfo"
-      />
-      <editable-field
-        id="user.city"
-        :text.sync="user.city"
-        @save="saveUserInfo"
-      />
+      <label for="user.address">Address</label>
       <editable-field
         id="user.address"
         :text.sync="user.address"
         @save="saveUserInfo"
       />
+      <label for="user.city">City</label>
+      <editable-field
+        id="user.city"
+        :text.sync="user.city"
+        @save="saveUserInfo"
+      />
+      <label for="user.lastName">Country</label>
+      <editable-field
+        id="user.country"
+        :text.sync="user.country"
+        @save="saveUserInfo"
+      />
+      <label for="user.phone">Phone</label>
       <editable-field
         id="user.phone"
         :text.sync="user.phone"
         @save="saveUserInfo"
       />
+      <label for="user.profession">Profession</label>
       <editable-field
         id="user.profession"
         :text.sync="user.profession"
         @save="saveUserInfo"
       />
+      <label for="user.institution">Institution</label>
       <editable-field
         id="user.institution"
         :text.sync="user.institution"
         @save="saveUserInfo"
       />
     </div>
-    <button class="btn btn-red" @click="deleteAccount">Delete Account</button>
   </div>
 </template>
 <!--
@@ -71,19 +78,13 @@ export default Vue.extend({
       this.$store.commit("setUser", this.user);
       updateClientInfo(this.user);
     },
-    deleteAccount() {
-      if (confirm("Are you sure you want to delete your account?")) {
-        this.user.active = false;
-        this.saveUserInfo();
-        this.$emit("requestLogout");
-      }
-    },
   },
 });
 </script>
 
 <style scoped lang="scss">
 #profile {
+  padding: 50px;
   height: 100vh;
   width: 100vw;
   position: fixed;
