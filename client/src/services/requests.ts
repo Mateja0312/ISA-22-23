@@ -1,22 +1,22 @@
 import api from "./api";
 export async function register(newUser: any): Promise<any> {
-  return api().post("register", newUser).then();
+  return api().post("account/register", newUser).then();
 }
 
 export async function login(credentials: any): Promise<any> {
-  return api().post("login", credentials).then();
+  return api().post("account/login", credentials).then();
 }
 
 export async function getCenters(query: any): Promise<any> {
   console.log("query", query);
   return api()
-    .get("centers", { params: query })
+    .get("center/list", { params: query })
     .then((res) => res.data);
 }
 
 export async function getMyInteractions(token: any): Promise<any> {
   return api()
-    .get("interactions", { params: token })
+    .get("feedback/interactions", { params: token })
     .then((res) => res.data);
 }
 
@@ -28,7 +28,7 @@ export async function getAnswers(token: any): Promise<any> {
 
 export async function questions(): Promise<any> {
   return api()
-    .get("questionnaireQuestions")
+    .get("questionnaire/questions")
     .then((res) => res.data);
 }
 
@@ -40,31 +40,31 @@ export async function getAllUsers(): Promise<any> {
 
 export async function getPendingFeedbacks(): Promise<any> {
   return api()
-    .get("feedbacksToRespond")
+    .get("feedback//waiting-response")
     .then((res) => res.data);
 }
 
 export async function getFeedbackById(id: number): Promise<any> {
   return api()
-    .get(`feedbackById/${id}`)
+    .get(`feedback/${id}`)
     .then((res) => res.data);
 }
 
 export async function myResponseHistory(token: any): Promise<any> {
   return api()
-    .get("myResponseHistory", { params: token })
+    .get("feedback/response-history", { params: token })
     .then((res) => res.data);
 }
 
 export async function getMyResponses(id: number): Promise<any> {
   return api()
-    .get(`getMyResponses/${id}`)
+    .get(`feedback/response/${id}`)
     .then((res) => res.data);
 }
 
 export async function myFeedbackHistory(token: any): Promise<any> {
   return api()
-    .get("myFeedbackHistory", { params: token })
+    .get("feedback/history", { params: token })
     .then((res) => res.data);
 }
 
@@ -73,7 +73,7 @@ export async function makeAppointment(appointment: any): Promise<any> {
 }
 
 export async function submitResponse(feedbackResponse: any, token: any): Promise<any> {
-  return api().post("feedbackResponse", feedbackResponse, { params: token }).then();
+  return api().post("feedback/response", feedbackResponse, { params: token }).then();
 }
 
 export async function acceptAppointment(
@@ -125,6 +125,6 @@ export async function getCenter(id: number, token: any): Promise<any> {
 
 export async function getCompletedAndPendingAppointments(token: any): Promise<any> {
   return api()
-    .get("myVisits", { params: token })
+    .get("appointment/visits", { params: token })
     .then((res) => res.data);
 }
