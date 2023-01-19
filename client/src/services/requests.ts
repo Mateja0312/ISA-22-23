@@ -99,7 +99,7 @@ export async function cancelAppointment(
 }
 
 export async function updateClientInfo(clientInfo: any): Promise<any> {
-  return api().put("profile", clientInfo).then();
+  return api().put("account/profile", clientInfo).then();
 }
 
 export async function updateUserActivity(userInfo: any): Promise<any> {

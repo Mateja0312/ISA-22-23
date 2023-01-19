@@ -15,6 +15,14 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+account.put("/profile", async(req, res) => {
+  User.update(req.body, {
+    where: {
+      id: req.body.id
+    }
+  });
+});
+
 account.post("/register", async (req, res) => {
     const newUser = req.body;
     newUser.password = bcrypt.hashSync(newUser.password, 10);
