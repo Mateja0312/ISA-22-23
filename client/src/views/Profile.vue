@@ -43,6 +43,12 @@
         @save="saveUserInfo"
       />
       <editable-field
+        label="JMBG"
+        id="user.JMBG"
+        :text.sync="user.JMBG"
+        @save="saveUserInfo"
+      />
+      <editable-field
         label="Profession"
         id="user.profession"
         :text.sync="user.profession"

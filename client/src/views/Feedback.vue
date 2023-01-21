@@ -1,7 +1,8 @@
 <template>
   <div v-if="myInteractions">
     <div v-if="myInteractions.centers.length != 0" class="feedback">
-      <button @click="mySubmissions">My Submissions (wip)</button>
+
+      <button @click="mySubmissions">My Submissions</button>
 
       <p>What is this complaint about?</p>
       <button @click="modifyComplaintType" v-if="showEmployee">Employee</button>
