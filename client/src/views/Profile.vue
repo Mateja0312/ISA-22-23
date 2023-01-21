@@ -5,14 +5,12 @@
     </header>
     <div>
       <p>{{ user.email }}</p>
-      <label for="user.firstName">Name</label>
       <editable-field
         label="Name"
         id="user.firstName"
         :text.sync="user.firstName"
         @save="saveUserInfo"
       />
-      <label for="user.lastName">Surname</label>
       <editable-field
         label="Surname"
         id="user.lastName"
@@ -38,21 +36,18 @@
         :text.sync="user.address"
         @save="saveUserInfo"
       />
-      <label for="user.phone">Phone</label>
       <editable-field
         label="Phone"
         id="user.phone"
         :text.sync="user.phone"
         @save="saveUserInfo"
       />
-      <label for="user.profession">Profession</label>
       <editable-field
         label="Profession"
         id="user.profession"
         :text.sync="user.profession"
         @save="saveUserInfo"
       />
-      <label for="user.institution">Institution</label>
       <editable-field
         label="Institution"
         id="user.institution"
