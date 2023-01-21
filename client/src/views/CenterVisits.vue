@@ -34,8 +34,10 @@ export default Vue.extend({
         getCompletedAndPendingAppointments({token: this.$store.state.token}).then(res => {
             this.appointments = res
             for(var a in this.appointments){
+                console.log(this.appointments[a].start, this.appointments[a].end)
                 this.appointments[a].startTimeInSeconds = new Date(this.appointments[a].start).getTime()
                 this.appointments[a].lengthInSeconds = new Date(this.appointments[a].end).getTime() - this.appointments[a].startTimeInSeconds
+                console.log(this.appointments[a].status, this.appointments[a].startTimeInSeconds, this.appointments[a].lengthInSeconds)
             }
             this.filteredAppointments = this.appointments.filter((a: any) => a.status != "completed")
         });

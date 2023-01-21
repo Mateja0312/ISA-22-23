@@ -116,7 +116,7 @@ module.exports = {
       updatedAt: new Date()
     },{
       start: new Date('January 19, 2023, 13:00:00'),
-      end: new Date('January 20, 2023, 13:30:00'),
+      end: new Date('January 19, 2023, 13:30:00'),
       status: "completed",
       center_id: 2,
       employee_id: 3,
