@@ -4,7 +4,7 @@ import { Questionnaire, questions } from '../models/Questionnaire';
 
 export const questionnaire = Router();
 
-questionnaire.get("/questions", async (req, res) => { //   /questionnaireQuestions
+questionnaire.get("/questions", async (req, res) => { 
     console.log("print iz routes/questionnaire: ", questions)
     res.json(questions)
   });

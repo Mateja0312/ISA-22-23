@@ -9,7 +9,6 @@ export const feedback = Router();
 feedback.get("/interactions", async (req, res) => {
     const { token } = req.query;
     const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
-    console.log('|~| *API REQUEST REORGANISATION WORKING* |~|');
     try {
       let content : any = await Appointment.findAll({
         include: { all: true },
@@ -41,7 +40,6 @@ feedback.get("/interactions", async (req, res) => {
 feedback.get("/response-history", async (req, res) => {
     const { token } = req.query;
     const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
-    console.log('|~| *API REQUEST REORGANISATION WORKING* |~|');
     let responses = await FeedbackResponse.findAll({
       include: [Feedback],
       where: {
@@ -52,19 +50,17 @@ feedback.get("/response-history", async (req, res) => {
 });
 
 feedback.get("/waiting-response", async (req, res) => {
-    console.log('|~| *API REQUEST REORGANISATION WORKING* |~|');
     let feedbackList : any = await Feedback.findAll({
       include: [FeedbackResponse],
     })
     feedbackList = feedbackList.map((f: any) => {
       return f.get({ plain: true })
     });
-    feedbackList = feedbackList.filter((f: any) => !f.feedback_response) //svi feedbackovi gde je response null
+    feedbackList = feedbackList.filter((f: any) => !f.feedback_response)
     res.json(feedbackList);
 });
 
 feedback.get("/response/:id", async (req, res) => {
-    console.log('|~| *API REQUEST REORGANISATION WORKING* |~|');
     let response: any = await FeedbackResponse.findOne({
       include: [Feedback],
       where: {
@@ -75,7 +71,6 @@ feedback.get("/response/:id", async (req, res) => {
 });
 
 feedback.get("/:id", async (req, res) => {
-    console.log('|~| *API REQUEST REORGANISATION WORKING* |~|');
     let feedback = await Feedback.findOne({
       where: {
         id: req.params.id,
@@ -87,7 +82,6 @@ feedback.get("/:id", async (req, res) => {
 feedback.get("/history", async (req, res) => {
     const { token } = req.query;
     const { id: userId } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
-    console.log('|~| *API REQUEST REORGANISATION WORKING* |~|');
     let myFeedbacks = await Feedback.findAll({
     });
     myFeedbacks = myFeedbacks.map((f:any) => {
@@ -102,7 +96,6 @@ feedback.post("/response", async(req, res) => {
     const { token } = req.query;
     const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
     req.body.respondedBy = id;
-    console.log('|~| *API REQUEST REORGANISATION WORKING* |~|');
     
     FeedbackResponse.create(req.body)
     .then((feedbackResponse: any) => {
@@ -118,7 +111,6 @@ feedback.post("", async(req, res) => {
     const { token } = req.query;
     const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
     req.body.client_id = id;
-    console.log('|~| *API REQUEST REORGANISATION WORKING* |~|');
 
     Feedback.create(req.body)
     .then((createdFeedback: any) => {

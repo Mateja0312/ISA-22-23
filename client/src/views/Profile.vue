@@ -6,53 +6,58 @@
     <div>
       <p>{{ user.email }}</p>
       <editable-field
+        label="Name"
         id="user.firstName"
         :text.sync="user.firstName"
         @save="saveUserInfo"
       />
       <editable-field
+        label="Surname"
         id="user.lastName"
         :text.sync="user.lastName"
         @save="saveUserInfo"
       />
-      <p>{{ user.gender ? "Male" : "Female" }}</p>
+      <p>Gender: {{ user.gender ? "Male" : "Female" }}</p>
       <editable-field
+        label="Country"
         id="user.country"
         :text.sync="user.country"
         @save="saveUserInfo"
       />
       <editable-field
+        label="City"
         id="user.city"
         :text.sync="user.city"
         @save="saveUserInfo"
       />
       <editable-field
+        label="Address"
         id="user.address"
         :text.sync="user.address"
         @save="saveUserInfo"
       />
       <editable-field
+        label="Phone"
         id="user.phone"
         :text.sync="user.phone"
         @save="saveUserInfo"
       />
       <editable-field
+        label="Profession"
         id="user.profession"
         :text.sync="user.profession"
         @save="saveUserInfo"
       />
       <editable-field
+        label="Institution"
         id="user.institution"
         :text.sync="user.institution"
         @save="saveUserInfo"
       />
     </div>
-    <button class="btn btn-red" @click="deleteAccount">Delete Account</button>
   </div>
 </template>
-<!--
-Treba dodati sliku na pozadinu tako da cela stranica bude prekirvena 
--->
+
 <script lang="ts">
 import Vue from "vue";
 import { mapState } from "vuex";
@@ -70,13 +75,6 @@ export default Vue.extend({
     saveUserInfo() {
       this.$store.commit("setUser", this.user);
       updateClientInfo(this.user);
-    },
-    deleteAccount() {
-      if (confirm("Are you sure you want to delete your account?")) {
-        this.user.active = false;
-        this.saveUserInfo();
-        this.$emit("requestLogout");
-      }
     },
   },
 });

@@ -161,7 +161,6 @@ function sendQRcode(appointment: any, email: string){
 appointment.get("/visits", async (req, res) => {
     const { token } = req.query;
     const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
-    console.log('|~| *API REQUEST REORGANISATION WORKING* |~|');
     let responses = await Appointment.findAll({
       include: [Center],
       where: {
@@ -178,8 +177,9 @@ appointment.get("/visits", async (req, res) => {
 
 appointment.post("", async(req, res) => {
   const newAppointment = req.body;
-  const { id, role } = jwt.verify(newAppointment.token, process.env.JWT_SECRET as string) as { id: number, role: string };
-  console.log('|~| *API REQUEST REORGANISATION WORKING* |~|');
+  const sender = jwt.verify(newAppointment.token, process.env.JWT_SECRET as string) as User;
+  const { id, role, employedAt } = sender;
+  console.log("SENDER", sender)
   
   if (id !== newAppointment.user_id) {
     return res.status(401).json({ message: "Invalid token" });
@@ -205,6 +205,12 @@ appointment.post("", async(req, res) => {
     if (recentAppointments.length) {
       return res.status(409).json({ message: "You already have an appointment in the last 6 months" });
     }
+  } else if (role == "employee") {
+    if(employedAt != newAppointment.center_id) {
+      return res.status(401).json({ message: "You are not employed at this center!" });
+    }
+  } else {
+    return res.status(401).json({ message: "You are not authorized to make an appointment!" });
   }
 
   if(!(await isTimeslotFree( newAppointment.center_id, id, newAppointment.start, newAppointment.end))){
@@ -216,7 +222,7 @@ appointment.post("", async(req, res) => {
   const user = (await User.findOne({ where: { id } })).get({ plain: true });
   newAppointment['client_id'] = user.role === 'client' ? id : null;
   newAppointment['status'] = user.role === 'client' ? 'reserved' : 'predefined';
-  //newAppointment['employee'] = ...; //potrebno je pregledu dodeliti radnika 
+
   Appointment.create(newAppointment)
   .then((createdAppointment: any) => {
     
@@ -237,7 +243,6 @@ appointment.post("/:id", async(req, res) => {
   const { token } = req.query;
   const { id: userId } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
   const user = (await User.findOne({ where: { id: userId } })).get({ plain: true });
-  console.log('|~| *API REQUEST REORGANISATION WORKING* |~|');
 
   const questionnaire = (await Questionnaire.findOne({ where: { client_id: userId } }))?.get({ plain: true });
   if(!questionnaire) {
@@ -275,7 +280,6 @@ appointment.delete(":id", async(req, res) => {
   const { id } = req.params;
   const { token } = req.query;
   const { id: userId } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
-  console.log('|~| *API REQUEST REORGANISATION WORKING* |~|');
 
   const appointment = (await Appointment.findOne({ where: { id } })).get({ plain: true });
 

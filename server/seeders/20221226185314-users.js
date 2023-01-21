@@ -63,8 +63,8 @@ module.exports = {
     {
       email: 'client@gmail.com',
       password: bcrypt.hashSync( '123', 10 ),
-      firstName: 'Blood',
-      lastName: 'Bag',
+      firstName: 'Client',
+      lastName: 'Clientson',
       role: 'client',
       active: 'activated',
       address: 'ND',

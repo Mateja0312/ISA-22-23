@@ -25,7 +25,7 @@ app.get("/", (req, response) => {
 });
 
 (async () => {
-  await sequelize.sync(); // mora bez {force: true} da se ne bi dropovale i ponovo pravile tabele pri pokretanju beka
+  await sequelize.sync();
 
   app.listen(8081);
 

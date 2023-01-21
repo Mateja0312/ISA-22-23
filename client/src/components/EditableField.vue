@@ -1,5 +1,6 @@
 <template>
   <div class="editable-field">
+    <label>{{ label }}: </label>
     <button @click="toggleEdit()" class="pr-3">
       {{ editing ? "💾" : "✏️" }}
     </button>
@@ -19,7 +20,7 @@ import Vue from "vue";
 
 export default Vue.extend({
   name: "EditableField",
-  props: { text: String },
+  props: { text: String, label: String },
   data() {
     return {
       editing: false,

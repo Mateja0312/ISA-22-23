@@ -5,7 +5,7 @@
       <h2>
         New around here?
         <router-link to="/registration">Sign up</router-link> now, <br />
-        or start <router-link to="/browse">browsing</router-link>.
+        or start <router-link to="/centers">browsing</router-link>.
       </h2>
     </main>
   </div>
@@ -25,7 +25,7 @@ div {
   position: relative;
   height: 100vh;
   background-image: url("../assets/home_screen.jpg");
-  background-position: left top;
+  background-position: -20%;
   background-size: 100%;
   background-repeat: no-repeat;
   box-shadow: inset 0px 110px 90px rgba(0, 0, 0, 0.5);

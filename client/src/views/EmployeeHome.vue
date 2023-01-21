@@ -1,30 +1,40 @@
 <template>
-    <div class="dashboard">
-        <homepage-image id=requests img="No-Image-Placeholder.jpg" page="boats" title="Business Data"/>
-        <homepage-image id=requests img="No-Image-Placeholder.jpg" page="boats" title="Manage Appointments"/><!--na ovoj stranici ce biti link za istoriju svih appointmenta vezanih za dodeljen centar-->
-    </div>
-  </template>
-  
-  <script lang="ts">
-  import Vue from 'vue';
-  import HomepageImage from '../components/HomepageImage.vue';
-  
-  export default Vue.extend({
-    name: 'AdminHome',
-    components: {
-      HomepageImage
-    }
-  });
-  
-  
-  
-  </script>
-  
-  <style scoped lang="scss">
-  .homepage-image{
-    width:calc(100% / 2);
-    height:calc(100vh -  78px); 
-    float:left;
-  }
-  </style>
-  
+  <div class="dashboard">
+    <homepage-image
+      id="requests"
+      img="schedule.jpg"
+      :page="'center/' + user.employedAt"
+      title="Center"
+    />
+    <homepage-image
+      id="requests"
+      img="No-Image-Placeholder.jpg"
+      page="appointments"
+      title="Appointments"
+    />
+  </div>
+</template>
+
+<script lang="ts">
+import Vue from "vue";
+import { mapState } from "vuex";
+import HomepageImage from "../components/HomepageImage.vue";
+
+export default Vue.extend({
+  name: "AdminHome",
+  components: {
+    HomepageImage,
+  },
+  computed: {
+    ...mapState(["user"]),
+  },
+});
+</script>
+
+<style scoped lang="scss">
+.homepage-image {
+  width: calc(100% / 2);
+  height: 100vh;
+  float: left;
+}
+</style>

@@ -40,7 +40,7 @@ export async function getAllUsers(): Promise<any> {
 
 export async function getPendingFeedbacks(): Promise<any> {
   return api()
-    .get("feedback//waiting-response")
+    .get("feedback/waiting-response")
     .then((res) => res.data);
 }
 
@@ -72,8 +72,13 @@ export async function makeAppointment(appointment: any): Promise<any> {
   return api().post("appointment", appointment).then();
 }
 
-export async function submitResponse(feedbackResponse: any, token: any): Promise<any> {
-  return api().post("feedback/response", feedbackResponse, { params: token }).then();
+export async function submitResponse(
+  feedbackResponse: any,
+  token: any
+): Promise<any> {
+  return api()
+    .post("feedback/response", feedbackResponse, { params: token })
+    .then();
 }
 
 export async function acceptAppointment(
@@ -113,7 +118,10 @@ export async function saveQuestionnaireInfo(
   return api().post("questionnaire", newAnswers, { params: token }).then();
 }
 
-export async function submitFeedback(newFeedback: any, token:any): Promise<any> {
+export async function submitFeedback(
+  newFeedback: any,
+  token: any
+): Promise<any> {
   return api().post("feedback", newFeedback, { params: token }).then();
 }
 
@@ -123,7 +131,9 @@ export async function getCenter(id: number, token: any): Promise<any> {
     .then((res) => res.data);
 }
 
-export async function getCompletedAndPendingAppointments(token: any): Promise<any> {
+export async function getCompletedAndPendingAppointments(
+  token: any
+): Promise<any> {
   return api()
     .get("appointment/visits", { params: token })
     .then((res) => res.data);

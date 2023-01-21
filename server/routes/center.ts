@@ -60,7 +60,6 @@ async function isTimeslotFree(center_id: number, client_id: number, start: strin
 center.get("/list", async (req, res) => {
     const { name, address, rating, datetime, token } = req.query;
     const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
-    console.log('|~| *API REQUEST REORGANISATION WORKING* |~|');
   
     const where: any = {};
     if (name) {
@@ -111,7 +110,6 @@ center.get("/:id", async (req, res) => {
     const { token } = req.query;
     const { id: userId } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
     const user = (await User.findOne({ where: { id: userId } })).get({ plain: true });
-    console.log('|~| *API REQUEST REORGANISATION WORKING* |~|');
     
     try {
       let center : any = await Center.findOne({ where: { id }, include: [Rating, Appointment, User]});

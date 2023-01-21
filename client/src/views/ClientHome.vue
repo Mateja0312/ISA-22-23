@@ -2,25 +2,25 @@
   <div id="home">
     <homepage-image
       id="questionnaire"
-      img="cottages.jpg"
+      img="questionnaire.jpg"
       page="questionnaire"
       title="QUESTIONNAIRE"
     />
     <homepage-image
       id="centers"
-      img="cottages.jpg"
+      img="schedule.jpg"
       page="centers"
       title="SCHEDULE APPOINTMENT"
     />
     <homepage-image
       id="center-visits"
-      img="cottages.jpg"
+      img="files.jpg"
       page="center-visits"
       title="MY APPOINTMENTS"
     />
     <homepage-image
       id="feedback"
-      img="cottages.jpg"
+      img="complaint.jpeg"
       page="feedback"
       title="FEEDBACK"
     />
@@ -39,14 +39,18 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 #home {
   display: flex;
   height: 100vh;
 
   .homepage-image {
-    width: calc(100vw / 2);
+    width: calc(100vw / 4);
     height: 100%;
+  }
+
+  #questionnaire img {
+    object-position: 70%;
   }
 }
 </style>

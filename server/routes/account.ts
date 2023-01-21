@@ -38,7 +38,6 @@ account.post("/register", async (req, res) => {
       };
       await transporter.sendMail(mailOptions);
   
-      console.log('|~| *API REQUEST REORGANISATION WORKING* |~|');
       res.status(201).json(createdUser);
     } catch (error) {
       console.error(error);
@@ -46,13 +45,12 @@ account.post("/register", async (req, res) => {
     }
 });
 
-account.get("/activate/:token", async (req, res) => { //ovo se ne poziva u requests ???
+account.get("/activate/:token", async (req, res) => {
     const { token } = req.params;
     try {
       const { id } = jwt.verify(token, process.env.JWT_SECRET as string) as { id: number };
       await User.update({ active: 'activated' }, { where: { id } });
   
-      console.log('|~| *API REQUEST REORGANISATION WORKING* |~|');
       res.redirect(`${process.env.CLIENT}/login`);
     } catch (error) {
       console.error(error);
@@ -79,12 +77,11 @@ account.post("/login", async (req, res) => {
           return res.status(401).json({ message: "You have not activated your account" });
         }
   
-        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, {
+        const token = jwt.sign(user, process.env.JWT_SECRET as string, {
           expiresIn: "7d"
         });
   
         res.cookie("token", token, { httpOnly: true });
-        console.log('|~| *API REQUEST REORGANISATION WORKING* |~|');
         res.json({ token, user });
       })
       .catch((error: any) => {

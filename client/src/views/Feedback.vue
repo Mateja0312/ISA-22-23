@@ -1,37 +1,54 @@
 <template>
   <div v-if="myInteractions">
     <div v-if="myInteractions.centers.length != 0" class="feedback">
-
       <button @click="mySubmissions">My Submissions (wip)</button>
 
       <p>What is this complaint about?</p>
       <button @click="modifyComplaintType" v-if="showEmployee">Employee</button>
       <button @click="modifyComplaintType" v-if="!showEmployee">Center</button>
 
-      <label for="employee-names" v-if="showEmployee">Choose the employee:</label>
-      <select name="employee-names" id="employee-names" v-if="showEmployee" v-model="employeeIdValue">
-        <option v-for="employee in this.myInteractions.employees"
-        :key="employee.id"
-        :value="employee.id"
-        >{{ employee.firstName }} {{ employee.lastName }}</option> 
+      <label for="employee-names" v-if="showEmployee"
+        >Choose the employee:</label
+      >
+      <select
+        name="employee-names"
+        id="employee-names"
+        v-if="showEmployee"
+        v-model="employeeIdValue"
+      >
+        <option
+          v-for="employee in this.myInteractions.employees"
+          :key="employee.id"
+          :value="employee.id"
+        >
+          {{ employee.firstName }} {{ employee.lastName }}
+        </option>
       </select>
 
       <label for="center-names" v-if="!showEmployee">Choose the center:</label>
-      <select name="center-names" id="center-names" v-if="!showEmployee" v-model="centerIdValue">
-        <option v-for="center in this.myInteractions.centers"
-        :key="center.id"
-        :value="center.id"
-        >{{ center.name }} ({{ center.address }})</option> 
+      <select
+        name="center-names"
+        id="center-names"
+        v-if="!showEmployee"
+        v-model="centerIdValue"
+      >
+        <option
+          v-for="center in this.myInteractions.centers"
+          :key="center.id"
+          :value="center.id"
+        >
+          {{ center.name }} ({{ center.address }})
+        </option>
       </select>
 
-      <p>Title: </p>
+      <p>Title:</p>
       <input
         class="title"
         id="feedbackTitle"
         v-model="title"
         placeholder="Title your submission"
       />
-      <p>Input your feedback below: </p>
+      <p>Input your feedback below:</p>
       <input
         class="textarea"
         id="feedbackContent"
@@ -45,8 +62,6 @@
     </div>
   </div>
 </template>
-
-<!--obezbediti neki vid kontrole da li korisnik ima bar jedan uspesno izvrsen pregled pre nego moze da ucita/koristi stranicu za feedback-->
 
 <script>
 import Vue from "vue";
@@ -73,14 +88,17 @@ export default Vue.extend({
   },
   methods: {
     onSubmit() {
-      submitFeedback({
-        title: this.title,
-        content: this.content,
-        employee_id: this.employeeIdValue,
-        center_id: this.centerIdValue,
-      },{
-        token: this.$store.state.token,
-      });
+      submitFeedback(
+        {
+          title: this.title,
+          content: this.content,
+          employee_id: this.employeeIdValue,
+          center_id: this.centerIdValue,
+        },
+        {
+          token: this.$store.state.token,
+        }
+      );
       alert("Submission completed!");
       this.title = "";
       this.content = "";
@@ -89,7 +107,7 @@ export default Vue.extend({
     },
     modifyComplaintType() {
       this.showEmployee = !this.showEmployee;
-      if(this.showEmployee) this.centerIdValue = null;
+      if (this.showEmployee) this.centerIdValue = null;
       else this.employeeIdValue = null;
     },
     mySubmissions() {
@@ -131,7 +149,7 @@ body {
     resize: none;
   }
   .visible {
-    display:block;
+    display: block;
   }
 
   .hidden {

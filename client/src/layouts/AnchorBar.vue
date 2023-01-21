@@ -49,6 +49,11 @@ nav {
   pointer-events: none;
 
   color: white;
+
+  a {
+    pointer-events: auto;
+  }
+
   #links {
     position: absolute;
     top: 50%;
@@ -57,7 +62,6 @@ nav {
     color: red;
     display: flex;
     gap: 20px;
-    pointer-events: auto;
   }
   img {
     margin-top: 20px;

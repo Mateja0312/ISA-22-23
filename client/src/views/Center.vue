@@ -254,13 +254,15 @@ export default Vue.extend({
       this.showAcceptModal = false;
       acceptAppointment(this.activeRes, {
         token: this.$store.state.token,
-      }).then(res => {
-        this.reloadCenter();
-      }).catch(err => {
-        if (err.response) {
+      })
+        .then((res) => {
+          this.reloadCenter();
+        })
+        .catch((err) => {
+          if (err.response) {
             alert(err.response.data.message);
           }
-      })
+        });
     },
     async cancelAppointment() {
       this.showAcceptModal = false;
