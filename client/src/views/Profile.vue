@@ -42,6 +42,12 @@
         :text.sync="user.phone"
         @save="saveUserInfo"
       />
+      <label for="user.JMBG">JMBG</label>
+      <editable-field
+        id="user.JMBG"
+        :text.sync="user.JMBG"
+        @save="saveUserInfo"
+      />
       <label for="user.profession">Profession</label>
       <editable-field
         id="user.profession"

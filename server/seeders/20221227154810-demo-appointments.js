@@ -96,6 +96,33 @@ module.exports = {
       client_id: 4,
       createdAt: new Date(),
       updatedAt: new Date()
+    },{
+      start: new Date('January 18, 2023, 11:00:00'),
+      end: new Date('January 18, 2023, 12:00:00'),
+      status: "completed",
+      center_id: 2,
+      employee_id: 3,
+      client_id: 4,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },{
+      start: new Date('January 19, 2023, 08:45:00'),
+      end: new Date('January 19, 2023, 09:00:00'),
+      status: "completed",
+      center_id: 2,
+      employee_id: 3,
+      client_id: 4,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },{
+      start: new Date('January 19, 2023, 13:00:00'),
+      end: new Date('January 20, 2023, 13:30:00'),
+      status: "completed",
+      center_id: 2,
+      employee_id: 3,
+      client_id: 4,
+      createdAt: new Date(),
+      updatedAt: new Date()
     }]
 
     appointments.map((appointment, index) => {

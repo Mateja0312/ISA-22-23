@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import { sequelize } from './sequelize';
 import path from 'path';
+import { sequelize } from './sequelize';
 
 import { questionnaire } from '../routes/questionnaire';
 import { account } from '../routes/account';
