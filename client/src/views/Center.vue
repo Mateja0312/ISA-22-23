@@ -147,7 +147,6 @@ export default Vue.extend({
     reloadCenter() {
       getCenter(this.id, this.$store.state.token)
         .catch((err) => {
-          console.log("error while loading center");
           console.log(err);
         })
         .then((res) => {

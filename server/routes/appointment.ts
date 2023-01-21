@@ -125,8 +125,6 @@ async function isTimeslotFree(center_id: number, client_id: number, start: strin
     }
   });
 
-  console.log(center_id, client_id, typeof start, typeof end, appointments.map((appointment: any) => appointment.get({ plain: true })));
-
   if (appointments.length) {
     return false;
   }
@@ -179,7 +177,6 @@ appointment.post("", async(req, res) => {
   const newAppointment = req.body;
   const sender = jwt.verify(newAppointment.token, process.env.JWT_SECRET as string) as User;
   const { id, role, employedAt } = sender;
-  console.log("SENDER", sender)
   
   if (id !== newAppointment.user_id) {
     return res.status(401).json({ message: "Invalid token" });

@@ -83,7 +83,6 @@ export default Vue.extend({
   mounted() {
     getMyInteractions({ token: this.$store.state.token }).then((res) => {
       this.myInteractions = res;
-      console.log("Interakcije: ", this.myInteractions);
     });
   },
   methods: {

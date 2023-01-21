@@ -48,9 +48,7 @@ async function isTimeslotFree(center_id: number, client_id: number, start: strin
         ]
       }
     });
-  
-    console.log(center_id, client_id, typeof start, typeof end, appointments.map((appointment: any) => appointment.get({ plain: true })));
-  
+    
     if (appointments.length) {
       return false;
     }

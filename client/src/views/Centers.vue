@@ -93,6 +93,7 @@ export default Vue.extend({
   left: 0%;
   background-image: url("../assets/home_screen.jpg");
   background-position: -20%;
+  background-size: cover;
   color: white;
 
   padding-top: 120px;

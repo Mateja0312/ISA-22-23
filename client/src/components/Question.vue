@@ -34,9 +34,6 @@ export default Vue.extend({
     text: String,
     index: Number,
   },
-  mounted() {
-    console.log(this.index);
-  },
   methods: {
     updateValue(event: any) {
       this.$emit("input", event.target.value);
