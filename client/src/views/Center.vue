@@ -56,7 +56,9 @@
     </div>
     <div v-if="showAcceptModal" class="modal">
       <div>
-        {{ activeRes }}
+        <p>ID: {{ activeRes.id }}</p>
+        <p>Start: {{ new Date(activeRes.start) }}</p>
+        <p>End: {{ new Date(activeRes.end) }}</p>
       </div>
       <div>
         <button
@@ -126,7 +128,7 @@ export default Vue.extend({
       newResDoctor: null as any,
 
       showAcceptModal: false,
-      activeRes: {},
+      activeRes: {} as any,
     };
   },
   computed: {
@@ -312,7 +314,10 @@ export default Vue.extend({
   }
   .modal {
     position: absolute;
-    background: green;
+    border: 2px;
+    border-style: solid;
+    border-color: rgb(78, 122, 179);
+    background: rgb(94, 165, 165);
     top: 50vh;
     left: 50vw;
     height: 300px;

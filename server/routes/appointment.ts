@@ -273,7 +273,7 @@ appointment.post("/:id", async(req, res) => {
   })
 });
 
-appointment.delete(":id", async(req, res) => {
+appointment.delete("/:id", async(req, res) => {
   const { id } = req.params;
   const { token } = req.query;
   const { id: userId } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
