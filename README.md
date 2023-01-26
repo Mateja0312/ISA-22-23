@@ -26,3 +26,6 @@ Ports 8080 and 8081 should be free before starting the application, as frontend 
 10. Login credentials for every seeded user:  
     username: 'users_role'@gmail.com, e.g. client@gmail.com  
     password: 123
+
+#### Email
+11. To send emails, configure an SMTP server and enter its credentials into .env
