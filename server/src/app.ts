@@ -9,9 +9,6 @@ import { center } from '../routes/center';
 import { feedback } from '../routes/feedback';
 import { appointment } from '../routes/appointment';
 
-console.log(process.env)
-console.log(process.env.local)
-
 const app = express();
 
 app.use(cors());
@@ -38,6 +35,6 @@ const qrcodes = express();
 var dir = path.join(__dirname, '..', 'qrcodes');
 qrcodes.use(express.static(dir));
 qrcodes.listen(3000, function () {
-    console.log('Listening on http://localhost:3000/');
+    console.log('File server on http://localhost:3000/');
 });
     

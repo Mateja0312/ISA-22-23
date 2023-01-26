@@ -3,17 +3,9 @@ import nodemailer from 'nodemailer';
 import bcrypt from 'bcrypt';
 import {Router} from 'express';
 import {User} from '../models/User'
+import { sendEmail } from '../services/email';
 
 export const account = Router();
-
-const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT, 10), 
-    auth: {
-      user: process.env.SMTP_USERNAME,
-      pass: process.env.SMTP_PASSWORD
-    }
-});
 
 account.put("/profile", async(req, res) => {
   User.update(req.body, {
@@ -25,6 +17,7 @@ account.put("/profile", async(req, res) => {
 
 account.post("/register", async (req, res) => {
     const newUser = req.body;
+
     newUser.password = bcrypt.hashSync(newUser.password, 10);
     newUser.active = 'unactivated'; 
   
@@ -38,13 +31,14 @@ account.post("/register", async (req, res) => {
       );
   
       const mailOptions = {
-        from: "welcome@lastdrop.com",
+        from: "welcome@clinic.com",
         to: newUser.email,
         subject: "Account activation",
         html: `<p>Click the link below to activate your account:</p>
-               <p><a href="${process.env.SERVER}/activate/${activationToken}">Activate my account</a></p>`
+               <p><a href="${process.env.SERVER}/account/activate/${activationToken}">Activate my account</a></p>`
       };
-      await transporter.sendMail(mailOptions);
+
+      sendEmail(mailOptions);
   
       res.status(201).json(createdUser);
     } catch (error) {

@@ -8,17 +8,9 @@ import { User } from '../models/User';
 import path from 'path';
 import qrcode from 'qrcode';
 import nodemailer from 'nodemailer';
+import { sendEmail } from '../services/email';
 
 export const appointment = Router();
-
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: parseInt(process.env.SMTP_PORT, 10), 
-  auth: {
-    user: process.env.SMTP_USERNAME,
-    pass: process.env.SMTP_PASSWORD
-  }
-});
 
 async function isPenalized(clientId: any){
   const penalties = await Appointment.findAll({
@@ -65,6 +57,9 @@ async function getRecentAppointments(clientId: any, start: any) {
             }},
             {status: {
               [Op.eq]: AppointmentStatus.CLIENT_RESERVED
+            }},
+            {status: {
+              [Op.eq]: AppointmentStatus.CLIENT_ACCEPTED
             }}
           ],
         },
@@ -140,14 +135,14 @@ function sendQRcode(appointment: any, email: string){
   });
 
   const mailOptions = {
-    from: 'appointments@lastdrop.com',
+    from: 'appointments@clinic.com',
     to: email,
     subject: 'Appointment QR Code',
     text: 'Appointment QR Code',
     html: `<p>Appointment QR Code</p><img src="http://localhost:3000/${filename}"/>`
   };
   
-  transporter.sendMail(mailOptions, function(error, info){
+  sendEmail(mailOptions, function(error: any, info: any){
     if (error) {
       console.log(error);
     } else {
@@ -157,20 +152,37 @@ function sendQRcode(appointment: any, email: string){
 }
 
 appointment.get("/visits", async (req, res) => {
-    const { token } = req.query;
-    const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
-    let responses = await Appointment.findAll({
-      include: [Center],
-      where: {
-        client_id: id,
-        [Op.or]: [
-          {status: 'reserved'},
-          {status: 'accepted'},
-          {status: 'completed'}
-        ]
-      }
-    });
-    res.json(responses);
+  const { token } = req.query;
+  const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
+  let responses = await Appointment.findAll({
+    include: [Center],
+    where: {
+      client_id: id,
+      [Op.or]: [
+        {status: 'reserved'},
+        {status: 'accepted'},
+        {status: 'completed'}
+      ]
+    }
+  });
+  res.json(responses);
+});
+
+appointment.get("/:id", async (req, res) => {
+  const { token } = req.query;
+  const { id, role } = jwt.verify(token as string, process.env.JWT_SECRET as string) as User;
+
+  const appointment = await Appointment.findOne({
+    include: { all: true },
+    where: {
+      id: req.params.id
+    }
+  });
+  const app = appointment.get({ plain:true })
+  if(role == "client" && app.status != "predefined" && id != app.client.id ){
+    return res.status(401).json({ message: "Invalid token" })
+  }
+  res.json(appointment);
 });
 
 appointment.post("", async(req, res) => {
@@ -186,7 +198,6 @@ appointment.post("", async(req, res) => {
     return res.status(400).json({ message: "Invalid date" });
   }
 
-  console.log("uloga uloga uloga ", role )
   if(role == "client"){
     const questionnaire = (await Questionnaire.findOne({ where: { client_id: id } }))?.get({ plain: true });
     if(!questionnaire) {

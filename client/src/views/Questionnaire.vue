@@ -52,6 +52,7 @@ export default Vue.extend({
       saveQuestionnaireInfo(this.myAnswers, {
         token: this.$store.state.token,
       });
+      alert("Successfully submited!");
     },
   },
 });

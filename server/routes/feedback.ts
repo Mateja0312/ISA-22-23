@@ -3,6 +3,8 @@ import { Router } from 'express';
 import { Appointment } from '../models/Appointment';
 import { FeedbackResponse } from '../models/FeedbackResponse';
 import { Feedback } from '../models/Feedback';
+import { User } from '../models/User';
+import { sendEmail } from '../services/email';
 
 export const feedback = Router();
 
@@ -81,24 +83,47 @@ feedback.get("/:id", async (req, res) => {
 
 feedback.get("/history", async (req, res) => {
     const { token } = req.query;
-    const { id: userId } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
-    let myFeedbacks = await Feedback.findAll({
-    });
+    const { id: userId } = jwt.verify(token as string, process.env.JWT_SECRET as string) as User;
+
+    let myFeedbacks = await Feedback.findAll({});
     myFeedbacks = myFeedbacks.map((f:any) => {
       return f.get({plain: true})
     });
     myFeedbacks = myFeedbacks.filter((f:any) => f.client_id == userId)
-    console.log("Sadrzaj feedbacka je: ",myFeedbacks);
+
     res.json(myFeedbacks);
 });
 
 feedback.post("/response", async(req, res) => {
     const { token } = req.query;
-    const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
+    const { id, role } = jwt.verify(token as string, process.env.JWT_SECRET as string) as User;
+
+    if(role !== 'admin') {
+      res.status(401).json({message: 'Unauthorized'});
+      return;
+    }
+
     req.body.respondedBy = id;
     
-    FeedbackResponse.create(req.body)
-    .then((feedbackResponse: any) => {
+    FeedbackResponse.create(req.body) 
+    .then(async(feedbackResponse: any) => {
+
+      const feedback = await feedbackResponse.$get('feedback');
+      const client = (await feedback.$get('client')).get({plain: true});
+      const response = feedbackResponse.get({plain: true}).response;
+
+      const mailOptions = {
+        from: "feedback@clinic.com",
+        to: client.email,
+        subject: 'Feedback',
+        html: `
+          <h1>Feedback</h1>
+          <p>${response}</p>
+        ` 
+      }
+
+      sendEmail(mailOptions)
+
       res.status(201).json(feedbackResponse);
     })
     .catch((err: any)=>{
@@ -109,7 +134,13 @@ feedback.post("/response", async(req, res) => {
 
 feedback.post("", async(req, res) => {
     const { token } = req.query;
-    const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
+    const { id, role } = jwt.verify(token as string, process.env.JWT_SECRET as string) as User;
+
+    if(role !== 'client') {
+      res.status(401).json({message: 'Unauthorized'});
+      return;
+    }
+
     req.body.client_id = id;
 
     Feedback.create(req.body)
