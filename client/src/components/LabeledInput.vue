@@ -1,12 +1,8 @@
 <template>
-    <div class="labeled-input">
-      <label :for="idValue"> {{ labelValue }} </label>
-      <input
-        :id="idValue"
-        :type="typeValue"
-        @input="updateValue"
-      />
-    </div>
+  <div class="labeled-input">
+    <label :for="idValue"> {{ labelValue }} </label>
+    <input :id="idValue" :type="typeValue" @input="updateValue" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -18,18 +14,18 @@ export default Vue.extend({
     modelValue: String,
     labelValue: String,
     typeValue: String,
-    idValue: String
+    idValue: String,
   },
   methods: {
     updateValue(event: any) {
-      this.$emit('input', event.target.value)
-    }
+      this.$emit("input", event.target.value);
+    },
   },
 });
 </script>
 
 <style scoped lang="scss">
 input {
-    margin: 5px;
-  }
+  margin: 5px;
+}
 </style>
