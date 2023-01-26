@@ -106,6 +106,12 @@ center.get("/list", async (req, res) => {
 center.get("/:id", async (req, res) => {
     const { id } = req.params;
     const { token } = req.query;
+
+    if( !token ) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
+    
     const { id: userId } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
     const user = (await User.findOne({ where: { id: userId } })).get({ plain: true });
     

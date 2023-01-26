@@ -13,8 +13,8 @@
       title="Register New Center"
     />
     <homepage-image
-      id="requests"
-      img="No-Image-Placeholder.jpg"
+      id="feedback-response"
+      img="complaint.jpeg"
       page="feedback-response"
       title="User Feedback"
     />
@@ -36,7 +36,7 @@ export default Vue.extend({
 <style scoped lang="scss">
 .homepage-image {
   width: calc(100% / 3);
-  height: calc(100vh - 78px);
+  height: calc(100vh);
   float: left;
 }
 </style>

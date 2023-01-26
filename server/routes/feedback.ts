@@ -134,7 +134,13 @@ feedback.post("/response", async(req, res) => {
 
 feedback.post("", async(req, res) => {
     const { token } = req.query;
-    const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
+    const { id, role } = jwt.verify(token as string, process.env.JWT_SECRET as string) as User;
+
+    if(role !== 'client') {
+      res.status(401).json({message: 'Unauthorized'});
+      return;
+    }
+
     req.body.client_id = id;
 
     Feedback.create(req.body)
