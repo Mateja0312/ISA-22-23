@@ -38,6 +38,6 @@ const qrcodes = express();
 var dir = path.join(__dirname, '..', 'qrcodes');
 qrcodes.use(express.static(dir));
 qrcodes.listen(3000, function () {
-    console.log('Listening on http://localhost:3000/');
+    console.log('File server on http://localhost:3000/');
 });
     

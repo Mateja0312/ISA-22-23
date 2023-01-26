@@ -1,5 +1,7 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
+import { nextTick } from "vue/types/umd";
+import store from "../store";
 
 Vue.use(VueRouter);
 
@@ -38,6 +40,16 @@ const routes: Array<RouteConfig> = [
     name: "Center",
     component: () => import("../views/Center.vue"),
     props: true,
+    beforeEnter: (to, from, next) => {
+      const role = store.state.user.role ?? null;
+      console.log(role);
+      if (!role) {
+        console.log("returning false");
+        return false;
+      } else next();
+
+      console.log("returning true");
+    },
   },
   {
     path: "/feedback-response/:id",

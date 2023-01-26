@@ -57,7 +57,7 @@ async function isTimeslotFree(center_id: number, client_id: number, start: strin
 
 center.get("/list", async (req, res) => {
     const { name, address, rating, datetime, token } = req.query;
-    const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
+    const id = token ? (jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number })['id'] : null;
   
     const where: any = {};
     if (name) {
@@ -80,7 +80,7 @@ center.get("/list", async (req, res) => {
       centers = centers.filter((center: any) => center.rating >= rating);
     }
     
-    if (datetime) {
+    if (datetime && id) {
     
     const firstDate = new Date(datetime as string);
     const secondDate = new Date(new Date(datetime as string).getTime() + 60 * 60 * 1000);
