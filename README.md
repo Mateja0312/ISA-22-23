@@ -10,7 +10,7 @@ Ports 8080 and 8081 should be free before starting the application, as frontend 
 1. Install mysql (for ubuntu: sudo apt-get install mysql-server)
 2. Create '.env' file, by copying the '.env.example' file.
 3. Create a new connection (credentials should match with .env content)
-4. Once conected, create a new schema with the same name defined in .env
+4. Once connected, create a new schema with the same name defined in .env
 
 #### Frontend/Backend setup:
 
