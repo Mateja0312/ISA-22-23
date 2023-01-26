@@ -172,13 +172,14 @@ appointment.get("/:id", async (req, res) => {
   const { token } = req.query;
   const { id, role } = jwt.verify(token as string, process.env.JWT_SECRET as string) as User;
 
-  let appointment = await Appointment.findOne({
+  const appointment = await Appointment.findOne({
     include: { all: true },
     where: {
       id: req.params.id
     }
   });
-  if(role == "client" && id != appointment.client.id ){
+  const app = appointment.get({ plain:true })
+  if(role == "client" && app.status != "predefined" && id != app.client.id ){
     return res.status(401).json({ message: "Invalid token" })
   }
   res.json(appointment);
