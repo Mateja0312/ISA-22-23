@@ -4,20 +4,20 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('Centers', [{
-      name: 'Telep',
-      address: 'Adresa na Telepu 37',
+      name: 'First Center',
+      address: 'Some Address 37',
       createdAt: new Date(),
       updatedAt: new Date()
     },
     {
-      name: 'Telep2',
-      address: 'indjija 45',
+      name: 'Second Center',
+      address: 'Another Address 45',
       createdAt: new Date(),
       updatedAt: new Date()
     },
     {
-      name: 'Telep3',
-      address: 'beska 11',
+      name: 'Third Center',
+      address: 'Random Location 82',
       createdAt: new Date(),
       updatedAt: new Date()
     }])
