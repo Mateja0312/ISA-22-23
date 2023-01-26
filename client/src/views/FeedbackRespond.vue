@@ -16,7 +16,6 @@
 </template>
 
 <script lang="ts">
-import router from "@/router";
 import Vue from "vue";
 import { getFeedbackById } from "../services/requests";
 import { submitResponse } from "../services/requests";
