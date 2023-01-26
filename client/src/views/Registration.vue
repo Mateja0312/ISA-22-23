@@ -83,6 +83,10 @@ export default Vue.extend({
   },
   methods: {
     onSubmit() {
+      if (this.newUser.password !== this.password2) {
+        alert("Passwords do not match!");
+        return;
+      }
       register({
         ...this.newUser,
         role: "client",

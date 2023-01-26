@@ -24,7 +24,7 @@ module.exports = {
     },{
       rating: 1,
       user_id: 4,
-      center_id: 1,
+      center_id: 2,
       createdAt: new Date(),
       updatedAt: new Date()
     }])

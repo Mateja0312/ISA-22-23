@@ -12,7 +12,7 @@ import { sendEmail } from '../services/email';
 
 export const appointment = Router();
 
-async function isPenalized(clientId: any){
+export async function isPenalized(clientId: any){
   const penalties = await Appointment.findAll({
     where: {
       [Op.and]: [
@@ -35,7 +35,7 @@ async function isPenalized(clientId: any){
     }
   });
 
-  return penalties.length >= 3;
+  return penalties.length;
 }
 
 async function getRecentAppointments(clientId: any, start: any) {
@@ -204,11 +204,12 @@ appointment.post("", async(req, res) => {
       return res.status(400).json({ message: "Questionnaire not filled" });
     }
 
-    if(await isPenalized(id)) {
+    if((await isPenalized(id)) >= 3) {
       return res.status(400).json({ message: "You have exceeded the number of penalties for this month" });
     }
 
     const recentAppointments = await getRecentAppointments(id, newAppointment.start);
+    console.log(recentAppointments)
 
     if (recentAppointments.length) {
       return res.status(409).json({ message: "You already have an appointment in the last 6 months" });
@@ -247,7 +248,7 @@ appointment.post("", async(req, res) => {
 });
 
 appointment.post("/:id", async(req, res) => {
-  const { id } = req.params;
+  const id = req.params.id;
   const { token } = req.query;
   const { id: userId } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
   const user = (await User.findOne({ where: { id: userId } })).get({ plain: true });
@@ -258,15 +259,15 @@ appointment.post("/:id", async(req, res) => {
   }
 
   const appointment = (await Appointment.findOne({ where: { id } })).get({ plain: true });
+  console.log(userId)
   appointment.client_id = userId;
   appointment.status = AppointmentStatus.CLIENT_ACCEPTED;
 
-  if(await isPenalized(id)) {
+  if((await isPenalized(id)) >= 3) {
     return res.status(400).json({ message: "You have exceeded the number of penalties for this month" });
   }
 
-  const recentAppointments = await getRecentAppointments(id, appointment.start);
-
+  const recentAppointments = await getRecentAppointments(userId, appointment.start);
   if (recentAppointments.length) {
     return res.status(409).json({ message: "You already have an appointment in the last 6 months" });
   }

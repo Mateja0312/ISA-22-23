@@ -72,20 +72,11 @@ feedback.get("/response/:id", async (req, res) => {
     res.json(response);
 });
 
-feedback.get("/:id", async (req, res) => {
-    let feedback = await Feedback.findOne({
-      where: {
-        id: req.params.id,
-      }
-    })
-    res.json(feedback);
-});
-
 feedback.get("/history", async (req, res) => {
     const { token } = req.query;
     const { id: userId } = jwt.verify(token as string, process.env.JWT_SECRET as string) as User;
 
-    let myFeedbacks = await Feedback.findAll({});
+    let myFeedbacks = await Feedback.findAll();
     myFeedbacks = myFeedbacks.map((f:any) => {
       return f.get({plain: true})
     });
@@ -151,4 +142,13 @@ feedback.post("", async(req, res) => {
       console.error(err);
       res.status(500).json(err);
     })
+});
+
+  feedback.get("/:id", async (req, res) => {
+      let feedback = await Feedback.findOne({
+        where: {
+          id: req.params.id,
+        }
+      })
+      res.json(feedback);
 });

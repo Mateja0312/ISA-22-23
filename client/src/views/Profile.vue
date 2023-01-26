@@ -60,6 +60,9 @@
         :text.sync="user.institution"
         @save="saveUserInfo"
       />
+      <p v-if="user.role == 'client'" style="color: red">
+        Penalty points: {{ user.penalties }}
+      </p>
     </div>
   </div>
 </template>

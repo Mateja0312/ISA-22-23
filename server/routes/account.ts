@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import {Router} from 'express';
 import {User} from '../models/User'
 import { sendEmail } from '../services/email';
+import { isPenalized } from './appointment';
 
 export const account = Router();
 
@@ -64,7 +65,7 @@ account.post("/login", async (req, res) => {
     const { email, password } = req.body;
   
     User.findOne({ where: { email } })
-      .then((user: any) => {
+      .then(async (user: any) => {
         if (!user) {
           return res.status(401).json({ message: "Invalid email or password" });
         }
@@ -78,6 +79,8 @@ account.post("/login", async (req, res) => {
         if (user.active === 'unactivated') {
           return res.status(401).json({ message: "You have not activated your account" });
         }
+
+        user.penalties = await isPenalized(user.id);
   
         const token = jwt.sign(user, process.env.JWT_SECRET as string, {
           expiresIn: "7d"
