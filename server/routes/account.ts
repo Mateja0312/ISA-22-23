@@ -3,17 +3,9 @@ import nodemailer from 'nodemailer';
 import bcrypt from 'bcrypt';
 import {Router} from 'express';
 import {User} from '../models/User'
+import { sendEmail } from '../services/email';
 
 export const account = Router();
-
-const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT, 10), 
-    auth: {
-      user: process.env.SMTP_USERNAME,
-      pass: process.env.SMTP_PASSWORD
-    }
-});
 
 account.put("/profile", async(req, res) => {
   User.update(req.body, {
@@ -44,7 +36,7 @@ account.post("/register", async (req, res) => {
         html: `<p>Click the link below to activate your account:</p>
                <p><a href="${process.env.SERVER}/activate/${activationToken}">Activate my account</a></p>`
       };
-      await transporter.sendMail(mailOptions);
+      await sendEmail(mailOptions);
   
       res.status(201).json(createdUser);
     } catch (error) {

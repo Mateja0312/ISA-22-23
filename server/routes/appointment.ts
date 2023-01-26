@@ -8,17 +8,9 @@ import { User } from '../models/User';
 import path from 'path';
 import qrcode from 'qrcode';
 import nodemailer from 'nodemailer';
+import { sendEmail } from '../services/email';
 
 export const appointment = Router();
-
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: parseInt(process.env.SMTP_PORT, 10), 
-  auth: {
-    user: process.env.SMTP_USERNAME,
-    pass: process.env.SMTP_PASSWORD
-  }
-});
 
 async function isPenalized(clientId: any){
   const penalties = await Appointment.findAll({
@@ -147,7 +139,7 @@ function sendQRcode(appointment: any, email: string){
     html: `<p>Appointment QR Code</p><img src="http://localhost:3000/${filename}"/>`
   };
   
-  transporter.sendMail(mailOptions, function(error, info){
+  sendEmail(mailOptions, function(error, info){
     if (error) {
       console.log(error);
     } else {
