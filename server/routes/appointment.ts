@@ -170,16 +170,19 @@ appointment.get("/visits", async (req, res) => {
 
 appointment.get("/:id", async (req, res) => {
   const { token } = req.query;
-  const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
-  
-  let response = await Appointment.findOne({
+  const { id, role } = jwt.verify(token as string, process.env.JWT_SECRET as string) as User;
+
+  let appointment = await Appointment.findOne({
     include: { all: true },
     where: {
       id: req.params.id
     }
   });
-  res.json(response);
-})
+  if(role == "client" && id != appointment.client.id ){
+    return res.status(401).json({ message: "Invalid token" })
+  }
+  res.json(appointment);
+});
 
 appointment.post("", async(req, res) => {
   const newAppointment = req.body;
