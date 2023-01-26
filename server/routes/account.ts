@@ -38,7 +38,7 @@ account.post("/register", async (req, res) => {
       );
   
       const mailOptions = {
-        from: "welcome@lastdrop.com",
+        from: "welcome@clinic.com",
         to: newUser.email,
         subject: "Account activation",
         html: `<p>Click the link below to activate your account:</p>

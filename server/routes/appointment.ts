@@ -140,7 +140,7 @@ function sendQRcode(appointment: any, email: string){
   });
 
   const mailOptions = {
-    from: 'appointments@lastdrop.com',
+    from: 'appointments@clinic.com',
     to: email,
     subject: 'Appointment QR Code',
     text: 'Appointment QR Code',
