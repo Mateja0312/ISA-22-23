@@ -9,9 +9,6 @@ import { center } from '../routes/center';
 import { feedback } from '../routes/feedback';
 import { appointment } from '../routes/appointment';
 
-console.log(process.env)
-console.log(process.env.local)
-
 const app = express();
 
 app.use(cors());

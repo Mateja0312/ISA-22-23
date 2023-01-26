@@ -40,7 +40,7 @@ export default Vue.extend({
       submitResponse(
         {
           response: this.content,
-          feedback_id: this.id,
+          feedback_id: +this.id,
         },
         {
           token: this.$store.state.token,

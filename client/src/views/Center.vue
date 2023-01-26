@@ -66,7 +66,10 @@
         <button
           style="background-color: rgb(240 0 0)"
           @click="cancelAppointment"
-          v-if="activeStatus == 'Mine' || activeStatus == 'MineAccepted'"
+          v-if="
+            (activeStatus == 'Mine' || activeStatus == 'MineAccepted') &&
+            user.role == 'client'
+          "
         >
           Cancel
         </button>
@@ -153,7 +156,7 @@ export default Vue.extend({
     reloadCenter() {
       getCenter(this.id, this.$store.state.token)
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         })
         .then((res) => {
           this.center = res;
@@ -249,9 +252,13 @@ export default Vue.extend({
         case "canceled":
           return "Canceled";
         case "completed":
-          return "Completed";
+          if (appointment[this.user.role + "_id"] == this.user.id)
+            return "Completed";
+          else return "Reserved";
         case "failed":
-          return "Failed";
+          if (appointment[this.user.role + "_id"] == this.user.id)
+            return "Failed";
+          else return "Reserved";
       }
     },
     cancelApproving() {

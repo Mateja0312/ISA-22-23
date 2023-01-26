@@ -42,13 +42,9 @@ const routes: Array<RouteConfig> = [
     props: true,
     beforeEnter: (to, from, next) => {
       const role = store.state.user.role ?? null;
-      console.log(role);
       if (!role) {
-        console.log("returning false");
         return false;
       } else next();
-
-      console.log("returning true");
     },
   },
   {

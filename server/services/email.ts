@@ -9,4 +9,6 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-export const sendEmail = transporter.sendMail
+export function sendEmail(emailOptions: any, callback?: any) {
+  return transporter.sendMail(emailOptions, callback)
+}

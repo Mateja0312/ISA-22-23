@@ -57,6 +57,9 @@ async function getRecentAppointments(clientId: any, start: any) {
             }},
             {status: {
               [Op.eq]: AppointmentStatus.CLIENT_RESERVED
+            }},
+            {status: {
+              [Op.eq]: AppointmentStatus.CLIENT_ACCEPTED
             }}
           ],
         },
@@ -139,7 +142,7 @@ function sendQRcode(appointment: any, email: string){
     html: `<p>Appointment QR Code</p><img src="http://localhost:3000/${filename}"/>`
   };
   
-  sendEmail(mailOptions, function(error, info){
+  sendEmail(mailOptions, function(error: any, info: any){
     if (error) {
       console.log(error);
     } else {
@@ -191,7 +194,6 @@ appointment.post("", async(req, res) => {
     return res.status(400).json({ message: "Invalid date" });
   }
 
-  console.log("uloga uloga uloga ", role )
   if(role == "client"){
     const questionnaire = (await Questionnaire.findOne({ where: { client_id: id } }))?.get({ plain: true });
     if(!questionnaire) {

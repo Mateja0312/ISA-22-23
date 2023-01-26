@@ -17,6 +17,7 @@ account.put("/profile", async(req, res) => {
 
 account.post("/register", async (req, res) => {
     const newUser = req.body;
+
     newUser.password = bcrypt.hashSync(newUser.password, 10);
     newUser.active = 'unactivated'; 
   
@@ -34,9 +35,10 @@ account.post("/register", async (req, res) => {
         to: newUser.email,
         subject: "Account activation",
         html: `<p>Click the link below to activate your account:</p>
-               <p><a href="${process.env.SERVER}/activate/${activationToken}">Activate my account</a></p>`
+               <p><a href="${process.env.SERVER}/account/activate/${activationToken}">Activate my account</a></p>`
       };
-      await sendEmail(mailOptions);
+
+      sendEmail(mailOptions);
   
       res.status(201).json(createdUser);
     } catch (error) {
