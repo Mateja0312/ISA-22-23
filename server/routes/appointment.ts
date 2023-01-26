@@ -149,21 +149,34 @@ function sendQRcode(appointment: any, email: string){
 }
 
 appointment.get("/visits", async (req, res) => {
-    const { token } = req.query;
-    const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
-    let responses = await Appointment.findAll({
-      include: [Center],
-      where: {
-        client_id: id,
-        [Op.or]: [
-          {status: 'reserved'},
-          {status: 'accepted'},
-          {status: 'completed'}
-        ]
-      }
-    });
-    res.json(responses);
+  const { token } = req.query;
+  const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
+  let responses = await Appointment.findAll({
+    include: [Center],
+    where: {
+      client_id: id,
+      [Op.or]: [
+        {status: 'reserved'},
+        {status: 'accepted'},
+        {status: 'completed'}
+      ]
+    }
+  });
+  res.json(responses);
 });
+
+appointment.get("/:id", async (req, res) => {
+  const { token } = req.query;
+  const { id } = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: number };
+  
+  let response = await Appointment.findOne({
+    include: { all: true },
+    where: {
+      id: req.params.id
+    }
+  });
+  res.json(response);
+})
 
 appointment.post("", async(req, res) => {
   const newAppointment = req.body;

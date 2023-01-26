@@ -59,6 +59,8 @@
         <p>ID: {{ activeRes.id }}</p>
         <p>Start: {{ new Date(activeRes.start) }}</p>
         <p>End: {{ new Date(activeRes.end) }}</p>
+        <p v-if="selectedAppointment.employee">Doctor: {{ selectedAppointment.employee.firstName }} {{ selectedAppointment.employee.lastName }}</p>
+        <p v-if="selectedAppointment.client">Client: {{ selectedAppointment.client.firstName }} {{ selectedAppointment.client.lastName }}</p>
       </div>
       <div>
         <button
@@ -92,6 +94,7 @@ import {
   makeAppointment,
   acceptAppointment,
   cancelAppointment,
+getAppointment,
 } from "../services/requests";
 import VueScheduler from "vue-calendar-scheduler";
 
@@ -129,6 +132,7 @@ export default Vue.extend({
 
       showAcceptModal: false,
       activeRes: {} as any,
+      selectedAppointment: {} as any,
     };
   },
   computed: {
@@ -192,6 +196,8 @@ export default Vue.extend({
         return;
       this.showAcceptModal = true;
       this.activeRes = e.unavailability;
+      getAppointment(this.activeRes.id, this.$store.state.token)
+      .then(res => this.selectedAppointment = res )
     },
     cancelNewRes() {
       this.showCreateModal = false;

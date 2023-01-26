@@ -137,3 +137,12 @@ export async function getCompletedAndPendingAppointments(
     .get("appointment/visits", { params: token })
     .then((res) => res.data);
 }
+
+export async function getAppointment(
+  appointmentId: number,
+  token: any
+): Promise<any>{
+  return api()
+    .get(`appointment/${appointmentId}`, { params: { token } })
+    .then((res) => res.data);
+}
