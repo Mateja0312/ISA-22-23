@@ -80,14 +80,13 @@ const routes: Array<RouteConfig> = [
     path: "/feedback-response-history/:id",
     name: "FeedbackResponse",
     component: () => import("../views/FeedbackResponse.vue"),
-    props: true
+    props: true,
   },
   {
     path: "/center-visits",
     name: "CenterVisits",
     component: () => import("../views/CenterVisits.vue"),
   },
-
 ];
 
 const router = new VueRouter({
