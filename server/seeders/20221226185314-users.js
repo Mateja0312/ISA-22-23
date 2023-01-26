@@ -25,8 +25,8 @@ module.exports = {
     {
       email: 'employee@gmail.com',
       password: bcrypt.hashSync( '123', 10 ),
-      firstName: 'Medicinski',
-      lastName: 'Radnik',
+      firstName: 'Center',
+      lastName: 'Employee',
       role: 'employee',
       active: 'activated',
       address: 'ND',
@@ -44,8 +44,8 @@ module.exports = {
     {
       email: 'centeradmin@gmail.com',
       password: bcrypt.hashSync( '123', 10 ),
-      firstName: 'Admin',
-      lastName: 'Centra',
+      firstName: 'Center',
+      lastName: 'Admin',
       role: 'employee',
       active: 'activated',
       address: 'ND',
