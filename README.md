@@ -29,6 +29,3 @@ NOTE: Running the 'npm run serve' command inside the 'server' folder for the fir
 
 #### Email:
 10. To send emails, configure an SMTP server and enter its credentials into .env
-
-#### Email:
-10. To send emails, configure an SMTP server and enter its credentials into .env
